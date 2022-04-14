@@ -33,6 +33,8 @@ public class UserController {
 
         User saved = userEntityService.saveUser(userDto, file);
 
+
+        
         if (saved == null)
             return ResponseEntity.badRequest().build();
         else
