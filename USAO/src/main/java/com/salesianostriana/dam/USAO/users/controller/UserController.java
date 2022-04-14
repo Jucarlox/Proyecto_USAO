@@ -26,18 +26,12 @@ public class UserController {
 
 
     @PostMapping("/auth/register")
-    public ResponseEntity<GetUserDto3> nuevoUsuario(@RequestPart("file") MultipartFile file,@Valid @RequestParam("nick") String nick,@Valid @RequestParam("email") String email,@Valid @RequestParam("fechaNacimiento") String fechaNacimiento, @Valid @RequestParam("password") String password,@Valid @RequestParam("password2") String password2,@Valid @RequestParam("privacity") boolean privacity) throws IOException {
+    public ResponseEntity<GetUserDto3> nuevoUsuario(@RequestPart("file") MultipartFile file,
+                                                    @RequestPart("user") @Valid CreateUserDto userDto) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
-        CreateUserDto userDto = CreateUserDto.builder()
-                .nick(nick)
-                .email(email)
-                .fechaNacimiento(LocalDate.parse(fechaNacimiento, formatter))
-                .password(password)
-                .password2(password2)
-                .privacity(privacity)
-                .build();
+        
 
 
 
