@@ -31,11 +31,6 @@ public class UserController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
-
-
-
-
-
         User saved = userEntityService.saveUser(userDto, file);
 
         if (saved == null)
