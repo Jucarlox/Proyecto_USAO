@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<GetUserDto3> nuevoUsuario(@RequestPart("file") MultipartFile file,
-                                                    @RequestPart("user") @Valid CreateUserDto userDto) throws IOException {
+                                                    @Valid @RequestPart("user")  CreateUserDto userDto) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
