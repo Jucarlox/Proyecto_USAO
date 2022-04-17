@@ -8,8 +8,8 @@ import 'package:image_picker/image_picker.dart';
 part 'image_pick_event.dart';
 part 'image_pick_state.dart';
 
-class ImagePickBlocBloc extends Bloc<ImagePickEvent, ImagePickState> {
-  ImagePickBlocBloc() : super(ImagePickBlocInitial()) {
+class ImagePickBloc extends Bloc<ImagePickEvent, ImagePickState> {
+  ImagePickBloc() : super(ImagePickBlocInitial()) {
     on<SelectImageEvent>(_onSelectImage);
   }
 

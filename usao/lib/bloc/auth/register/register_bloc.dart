@@ -5,10 +5,10 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
+import 'package:usao/repository/auth/auth_repository.dart';
 
 import '../../../models/register/register_dto.dart';
 import '../../../models/register/register_response.dart';
-import '../../../repository/auth/login/auth_repository.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

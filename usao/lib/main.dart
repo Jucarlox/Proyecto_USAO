@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:usao/repository/preferences_utils.dart';
+import 'package:usao/ui/register_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +19,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login',
+      initialRoute: '/register',
       routes: {
-        '/': (context) => const MenuScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/profile': (context) => const ProfileScreen(),
+/*        '/': (context) => const MenuScreen(),
+        '/login': (context) => const LoginScreen(),*/
+        '/': (context) => const RegisterScreen(),
+/*        '/profile': (context) => const ProfileScreen(),
         '/search': (context) => const SearchScreen(),
-        '/post-form': (context) => const PostForm(),
+        '/post-form': (context) => const PostForm(),*/
       },
     );
   }
