@@ -27,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nickController = TextEditingController();
   TextEditingController nombreController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController password2Controller = TextEditingController();
   TextEditingController emailController = TextEditingController();
   String filePath = '';
   String _selectedDate = '';
@@ -131,24 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                width: deviceWidth - 100,
-                                child: TextFormField(
-                                  controller: nombreController,
-                                  decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.person),
-                                      suffixIconColor: Colors.white,
-                                      hintText: 'Nombre',
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white))),
-                                  onSaved: (String? value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
-                                  },
-                                ),
-                              ),
+
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
@@ -202,10 +186,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     // This optional block of code can be used to run
                                     // code when the user saves the form.
                                   },
-                                  validator: (value) {
-                                    return (value == null || value.isEmpty)
-                                        ? 'Write a password'
-                                        : null;
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 20),
+                                width: deviceWidth - 100,
+                                child: TextFormField(
+                                  controller: password2Controller,
+                                  obscureText: true,
+                                  decoration: const InputDecoration(
+                                      suffixIcon: Icon(Icons.vpn_key),
+                                      suffixIconColor: Colors.white,
+                                      hintText: 'Repeat Password',
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white))),
+                                  onSaved: (String? value) {
+                                    // This optional block of code can be used to run
+                                    // code when the user saves the form.
                                   },
                                 ),
                               ),
@@ -338,7 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     nick: nickController.text,
                                     email: emailController.text,
                                     password: passwordController.text,
-                                    password2: passwordController.text,
+                                    password2: password2Controller.text,
                                     fechaNacimiento: dateController.text,
                                     privacity: publicController);
                                 BlocProvider.of<RegisterBloc>(context).add(
