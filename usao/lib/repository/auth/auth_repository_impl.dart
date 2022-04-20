@@ -1,18 +1,18 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
-import 'package:http/http.dart';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usao/models/login/login_dto.dart';
+import 'package:usao/models/login/login_response.dart';
 import 'package:usao/models/register/register_dto.dart';
-import 'package:usao/repository/auth/auth_repository.dart';
-import 'package:usao/repository/constants.dart';
-import '../../../bloc/auth/login/login_bloc.dart';
-import '../../../models/login/login_dto.dart';
-import '../../../models/login/login_response.dart';
-import '../../../models/register/register_response.dart';
+import 'package:usao/models/register/register_response.dart';
 import 'package:http_parser/http_parser.dart';
+
+import '../constants.dart';
+import 'auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final Client _client = Client();
@@ -46,12 +46,15 @@ class AuthRepositoryImpl extends AuthRepository {
         "email": registerDto.email,
         "password": registerDto.password,
         "password2": registerDto.password2,
+        "avatar": "",
         "fechaNacimiento": registerDto.fechaNacimiento,
         "privacity": registerDto.privacity
       });
 
+      print(data);
+      print(filePath);
       var request = http.MultipartRequest(
-          'POST', Uri.parse("${Constants.baseUrl}/auth/register"))
+          'POST', Uri.parse("https://usao-back.herokuapp.com/auth/register"))
         ..files.add(http.MultipartFile.fromString('user', data,
             contentType: MediaType('application', 'json')))
         ..files.add(await http.MultipartFile.fromPath('file', filePath));
@@ -62,7 +65,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
       if (response.statusCode == 201) {
         LoginDto loginDto =
-            LoginDto(nick: registerDto.nick, password: registerDto.password);
+            LoginDto(nick: registerDto.email, password: registerDto.password);
         login(loginDto);
         return RegisterResponse.fromJson(
             jsonDecode(await response.stream.bytesToString()));

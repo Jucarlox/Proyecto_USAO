@@ -12,6 +12,8 @@ import 'package:usao/bloc/image_pick/image_pick_bloc.dart';
 import 'package:usao/models/register/register_dto.dart';
 import 'package:usao/repository/auth/auth_repository.dart';
 import 'package:usao/repository/auth/auth_repository_impl.dart';
+import 'package:usao/styles/colors.dart';
+import 'package:usao/widgets/custom_header.dart';
 import '../bloc/auth/login/login_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -54,6 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   _createBody(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
             padding: const EdgeInsets.all(20),
@@ -110,22 +113,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Miarmapp',
-                            style: GoogleFonts.oleoScript(
-                              color: Colors.black,
-                              textStyle: Theme.of(context).textTheme.headline4,
-                              fontSize: 40,
-                              fontWeight: FontWeight.w100,
-                              fontStyle: FontStyle.normal,
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                            child: CustomHeader(
+                                text: 'Registro',
+                                onTap: () {
+                                  // Navigator.pushReplacement(context,
+                                  //   MaterialPageRoute(builder: (context) => const Signin()));
+                                }),
                           ),
-                          const Divider(
-                            height: 20,
-                            thickness: .1,
-                            indent: 20,
-                            endIndent: 20,
-                            color: Colors.black,
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                            alignment: Alignment.centerLeft,
+                            height: 200,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.09),
+                            child: Image.asset(("assets/images/logo.png")),
                           ),
                           Column(
                             children: [
@@ -155,10 +159,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
                                 child: TextFormField(
+                                  style: TextStyle(color: AppColors.cyan),
                                   controller: emailController,
                                   decoration: const InputDecoration(
                                       suffixIcon: Icon(Icons.email),
-                                      suffixIconColor: Colors.white,
+                                      suffixIconColor: AppColors.cyan,
                                       hintText: 'Email',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide:
@@ -296,7 +301,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         return Center(
                                             child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: Colors.black,
+                                                  primary: AppColors.cyan,
                                                 ),
                                                 onPressed: () {
                                                   BlocProvider.of<
@@ -308,7 +313,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                                   .gallery));
                                                 },
                                                 child: const Text(
-                                                    'Select Image')));
+                                                    'Selecciona una imagen')));
                                       }),
                                 ),
                               ),
@@ -316,10 +321,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Row(
                             children: <Widget>[
-                              const Text('Already registered?'),
+                              const Text('Estas Registrado?'),
                               TextButton(
                                 child: const Text(
-                                  'Sing in',
+                                  'Logueate',
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 onPressed: () {
@@ -333,6 +338,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
                                 final registerDto = RegisterDto(
+                                    avatar: "",
                                     nick: nickController.text,
                                     email: emailController.text,
                                     password: passwordController.text,
@@ -350,11 +356,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),
                                 decoration: BoxDecoration(
+                                    color: AppColors.cyan,
                                     border: Border.all(
                                         color: Colors.black, width: 2),
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Text(
-                                  'Sign Up'.toUpperCase(),
+                                  'Registrar'.toUpperCase(),
                                   style: const TextStyle(color: Colors.black),
                                   textAlign: TextAlign.center,
                                 )),

@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Miarma',
+      debugShowCheckedModeBanner: false,
+      title: 'USAO',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
