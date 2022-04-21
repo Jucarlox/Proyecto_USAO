@@ -114,13 +114,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                            child: CustomHeader(
-                                text: 'Registro',
-                                onTap: () {
-                                  // Navigator.pushReplacement(context,
-                                  //   MaterialPageRoute(builder: (context) => const Signin()));
-                                }),
+                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 30),
+                            child: Text(
+                              'Registro',
+                              style: TextStyle(
+                                  fontSize: 40, color: AppColors.cyan),
+                            ),
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
@@ -141,10 +140,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
                                 child: TextFormField(
+                                  style: TextStyle(color: AppColors.cyan),
                                   controller: nickController,
                                   decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.person),
-                                      suffixIconColor: Colors.white,
+                                      suffixIcon: Icon(
+                                        Icons.person,
+                                        color: AppColors.cyan,
+                                      ),
+                                      suffixIconColor: AppColors.cyan,
                                       hintText: 'Nick',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide:
@@ -162,8 +165,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   style: TextStyle(color: AppColors.cyan),
                                   controller: emailController,
                                   decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.email),
-                                      suffixIconColor: AppColors.cyan,
+                                      suffixIcon: Icon(
+                                        Icons.email,
+                                        color: AppColors.cyan,
+                                      ),
                                       hintText: 'Email',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide:
@@ -178,10 +183,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
                                 child: TextFormField(
+                                  style: TextStyle(color: AppColors.cyan),
                                   controller: passwordController,
                                   obscureText: true,
                                   decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.vpn_key),
+                                      suffixIcon: Icon(
+                                        Icons.vpn_key,
+                                        color: AppColors.cyan,
+                                      ),
                                       suffixIconColor: Colors.white,
                                       hintText: 'Password',
                                       focusedBorder: UnderlineInputBorder(
@@ -197,10 +206,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
                                 child: TextFormField(
+                                  style: TextStyle(color: AppColors.cyan),
                                   controller: password2Controller,
                                   obscureText: true,
                                   decoration: const InputDecoration(
-                                      suffixIcon: Icon(Icons.vpn_key),
+                                      suffixIcon: Icon(
+                                        Icons.vpn_key,
+                                        color: AppColors.cyan,
+                                      ),
                                       suffixIconColor: Colors.white,
                                       hintText: 'Repeat Password',
                                       focusedBorder: UnderlineInputBorder(
@@ -222,6 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       padding:
                                           const EdgeInsets.only(left: 50.0),
                                       child: Switch(
+                                        activeColor: AppColors.cyan,
                                         value: publicController,
                                         onChanged: (value) {
                                           setState(() {
@@ -240,7 +254,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   controller: dateController,
                                   decoration: const InputDecoration(
                                     labelText: "Fecha de nacimiento",
-                                    suffixIcon: Icon(Icons.calendar_today),
+                                    suffixIcon: Icon(
+                                      Icons.calendar_today,
+                                      color: AppColors.cyan,
+                                    ),
                                   ),
                                   readOnly: true,
                                   onTap: () async {
@@ -325,7 +342,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextButton(
                                 child: const Text(
                                   'Logueate',
-                                  style: TextStyle(fontSize: 12),
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppColors.cyan),
                                 ),
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/login');
@@ -349,22 +367,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     DoRegisterEvent(registerDto, filePath));
                               }
                             },
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.only(
-                                    top: 30, left: 30, right: 30),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 20),
-                                decoration: BoxDecoration(
-                                    color: AppColors.cyan,
-                                    border: Border.all(
-                                        color: Colors.black, width: 2),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Text(
-                                  'Registrar'.toUpperCase(),
-                                  style: const TextStyle(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                )),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.only(
+                                      top: 30, left: 30, right: 30),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 20),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.cyan,
+                                      border: Border.all(
+                                          color: AppColors.cyan, width: 2),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: Text(
+                                    'Registrar'.toUpperCase(),
+                                    style: const TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  )),
+                            ),
                           )
                         ],
                       ),

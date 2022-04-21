@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usao/repository/preferences_utils.dart';
+import 'package:usao/ui/login_screen.dart';
 import 'package:usao/ui/register_screen.dart';
 
 void main() {
@@ -20,11 +21,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/register',
+      initialRoute: '/login',
       routes: {
-/*        '/': (context) => const MenuScreen(),
-        '/login': (context) => const LoginScreen(),*/
-        '/': (context) => const RegisterScreen(),
+//        '/': (context) => const MenuScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
 /*        '/profile': (context) => const ProfileScreen(),
         '/search': (context) => const SearchScreen(),
         '/post-form': (context) => const PostForm(),*/

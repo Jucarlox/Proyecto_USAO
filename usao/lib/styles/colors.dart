@@ -9,5 +9,5 @@ class AppColors {
   static const lightblue = Color(0xFF4B68D1);
   static const blackshade = Color(0xFF555555);
   static const hintText = Color(0xFFC7C7CD);
-  static const cyan = Color(0xFF80DEEA);
+  static const cyan = Color(0xFF00BFA5);
 }
