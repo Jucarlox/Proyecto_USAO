@@ -79,6 +79,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
                         .fechaNacimiento(newUser.getFechaNacimiento())
                         .roles(UserRole.USER)
                         .privacity(newUser.isPrivacity() ? Estado.PRIVADO : Estado.PUBLICO)
+                        .localizacion(newUser.getLocalizacion())
                         .build();
                 try {
                     return save(user);

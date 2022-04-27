@@ -31,6 +31,7 @@ public class CreateUserDto {
 
 
     private LocalDate fechaNacimiento;
+    private String localizacion;
 
     private boolean privacity;
     @NotEmpty

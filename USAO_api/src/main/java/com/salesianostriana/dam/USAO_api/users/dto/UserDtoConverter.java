@@ -21,6 +21,7 @@ public class UserDtoConverter {
                 .nick(user.getNick())
                 .email(user.getEmail())
                 .estado(user.getPrivacity())
+                .localizacion(user.getLocalizacion())
                 .build();
 
 
