@@ -1,5 +1,6 @@
-package com.salesianostriana.dam.USAO_api.users.model;
+package com.salesianostriana.dam.USAO_api.models;
 
+import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

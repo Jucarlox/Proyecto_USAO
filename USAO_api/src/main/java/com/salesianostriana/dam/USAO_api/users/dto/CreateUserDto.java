@@ -32,8 +32,8 @@ public class CreateUserDto {
 
     private LocalDate fechaNacimiento;
     private String localizacion;
+    private boolean categoria;
 
-    private boolean privacity;
     @NotEmpty
     private String password;
     private String password2;

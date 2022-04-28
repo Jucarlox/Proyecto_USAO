@@ -1,6 +1,8 @@
 package com.salesianostriana.dam.USAO_api.users.dto;
 
 
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto;
+import com.salesianostriana.dam.USAO_api.models.Producto;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,14 +22,14 @@ public class UserDtoConverter {
                 .fechaNacimiento(user.getFechaNacimiento())
                 .nick(user.getNick())
                 .email(user.getEmail())
-                .estado(user.getPrivacity())
                 .localizacion(user.getLocalizacion())
+                .role(user.getRoles())
                 .build();
 
 
     }
 
-    /*public GetUserDto convertUserEntityToGetUserDto2(User user, List<Post> postList) {
+    public GetUserDto convertUserEntityToGetUserDto2(User user, List<Producto> postList) {
 
         return GetUserDto.builder()
                 .id(user.getId())
@@ -35,12 +37,12 @@ public class UserDtoConverter {
                 .fechaNacimiento(user.getFechaNacimiento())
                 .nick(user.getNick())
                 .email(user.getEmail())
-                .estado(user.getPrivacity())
-                .postList(postList.stream().map(p -> new GetPostDto(p.getId(), p.getTitle(), p.getDescripcion(), p.getFileScale(), p.getPrivacity(), convertUserEntityToGetUserDto(p.getUser()))).toList())
+                .role(user.getRoles())
+                .productoList(postList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getPropietario())).toList())
                 .build();
 
 
-    }*/
+    }
 
 
     public GetUserDto2 convertUserEntityToGetUserDto7(User user) {

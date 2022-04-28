@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,13 +41,13 @@ public class UserController {
                     .body(userDtoConverter.convertUserEntityToGetUserDto(saved));
     }
 
-    /*@GetMapping("/profile/{id}")
+    @GetMapping("/profile/{id}")
     public ResponseEntity<?> visializarPerfif(@AuthenticationPrincipal User userPrincipal, @PathVariable UUID id) {
 
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userEntityService.visializarPerfif(userPrincipal, id));
-    }*/
+    }
 
     @PutMapping("/profile/me")
     public ResponseEntity<?> editUser(@RequestPart("file") MultipartFile file, @Valid @RequestPart("user") CreateUserDtoEdit createUserDto, @AuthenticationPrincipal User userPrincipal) throws IOException {
@@ -54,6 +55,12 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userDtoConverter.convertUserEntityToGetUserDto(userEditado));
+    }
+
+
+    @DeleteMapping("/profile/{id}")
+    public ResponseEntity<?> deleteUser (@AuthenticationPrincipal User userPrincipal, @PathVariable UUID id) throws IOException{
+        return userEntityService.deleteUser(userPrincipal,id);
     }
 
 

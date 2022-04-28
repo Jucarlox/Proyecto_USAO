@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.USAO_api.users.model;
 
-import com.salesianostriana.dam.USAO_api.models.Estado;
+import com.salesianostriana.dam.USAO_api.models.Producto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -53,8 +53,6 @@ public class User implements UserDetails {
 
     private String localizacion;
 
-    @Enumerated(EnumType.STRING)
-    private Estado privacity;
 
     @OneToMany(mappedBy = "propietario")
     private List<Producto> productoList;

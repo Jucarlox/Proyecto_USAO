@@ -13,9 +13,10 @@ import java.time.LocalDate;
 @Builder
 public class CreateUserDtoEdit {
 
+    private String nick;
+    private String localizacion;
     private LocalDate fechaNacimiento;
     private String avatar;
-    private boolean privacity;
     @NotEmpty
     private String password;
 }

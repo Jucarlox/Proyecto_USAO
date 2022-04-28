@@ -3,6 +3,7 @@ package com.salesianostriana.dam.USAO_api.security;
 import com.salesianostriana.dam.USAO_api.security.dto.JwtUserResponse;
 import com.salesianostriana.dam.USAO_api.security.dto.LoginDto;
 import com.salesianostriana.dam.USAO_api.security.jwt.JwtProvider;
+import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto;
 import com.salesianostriana.dam.USAO_api.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import com.salesianostriana.dam.USAO_api.users.services.UserEntityService;
@@ -12,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,14 +60,14 @@ public class AuthenticationController {
                 .build();
     }
 
-    /*@GetMapping("/me")
+    @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal User userPrincipal) {
 
         GetUserDto getUserDto = userEntityService.visializarMiPerfif(userPrincipal, userPrincipal.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(getUserDto);
-    }*/
+    }
 
 
 }
