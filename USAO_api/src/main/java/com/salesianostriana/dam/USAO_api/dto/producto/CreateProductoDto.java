@@ -1,20 +1,21 @@
 package com.salesianostriana.dam.USAO_api.dto.producto;
 
-import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto3;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.*;
+
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetProductoDto {
+public class CreateProductoDto {
 
-    private Long id;
+    @NotEmpty
     private String nombre;
+    @NotEmpty
     private String descripcion;
-    private GetUserDto3 propietario;
+    private String fileOriginal;
     private String fileScale;
-
 }

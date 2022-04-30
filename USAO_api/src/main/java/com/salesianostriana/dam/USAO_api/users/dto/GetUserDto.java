@@ -3,6 +3,7 @@ package com.salesianostriana.dam.USAO_api.users.dto;
 
 import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto;
 
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto2;
 import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class GetUserDto {
     private String avatar;
     private UserRole role;
     private List<GetProductoDto> productoList;
+    private List<GetProductoDto> productoListLike;
 
 
 }

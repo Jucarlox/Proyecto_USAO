@@ -2,6 +2,7 @@ package com.salesianostriana.dam.USAO_api.users.dto;
 
 
 
+import com.salesianostriana.dam.USAO_api.users.model.User;
 import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import lombok.*;
 
@@ -21,4 +22,5 @@ public class GetUserDto3 {
     private LocalDate fechaNacimiento;
     private String avatar;
     private UserRole role;
+
 }

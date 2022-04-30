@@ -2,6 +2,7 @@ package com.salesianostriana.dam.USAO_api.users.dto;
 
 
 import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto;
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto2;
 import com.salesianostriana.dam.USAO_api.models.Producto;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class UserDtoConverter {
 
     }
 
-    public GetUserDto convertUserEntityToGetUserDto2(User user, List<Producto> postList) {
+    public GetUserDto convertUserEntityToGetUserDto2(User user, List<Producto> productoList, List<Producto> productoListLike) {
 
         return GetUserDto.builder()
                 .id(user.getId())
@@ -38,7 +39,8 @@ public class UserDtoConverter {
                 .nick(user.getNick())
                 .email(user.getEmail())
                 .role(user.getRoles())
-                .productoList(postList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getPropietario())).toList())
+                .productoList(productoList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList())
+                .productoListLike(productoListLike.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList())
                 .build();
 
 

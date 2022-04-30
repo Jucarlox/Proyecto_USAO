@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.USAO_api.dto.producto;
 
 import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto3;
-import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.*;
 
 @Getter
@@ -9,12 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetProductoDto {
-
+public class GetProductoDto2 {
     private Long id;
     private String nombre;
     private String descripcion;
-    private GetUserDto3 propietario;
     private String fileScale;
-
 }

@@ -104,7 +104,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
         if (userBuscado.isPresent()) {
 
             if (userBuscado.get().getRoles().equals(UserRole.USER.USER)) {
-                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()));
+                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
             }
 
         }
@@ -118,7 +118,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
         Optional<User> userBuscado = userEntityRepository.findById(id);
 
 
-                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()));
+                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
 
 
 

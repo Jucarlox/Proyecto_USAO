@@ -49,6 +49,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole roles;
+
     private String avatar;
 
     private String localizacion;

@@ -1,19 +1,26 @@
 package com.salesianostriana.dam.USAO_api.models;
 
 import com.salesianostriana.dam.USAO_api.users.model.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
+
+@NamedEntityGraph(
+        name = "grafo-producto-propietario",
+        attributeNodes = {
+                @NamedAttributeNode("propietario")
+        }
+)
+
+
+
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Producto {
     @Id
@@ -21,9 +28,15 @@ public class Producto {
     private Long id;
 
     private String nombre;
-    @Lob
+
     private String descripcion;
 
-    @OneToOne
+    private String fileOriginal;
+
+    private String fileScale;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private User propietario;
+
+
 }
