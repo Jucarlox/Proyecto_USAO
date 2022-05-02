@@ -58,7 +58,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "propietario")
     private List<Producto> productoList;
 
-    @OneToMany(mappedBy = "propietario")
+    @OneToMany
+    @JoinTable(name = "productosLike",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_id"))
     private List<Producto> productosLike;
 
 
