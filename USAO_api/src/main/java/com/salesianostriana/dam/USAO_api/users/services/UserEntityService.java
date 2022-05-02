@@ -103,7 +103,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
 
         if (userBuscado.isPresent()) {
 
-            if (userBuscado.get().getRoles().equals(UserRole.USER.USER)) {
+            if (userBuscado.get().getRoles().equals(UserRole.USER)) {
                 return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
             }
 

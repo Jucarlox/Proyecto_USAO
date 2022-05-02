@@ -35,7 +35,7 @@ public class Producto {
 
     private String fileScale;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User propietario;
 
 

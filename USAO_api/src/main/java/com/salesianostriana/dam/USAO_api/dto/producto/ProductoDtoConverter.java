@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ProductoDtoConverter {
 
     private final UserDtoConverter userDtoConverter;
-    public GetProductoDto convertProductoToGetPostDto(Producto producto) {
+    public GetProductoDto convertProductoToGetProductoDto(Producto producto) {
         return GetProductoDto.builder()
                 .id(producto.getId())
                 .nombre(producto.getNombre())

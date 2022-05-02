@@ -12,14 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +34,35 @@ public class ProductoController {
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(productoDtoConverter.convertProductoToGetPostDto(saved));
+                    .body(productoDtoConverter.convertProductoToGetProductoDto(saved));
     }
+
+    @PutMapping("/producto/{id}")
+    public ResponseEntity<?> editPost(@RequestPart("file") MultipartFile file, @Valid @RequestPart("producto") CreateProductoDto createPostDto, @AuthenticationPrincipal User userPrincipal, @PathVariable Long id) throws IOException, VideoException {
+        Producto saved = productoService.editProducto(createPostDto, file, userPrincipal, id);
+
+        if (saved == null)
+            return ResponseEntity.badRequest().build();
+        else
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(productoDtoConverter.convertProductoToGetProductoDto(saved));
+    }
+
+    @DeleteMapping("/producto/{id}")
+    public ResponseEntity<?> deleteProducto(@AuthenticationPrincipal User userPrincipal, @PathVariable Long id) throws IOException {
+        return productoService.deleteProducto(userPrincipal, id);
+    }
+
+
+    @PostMapping("/producto/like/{id}")
+    public ResponseEntity<List<GetProductoDto>> likeProducto (@AuthenticationPrincipal User userPrincipal, @PathVariable Long id){
+        List<GetProductoDto> getProductoDtos = productoService.likeProducto(userPrincipal, id);
+
+        if (getProductoDtos == null)
+            return ResponseEntity.badRequest().build();
+        else
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(getProductoDtos);
+    }
+
 }
