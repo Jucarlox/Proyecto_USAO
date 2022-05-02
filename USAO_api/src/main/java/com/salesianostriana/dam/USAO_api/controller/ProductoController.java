@@ -65,4 +65,11 @@ public class ProductoController {
                     .body(getProductoDtos);
     }
 
+
+    @GetMapping("/producto/gangas")
+    public ResponseEntity<List<GetProductoDto>> getGangas (@AuthenticationPrincipal User userPrincipal){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productoService.getGangas());
+    }
+
 }

@@ -14,6 +14,8 @@ public class GetProductoDto {
     private Long id;
     private String nombre;
     private String descripcion;
+    private String categoria;
+    private double precio;
     private GetUserDto3 propietario;
     private String fileScale;
 

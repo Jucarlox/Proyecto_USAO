@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,8 @@ public class ProductoServiceImpl {
         Producto producto = Producto.builder()
                 .nombre(newProducto.getNombre())
                 .descripcion(newProducto.getDescripcion())
+                .categoria(newProducto.getCategoria())
+                .precio(newProducto.getPrecio())
                 .fileOriginal(uriOriginal)
                 .fileScale(uriPublicacion)
                 .propietario(user)
@@ -200,7 +203,7 @@ public class ProductoServiceImpl {
 
 
 
-            List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+            List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
             return getProductoDtos;
 
 
@@ -208,6 +211,30 @@ public class ProductoServiceImpl {
         }else{
             throw new SingleEntityNotFoundException(id.toString(), Producto.class);
         }
+    }
+
+
+    public List<GetProductoDto> getGangas(){
+
+
+
+            List<Producto> listGangas= new ArrayList<>();
+
+
+            listGangas.addAll(productoRepository.busquedaGangas("coches"));
+            listGangas.addAll(productoRepository.busquedaGangas("motos"));
+            listGangas.addAll(productoRepository.busquedaGangas("moda"));
+            listGangas.addAll(productoRepository.busquedaGangas("inmobiliaria"));
+            listGangas.addAll(productoRepository.busquedaGangas("informatica y electronica"));
+            listGangas.addAll(productoRepository.busquedaGangas("deporte"));
+
+
+            List<GetProductoDto> getProductoDtos = listGangas.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+
+            return getProductoDtos;
+
+
+
     }
 
 

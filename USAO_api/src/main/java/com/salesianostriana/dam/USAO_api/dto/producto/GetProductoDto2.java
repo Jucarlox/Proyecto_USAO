@@ -11,6 +11,8 @@ import lombok.*;
 public class GetProductoDto2 {
     private Long id;
     private String nombre;
+    private String categoria;
+    private double precio;
     private String descripcion;
     private String fileScale;
 }

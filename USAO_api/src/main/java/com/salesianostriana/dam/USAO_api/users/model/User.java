@@ -68,19 +68,6 @@ public class User implements UserDetails {
     private List<Producto> productosLike;
 
 
-
-    /*
-    @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "follows",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "following_id"))
-    private List<User> follows = new ArrayList<>();
-    */
-
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + roles.name()));

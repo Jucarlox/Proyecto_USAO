@@ -31,12 +31,21 @@ public class Producto {
 
     private String descripcion;
 
+    private double precio;
+
+    private String categoria;
+
     private String fileOriginal;
 
     private String fileScale;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User propietario;
+
+    @PreRemove
+    public void borrarProducto(){
+        propietario.setProductosLike(null);
+    }
 
 
 }

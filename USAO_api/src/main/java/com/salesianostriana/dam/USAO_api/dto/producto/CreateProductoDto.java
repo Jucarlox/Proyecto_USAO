@@ -18,4 +18,6 @@ public class CreateProductoDto {
     private String descripcion;
     private String fileOriginal;
     private String fileScale;
+    private String categoria;
+    private double precio;
 }

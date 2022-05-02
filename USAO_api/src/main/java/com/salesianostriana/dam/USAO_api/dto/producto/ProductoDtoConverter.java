@@ -16,6 +16,8 @@ public class ProductoDtoConverter {
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
                 .fileScale(producto.getFileScale())
+                .categoria(producto.getCategoria())
+                .precio(producto.getPrecio())
                 .propietario(userDtoConverter.convertUserEntityToGetUserDto(producto.getPropietario()))
                 .build();
     }
