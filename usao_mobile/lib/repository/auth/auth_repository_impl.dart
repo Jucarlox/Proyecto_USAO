@@ -10,6 +10,7 @@ import 'package:usao_mobile/models/login/login_response.dart';
 import 'package:usao_mobile/models/register/register_dto.dart';
 import 'package:usao_mobile/models/register/register_response.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:diacritic/diacritic.dart';
 
 import '../constants.dart';
 import 'auth_repository.dart';
@@ -48,7 +49,8 @@ class AuthRepositoryImpl extends AuthRepository {
         "password2": registerDto.password2,
         "avatar": "",
         "fechaNacimiento": registerDto.fechaNacimiento,
-        "privacity": registerDto.privacity
+        "categoria": "false",
+        "localizacion": removeDiacritics(registerDto.localizacion.toLowerCase())
       });
 
       print(data);
