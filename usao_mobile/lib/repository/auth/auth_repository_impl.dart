@@ -47,14 +47,12 @@ class AuthRepositoryImpl extends AuthRepository {
         "email": registerDto.email,
         "password": registerDto.password,
         "password2": registerDto.password2,
-        "avatar": "",
+        "avatar": registerDto.avatar,
         "fechaNacimiento": registerDto.fechaNacimiento,
         "categoria": "false",
         "localizacion": removeDiacritics(registerDto.localizacion.toLowerCase())
       });
 
-      print(data);
-      print(filePath);
       var request = http.MultipartRequest(
           'POST', Uri.parse("https://usao-back.herokuapp.com/auth/register"))
         ..files.add(http.MultipartFile.fromString('user', data,
@@ -69,13 +67,13 @@ class AuthRepositoryImpl extends AuthRepository {
         LoginDto loginDto =
             LoginDto(email: registerDto.email, password: registerDto.password);
         login(loginDto);
+        print(registerDto.avatar);
         return RegisterResponse.fromJson(
             jsonDecode(await response.stream.bytesToString()));
       } else {
         throw Exception('Fail to register');
       }
     } catch (error) {
-      print('Error add project $error');
       throw (error);
     }
   }
