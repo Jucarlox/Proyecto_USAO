@@ -12,21 +12,21 @@ import 'package:http_parser/http_parser.dart';
 class ProductoRepositoryImpl extends ProductoRepository {
   final Client _client = Client();
 
-  /*@override
-  Future<List<ProductoResponse>> fetchPublicPost(String type) async {
+  @override
+  Future<List<ProductoResponse>> fetchGangasProducto() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final response = await _client.get(
-        Uri.parse('http://10.0.2.2:8080/post/public'),
+        Uri.parse("${Constants.baseUrl}/producto/gangas"),
         headers: {'Authorization': 'Bearer ${prefs.getString("token")}'});
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
-          .map((i) => PublicResponse.fromJson(i))
+          .map((i) => ProductoResponse.fromJson(i))
           .toList();
     } else {
       throw Exception('Fail to load psot');
     }
-  }*/
+  }
 
   @override
   Future<ProductoResponse> createProducto(
@@ -65,6 +65,34 @@ class ProductoRepositoryImpl extends ProductoRepository {
             jsonDecode(await response.stream.bytesToString()));
       } else {
         throw Exception('Fail to create post');
+      }
+    } catch (error) {
+      print('Error add project $error');
+      throw (error);
+    }
+  }
+
+  @override
+  Future deleteProducto(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Map<String, String> headers = {
+        "Content-Type": "multipart/form-data",
+        "Authorization": "Bearer " + token!
+      };
+
+      var request = http.MultipartRequest(
+          'DELETE', Uri.parse("${Constants.baseUrl}/producto/${id}"));
+
+      request.headers.addAll(headers);
+
+      var response = await request.send();
+      if (response.statusCode == 204) {
+        return null;
+      } else {
+        throw Exception('Fail to delete post');
       }
     } catch (error) {
       print('Error add project $error');

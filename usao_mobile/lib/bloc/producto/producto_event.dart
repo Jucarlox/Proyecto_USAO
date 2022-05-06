@@ -8,12 +8,10 @@ abstract class ProductoEvent extends Equatable {
 }
 
 class FetchProductoWithType extends ProductoEvent {
-  final String type;
-
-  const FetchProductoWithType(this.type);
+  const FetchProductoWithType();
 
   @override
-  List<Object> get props => [type];
+  List<Object> get props => [];
 }
 
 class DoProductoEvent extends ProductoEvent {
@@ -21,4 +19,10 @@ class DoProductoEvent extends ProductoEvent {
   final String imagePath;
 
   const DoProductoEvent(this.productoDto, this.imagePath);
+}
+
+class DeleteProductoEvent extends ProductoEvent {
+  final int id;
+
+  const DeleteProductoEvent(this.id);
 }

@@ -11,25 +11,37 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
   final ProductoRepository productoRepository;
 
   ProductoBloc(this.productoRepository) : super(ProductoInitialState()) {
-    //on<FetchProductoWithType>(_productoFetched);
+    on<FetchProductoWithType>(_productoFetched);
     on<DoProductoEvent>(_doProductoEvent);
   }
 
-  /*void _productoFetched(FetchProductoWithType event, Emitter<ProductoState> emit) async {
+  void _productoFetched(
+      FetchProductoWithType event, Emitter<ProductoState> emit) async {
     try {
-      final post = await productoRepository.fetchPublicProducto(event.type);
-      emit(ProductoFetched(post, event.type));
+      final producto = await productoRepository.fetchGangasProducto();
+      emit(ProductoFetched(producto));
       return;
     } on Exception catch (e) {
       emit(ProductoFetchError(e.toString()));
     }
-  }*/
+  }
 
   void _doProductoEvent(
       DoProductoEvent event, Emitter<ProductoState> emit) async {
     try {
       final postResponse = await productoRepository.createProducto(
           event.productoDto, event.imagePath);
+      emit(ProductoSuccessState(postResponse));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoErrorState(e.toString()));
+    }
+  }
+
+  void _deleteProductoEvent(
+      DeleteProductoEvent event, Emitter<ProductoState> emit) async {
+    try {
+      final postResponse = await productoRepository.deleteProducto(event.id);
       emit(ProductoSuccessState(postResponse));
       return;
     } on Exception catch (e) {

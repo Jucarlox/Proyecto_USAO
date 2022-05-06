@@ -31,9 +31,8 @@ class ProductoErrorState extends ProductoState {
 
 class ProductoFetched extends ProductoState {
   final List<ProductoResponse> productos;
-  final String type;
 
-  const ProductoFetched(this.productos, this.type);
+  const ProductoFetched(this.productos);
 
   @override
   List<Object> get props => [productos];

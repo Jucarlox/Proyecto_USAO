@@ -390,8 +390,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       builder: (context, state) {
                                         if (state
                                             is ImageSelectedSuccessState) {
-                                          print(
-                                              'PATH ${state.pickedFile.path}');
                                           filePath = state.pickedFile.path;
                                           return Column(children: [
                                             Image.file(
