@@ -19,57 +19,54 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: CupertinoTabScaffold(
-        resizeToAvoidBottomInset: true,
-        tabBar: CupertinoTabBar(
-          activeColor: AppColors.cyan,
-          items: const [
-            BottomNavigationBarItem(
-              label: "Inicio",
-              icon: Icon(
-                CupertinoIcons.home,
-                color: AppColors.cyan,
-              ),
+    return CupertinoTabScaffold(
+      resizeToAvoidBottomInset: true,
+      tabBar: CupertinoTabBar(
+        activeColor: AppColors.cyan,
+        items: const [
+          BottomNavigationBarItem(
+            label: "Inicio",
+            icon: Icon(
+              CupertinoIcons.home,
+              color: AppColors.cyan,
+            ),
+            activeIcon: Icon(
+              CupertinoIcons.house_fill,
+              color: AppColors.cyan,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: "Favoritos",
+            icon: Icon(CupertinoIcons.suit_heart, color: AppColors.cyan),
+            activeIcon: Icon(CupertinoIcons.heart_fill, color: AppColors.cyan),
+          ),
+          BottomNavigationBarItem(
+              label: "Subelo",
+              icon: Icon(CupertinoIcons.add_circled, color: AppColors.cyan),
               activeIcon: Icon(
-                CupertinoIcons.house_fill,
+                CupertinoIcons.add_circled_solid,
                 color: AppColors.cyan,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: "Favoritos",
-              icon: Icon(CupertinoIcons.suit_heart, color: AppColors.cyan),
-              activeIcon:
-                  Icon(CupertinoIcons.heart_fill, color: AppColors.cyan),
-            ),
-            BottomNavigationBarItem(
-                label: "Subelo",
-                icon: Icon(CupertinoIcons.add_circled, color: AppColors.cyan),
-                activeIcon: Icon(
-                  CupertinoIcons.add_circled_solid,
-                  color: AppColors.cyan,
-                )),
-            BottomNavigationBarItem(
-                label: "Chat",
-                icon: Icon(CupertinoIcons.chat_bubble_2, color: AppColors.cyan),
-                activeIcon: Icon(
-                  CupertinoIcons.chat_bubble_2_fill,
-                  color: AppColors.cyan,
-                )),
-            BottomNavigationBarItem(
-                label: "Perfil",
-                icon: Icon(CupertinoIcons.person_alt_circle,
-                    color: AppColors.cyan),
-                activeIcon: Icon(
-                  CupertinoIcons.person_alt_circle_fill,
-                  color: AppColors.cyan,
-                ))
-          ],
-        ),
-        tabBuilder: (BuildContext context, int index) {
-          return screens[index];
-        },
+              )),
+          BottomNavigationBarItem(
+              label: "Chat",
+              icon: Icon(CupertinoIcons.chat_bubble_2, color: AppColors.cyan),
+              activeIcon: Icon(
+                CupertinoIcons.chat_bubble_2_fill,
+                color: AppColors.cyan,
+              )),
+          BottomNavigationBarItem(
+              label: "Perfil",
+              icon:
+                  Icon(CupertinoIcons.person_alt_circle, color: AppColors.cyan),
+              activeIcon: Icon(
+                CupertinoIcons.person_alt_circle_fill,
+                color: AppColors.cyan,
+              ))
+        ],
       ),
+      tabBuilder: (BuildContext context, int index) {
+        return screens[index];
+      },
     );
   }
 }

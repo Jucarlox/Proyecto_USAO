@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:usao_mobile/repository/preferences_utils.dart';
 import 'package:usao_mobile/ui/login_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
+import 'package:usao_mobile/ui/perfil_screen.dart';
 import 'package:usao_mobile/ui/register_screen.dart';
+import 'package:usao_mobile/ui/subelo_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +35,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-/*        '/profile': (context) => const ProfileScreen(),
-        '/search': (context) => const SearchScreen(),
-        '/post-form': (context) => const PostForm(),*/
+        '/profile': (context) => const PerfilScreen(),
+        '/subelo': (context) => const SubeloScreen(),
+        //       '/post-form': (context) => const PostForm(),
       },
     );
   }
