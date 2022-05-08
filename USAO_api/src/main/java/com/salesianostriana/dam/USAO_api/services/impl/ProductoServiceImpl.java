@@ -214,19 +214,21 @@ public class ProductoServiceImpl {
     }
 
 
-    public List<GetProductoDto> getGangas(){
+    public List<GetProductoDto> getGangas(User user){
 
 
 
             List<Producto> listGangas= new ArrayList<>();
 
 
-            listGangas.addAll(productoRepository.busquedaGangas("coches"));
-            listGangas.addAll(productoRepository.busquedaGangas("motos"));
-            listGangas.addAll(productoRepository.busquedaGangas("moda"));
-            listGangas.addAll(productoRepository.busquedaGangas("inmobiliaria"));
-            listGangas.addAll(productoRepository.busquedaGangas("informatica y electronica"));
-            listGangas.addAll(productoRepository.busquedaGangas("deporte"));
+            listGangas.addAll(productoRepository.busquedaGangas("coches", user.getId()));
+            listGangas.addAll(productoRepository.busquedaGangas("motos", user.getId()));
+            listGangas.addAll(productoRepository.busquedaGangas("moda", user.getId()));
+            listGangas.addAll(productoRepository.busquedaGangas("inmobiliaria", user.getId()));
+            listGangas.addAll(productoRepository.busquedaGangas("informatica y electronica", user.getId()));
+            listGangas.addAll(productoRepository.busquedaGangas("deporte", user.getId()));
+
+
 
 
             List<GetProductoDto> getProductoDtos = listGangas.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();

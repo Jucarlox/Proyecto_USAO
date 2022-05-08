@@ -56,16 +56,16 @@ public class User implements UserDetails {
 
     private String localizacion;
 
-
+    @Builder.Default
     @OneToMany(mappedBy = "propietario")
-    private List<Producto> productoList;
+    private List<Producto> productoList = new ArrayList<>();
 
-
+    @Builder.Default
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "productosLike",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "producto_id"))
-    private List<Producto> productosLike;
+    private List<Producto> productosLike= new ArrayList<>();
 
 
     @Override

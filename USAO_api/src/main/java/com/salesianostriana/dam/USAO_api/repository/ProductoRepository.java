@@ -20,9 +20,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query(value = """
             SELECT * FROM Producto p
             WHERE p.categoria = :param
+            AND p.propietario_id != :param2
             ORDER BY p.precio ASC
             LIMIT 3
             """, nativeQuery = true)
-    List<Producto> busquedaGangas(@Param("param") String categoria);
+    List<Producto> busquedaGangas(@Param("param") String categoria, @Param("param2") UUID uuid);
 
 }
