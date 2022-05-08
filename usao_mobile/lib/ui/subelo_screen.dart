@@ -161,6 +161,7 @@ class _ProductoFormState extends State<SubeloScreen> {
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
                                 child: TextFormField(
+                                  keyboardType: TextInputType.number,
                                   style: TextStyle(color: AppColors.cyan),
                                   controller: precioController,
                                   decoration: const InputDecoration(
@@ -273,22 +274,6 @@ class _ProductoFormState extends State<SubeloScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              const Text('Estas Registrado?'),
-                              TextButton(
-                                child: const Text(
-                                  'Logueate',
-                                  style: TextStyle(
-                                      fontSize: 12, color: AppColors.cyan),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/login');
-                                },
-                              )
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,
                           ),
                           GestureDetector(
                             onTap: () {

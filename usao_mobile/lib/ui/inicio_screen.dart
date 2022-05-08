@@ -6,6 +6,7 @@ import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:insta_like_button/insta_like_button.dart';
+import 'package:usao_mobile/styles/text.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({Key? key}) : super(key: key);
@@ -75,25 +76,89 @@ Widget _createPublics(BuildContext context) {
 
 Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
   final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
-  return SizedBox(
-    height: MediaQuery.of(context).size.height,
-    child: ListView.separated(
-      itemBuilder: (BuildContext context, int index) {
-        return _post(context, movies[index]);
-      },
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      scrollDirection: Axis.vertical,
-      separatorBuilder: (context, index) => const VerticalDivider(
-        color: Colors.transparent,
-        width: 6.0,
-      ),
-      itemCount: movies.length,
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 60.0),
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            "Gangas Actuales",
+            style: KTextStyle.headerTextStyle,
+          ),
+        ),
+        SizedBox(
+          height: 300,
+          child: ListView.separated(
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return _post(context, movies[index]);
+            },
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (context, index) => const VerticalDivider(
+              color: Colors.transparent,
+              width: 6.0,
+            ),
+            itemCount: movies.length,
+          ),
+        )
+      ],
     ),
   );
 }
 
 Widget _post(BuildContext context, ProductoResponse data) {
   return Container(
+    alignment: Alignment.bottomCenter,
+    width: 160,
+    height: 320,
+    child: Card(
+      child: Wrap(
+        children: <Widget>[
+          Center(
+              child: Container(
+            height: 230,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(data.fileScale),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: ListTile(
+                leading: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                imageUrl: data.propietario.avatar,
+                width: 30,
+                height: 30,
+                fit: BoxFit.cover,
+              ),
+            )),
+          )),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0),
+            child: ListTile(
+              title: Text(data.nombre, style: KTextStyle.textFieldHeading),
+              subtitle: Text(
+                data.descripcion,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+/**/ 
+
+/*return Container(
     decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.withOpacity(.3)))),
@@ -107,7 +172,7 @@ Widget _post(BuildContext context, ProductoResponse data) {
               placeholder: (context, url) => const Center(
                 child: CircularProgressIndicator(),
               ),
-              imageUrl: data.fileScale,
+              imageUrl: data.propietario.avatar,
               width: 30,
               height: 30,
               fit: BoxFit.cover,
@@ -133,8 +198,7 @@ Widget _post(BuildContext context, ProductoResponse data) {
           ),
         ),
         InstaLikeButton(
-          image: NetworkImage(
-              data.fileScale.toString().replaceFirst('localhost', '10.0.2.2')),
+          image: NetworkImage(data.fileScale.toString()),
           onChanged: () {},
           icon: Icons.favorite,
           iconSize: 80,
@@ -183,5 +247,4 @@ Widget _post(BuildContext context, ProductoResponse data) {
         )
       ],
     ),
-  );
-}
+  );*/ 
