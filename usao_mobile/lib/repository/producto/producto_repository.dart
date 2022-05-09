@@ -5,4 +5,6 @@ abstract class ProductoRepository {
   Future<List<ProductoResponse>> fetchGangasProducto();
   Future<ProductoResponse> createProducto(ProductoDto dto, String image);
   Future deleteProducto(int id);
+
+  Future likeProducto(int id);
 }

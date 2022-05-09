@@ -13,6 +13,18 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
   ProductoBloc(this.productoRepository) : super(ProductoInitialState()) {
     on<FetchProductoWithType>(_productoFetched);
     on<DoProductoEvent>(_doProductoEvent);
+    on<LikeProductoEvent>(_likeProductoEvent);
+  }
+
+  void _likeProductoEvent(
+      LikeProductoEvent event, Emitter<ProductoState> emit) async {
+    try {
+      final postResponse = await productoRepository.likeProducto(event.id);
+      emit(ProductoSuccessState(postResponse));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoErrorState(e.toString()));
+    }
   }
 
   void _productoFetched(

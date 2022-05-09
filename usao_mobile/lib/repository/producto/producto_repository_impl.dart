@@ -99,4 +99,33 @@ class ProductoRepositoryImpl extends ProductoRepository {
       throw (error);
     }
   }
+
+  @override
+  Future likeProducto(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Map<String, String> headers = {
+        "Content-Type": "multipart/form-data",
+        "Authorization": "Bearer " + token!
+      };
+
+      var request = http.MultipartRequest(
+          'POST', Uri.parse("${Constants.baseUrl}/producto/like/${id}"));
+
+      request.headers.addAll(headers);
+
+      var response = await request.send();
+      if (response.statusCode == 201) {
+        return ProductoResponse.fromJson(
+            jsonDecode(await response.stream.bytesToString()));
+      } else {
+        throw Exception('Fail to favorite producto');
+      }
+    } catch (error) {
+      print('Error add project $error');
+      throw (error);
+    }
+  }
 }

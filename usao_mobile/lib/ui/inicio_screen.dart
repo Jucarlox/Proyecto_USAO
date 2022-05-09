@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
@@ -6,7 +7,10 @@ import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:insta_like_button/insta_like_button.dart';
+import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
+import 'package:like_button/like_button.dart';
+import 'package:usao_mobile/ui/error_screen.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({Key? key}) : super(key: key);
@@ -50,21 +54,7 @@ Widget _createPublics(BuildContext context) {
       if (state is ProductoInitialState) {
         return const Center(child: CircularProgressIndicator());
       } else if (state is ProductoErrorState) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          alignment: Alignment.center,
-          margin: const EdgeInsets.all(4.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "error",
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        );
+        return Text("error");
       } else if (state is ProductoFetched) {
         return _createPopularView(context, state.productos);
       } else {
@@ -114,12 +104,14 @@ Widget _post(BuildContext context, ProductoResponse data) {
     width: 160,
     height: 320,
     child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Wrap(
         children: <Widget>[
           Center(
               child: Container(
-            height: 230,
+            height: 200,
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               image: DecorationImage(
                 image: NetworkImage(data.fileScale),
                 fit: BoxFit.cover,
@@ -139,16 +131,33 @@ Widget _post(BuildContext context, ProductoResponse data) {
               ),
             )),
           )),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            child: ListTile(
-              title: Text(data.nombre, style: KTextStyle.textFieldHeading),
-              subtitle: Text(
-                data.descripcion,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+          Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  title: Text(data.nombre, style: KTextStyle.textFieldHeading),
+                  subtitle: Text(
+                    data.precio.toString() + " €",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                child: LikeButton(
+                  likeBuilder: (isLiked) {
+                    return Icon(CupertinoIcons.heart_fill,
+                        color: isLiked
+                            ? Colors.red
+                            : Color.fromARGB(255, 216, 216, 216));
+                  },
+                  onTap: (isLiked) {
+                    return changedata(isLiked, data.id, context);
+                  },
+                ),
+              )
+            ],
           )
         ],
       ),
@@ -156,95 +165,9 @@ Widget _post(BuildContext context, ProductoResponse data) {
   );
 }
 
-/**/ 
+Future<bool> changedata(status, id, context) async {
+  //your code
 
-/*return Container(
-    decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.withOpacity(.3)))),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: CachedNetworkImage(
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              imageUrl: data.propietario.avatar,
-              width: 30,
-              height: 30,
-              fit: BoxFit.cover,
-            ),
-          ),
-          title: Text(
-            data.nombre,
-            style: TextStyle(
-                color: Colors.black.withOpacity(.8),
-                fontWeight: FontWeight.w400,
-                fontSize: 21),
-          ),
-          trailing: const Icon(Icons.more_vert),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: Text(
-            data.nombre,
-            style: TextStyle(
-                color: Colors.black.withOpacity(.8),
-                fontWeight: FontWeight.w400,
-                fontSize: 15),
-          ),
-        ),
-        InstaLikeButton(
-          image: NetworkImage(data.fileScale.toString()),
-          onChanged: () {},
-          icon: Icons.favorite,
-          iconSize: 80,
-          iconColor: Colors.red,
-          curve: Curves.fastLinearToSlowEaseIn,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: const <Widget>[
-                  Icon(
-                    Icons.favorite_border,
-                    size: 31,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  Icon(Icons.comment_sharp, size: 31),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  Icon(Icons.send, size: 31),
-                ],
-              ),
-              const Icon(Icons.bookmark_border, size: 31)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          child: Text(
-            'liked by you and 299 others',
-            style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(.8)),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          child: Text(
-            data.descripcion,
-            style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(.8)),
-          ),
-        )
-      ],
-    ),
-  );*/ 
+  BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
+  return Future.value(!status);
+}

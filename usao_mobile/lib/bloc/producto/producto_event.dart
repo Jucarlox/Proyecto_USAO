@@ -14,6 +14,11 @@ class FetchProductoWithType extends ProductoEvent {
   List<Object> get props => [];
 }
 
+class LikeProductoEvent extends ProductoEvent {
+  final int id;
+  const LikeProductoEvent(this.id);
+}
+
 class DoProductoEvent extends ProductoEvent {
   final ProductoDto productoDto;
   final String imagePath;

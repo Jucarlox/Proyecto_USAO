@@ -1,4 +1,4 @@
-/*part of 'user_bloc.dart';
+part of 'user_bloc.dart';
 
 abstract class UserEvent {
   const UserEvent();
@@ -12,4 +12,4 @@ class FetchUser extends UserEvent {
 
   @override
   List<Object> get props => [];
-}*/
+}
