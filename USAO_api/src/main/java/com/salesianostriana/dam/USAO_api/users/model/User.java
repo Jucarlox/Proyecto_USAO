@@ -61,7 +61,7 @@ public class User implements UserDetails {
     private List<Producto> productoList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "productosLike",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "producto_id"))

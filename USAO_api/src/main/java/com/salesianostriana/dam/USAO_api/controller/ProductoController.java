@@ -72,4 +72,18 @@ public class ProductoController {
                 .body(productoService.getGangas(userPrincipal));
     }
 
+
+    @GetMapping("/producto/like")
+    public ResponseEntity<List<GetProductoDto>> getListLike (@AuthenticationPrincipal User userPrincipal){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productoService.getListLike(userPrincipal));
+    }
+
+
+
+    @DeleteMapping("/producto/dislike/{id}")
+    public ResponseEntity<?> dislikeProducto (@AuthenticationPrincipal User userPrincipal, @PathVariable Long id){
+        return productoService.dislikeProducto(userPrincipal, id);
+    }
+
 }

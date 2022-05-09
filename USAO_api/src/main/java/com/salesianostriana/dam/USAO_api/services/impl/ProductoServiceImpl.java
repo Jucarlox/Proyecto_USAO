@@ -239,6 +239,32 @@ public class ProductoServiceImpl {
 
     }
 
+    public List<GetProductoDto> getListLike(User user){
+
+        List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+
+        return getProductoDtos;
+    }
+
+
+    public ResponseEntity dislikeProducto(User user, Long id){
+
+        Optional<Producto> producto = productoRepository.findById(id);
+
+        if(producto.isPresent()){
+
+            user.getProductosLike().remove(producto);
+            userEntityRepository.save(user);
+
+            return ResponseEntity.noContent().build();
+
+
+
+        }else{
+            throw new SingleEntityNotFoundException(id.toString(), Producto.class);
+        }
+    }
+
 
 
 
