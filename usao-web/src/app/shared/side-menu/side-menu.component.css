@@ -1,0 +1,54 @@
+.example-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .navav{
+      background-color:rgba(255, 255, 255, 0.034) !important;
+     
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .sidenav-menu {
+      width: 300px;
+  }
+
+  .sidenav-title {
+      text-align: center;
+      padding-top: 20px;
+      text-transform: uppercase;
+      width: 100%;
+      font-weight: bold;
+  }
+
+  .sidenav-icon {
+      margin-right: 20px;
+  }
+
+  a, a:active, a:hover, a:visited {
+      text-decoration: none;
+      color:black;
+      line-height: 20px;
+  }
+
+  mat-raised-button{
+   
+    background-color:  rgba(255, 255, 255, 0.212) !important;
+    color: rgb(0, 0, 0);
+    border-color: white !important;
+    border-top: oldlace 3px !important;
+ 
+    
+}
+
+.opciones{
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+}

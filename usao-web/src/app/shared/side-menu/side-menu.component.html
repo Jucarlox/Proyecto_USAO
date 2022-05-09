@@ -1,0 +1,27 @@
+<mat-sidenav-container class="example-container">
+    <mat-sidenav  #sidenav mode="push" class="sidenav-menu">
+      <h3 class="sidenav-title">Menú</h3>
+      <mat-list role="list">
+        <mat-list-item role="listitem"><a [routerLink]="['/home']" (click)="sidenav.toggle()" routerLinkActive="router-link-active"><mat-icon class="sidenav-icon">description</mat-icon> Home</a></mat-list-item>
+        <mat-list-item role="listitem"><a [routerLink]="['/usuarios']" (click)="sidenav.toggle()" routerLinkActive="router-link-active"><mat-icon class="sidenav-icon">home</mat-icon> Usuarios</a></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem"><mat-icon class="sidenav-icon">logout</mat-icon> Salir</mat-list-item>
+      </mat-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+      <mat-toolbar class="navav">
+        <button (click)="sidenav.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>USAO</span>
+        <span class="example-spacer"></span>
+        <div [ngSwitch]="currentPage" class="opciones">
+          <button *ngSwitchCase="''" [routerLink]="['/']" mat-raised-button >Home</button>
+          <button *ngSwitchCase="''" [routerLink]="['/']" mat-raised-button >Usuarios</button>
+        </div>
+      </mat-toolbar>
+      <router-outlet></router-outlet>
+      
+    </mat-sidenav-content>
+  </mat-sidenav-container>
