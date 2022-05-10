@@ -207,7 +207,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
         Flexible(
           child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 2,
               ),
               itemCount: user.productoList.length,
               itemBuilder: (BuildContext context, int index) {
@@ -221,7 +221,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                       children: <Widget>[
                         Center(
                             child: Container(
-                          height: 140,
+                          height: 120,
                           decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.vertical(top: Radius.circular(20)),
@@ -239,35 +239,31 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                                 child: CircularProgressIndicator(),
                               ),
                               imageUrl: user.avatar,
-                              width: 20,
-                              height: 20,
+                              width: 30,
+                              height: 30,
                               fit: BoxFit.cover,
                             ),
                           )),
                         )),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color.fromARGB(255, 173, 173, 173),
-                            ),
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(20)),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ListTile(
-                                  title: Text("hola",
-                                      style: KTextStyle.textFieldHeading),
-                                  subtitle: Text(
-                                    "hola" + " €",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                  ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(
+                                    user.productoList.elementAt(index).nombre,
+                                    style: KTextStyle.textFieldHeading),
+                                subtitle: Text(
+                                  user.productoList
+                                          .elementAt(index)
+                                          .precio
+                                          .toString() +
+                                      " €",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -282,9 +278,6 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                   image: AssetImage('assets/images/luismi.png'),
                   fit: BoxFit.contain,
                 )),*/
-        const SizedBox(
-          width: 20,
-        ),
       ],
     ),
   );

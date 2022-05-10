@@ -58,11 +58,11 @@ class ProductoList {
     required this.propietario,
     required this.fileScale,
   });
-  late final int id;
+  late final dynamic id;
   late final String nombre;
   late final String descripcion;
   late final String categoria;
-  late final double? precio;
+  late final dynamic precio;
   late final Propietario propietario;
   late final String fileScale;
 
@@ -140,11 +140,11 @@ class ProductoListLike {
     required this.propietario,
     required this.fileScale,
   });
-  late final int id;
+  late final dynamic id;
   late final String nombre;
   late final String descripcion;
   late final String categoria;
-  late final int precio;
+  late final dynamic precio;
   late final Propietario propietario;
   late final String fileScale;
 

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
+
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
@@ -67,8 +69,8 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
     padding: const EdgeInsets.symmetric(vertical: 60.0),
     child: Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             "Favoritos",
             style: KTextStyle.headerTextStyle,
@@ -96,74 +98,69 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
 }
 
 Widget _post(BuildContext context, ProductoResponse data) {
-  return Flexible(
-    child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            alignment: Alignment.bottomCenter,
-            width: 160,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Wrap(
-                children: <Widget>[
-                  Center(
-                      child: Container(
-                    height: 140,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                      image: DecorationImage(
-                        image: NetworkImage(data.fileScale),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: ListTile(
-                        leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        imageUrl: data.propietario.avatar,
-                        width: 20,
-                        height: 20,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
-                  )),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color.fromARGB(255, 173, 173, 173),
-                      ),
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(20)),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            title: Text("hola",
-                                style: KTextStyle.textFieldHeading),
-                            subtitle: Text(
-                              "hola" + " €",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+  return Container(
+    alignment: Alignment.bottomCenter,
+    width: 160,
+    height: 320,
+    child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Wrap(
+        children: <Widget>[
+          Center(
+              child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              image: DecorationImage(
+                image: NetworkImage(data.fileScale),
+                fit: BoxFit.cover,
               ),
             ),
-          );
-        }),
+            child: ListTile(
+                leading: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                imageUrl: data.propietario.avatar,
+                width: 30,
+                height: 30,
+                fit: BoxFit.cover,
+              ),
+            )),
+          )),
+          Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  title: Text(data.nombre, style: KTextStyle.textFieldHeading),
+                  subtitle: Text(
+                    data.precio.toString() + " €",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                child: LikeButton(
+                  likeBuilder: (isLiked) {
+                    return Icon(CupertinoIcons.heart_fill,
+                        color: isLiked
+                            ? Colors.red
+                            : Color.fromARGB(255, 216, 216, 216));
+                  },
+                  onTap: (isLiked) {
+                    return changedata(isLiked, data.id, context);
+                  },
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    ),
   );
 }
 

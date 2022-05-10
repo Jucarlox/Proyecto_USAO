@@ -6,11 +6,9 @@ import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
-import 'package:insta_like_button/insta_like_button.dart';
-import 'package:usao_mobile/styles/colors.dart';
+
 import 'package:usao_mobile/styles/text.dart';
 import 'package:like_button/like_button.dart';
-import 'package:usao_mobile/ui/error_screen.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({Key? key}) : super(key: key);
