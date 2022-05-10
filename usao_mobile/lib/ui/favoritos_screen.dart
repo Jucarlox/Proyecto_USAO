@@ -148,8 +148,8 @@ Widget _post(BuildContext context, ProductoResponse data) {
                   likeBuilder: (isLiked) {
                     return Icon(CupertinoIcons.heart_fill,
                         color: isLiked
-                            ? Colors.red
-                            : Color.fromARGB(255, 216, 216, 216));
+                            ? Color.fromARGB(255, 216, 216, 216)
+                            : Colors.red);
                   },
                   onTap: (isLiked) {
                     return changedata(isLiked, data.id, context);

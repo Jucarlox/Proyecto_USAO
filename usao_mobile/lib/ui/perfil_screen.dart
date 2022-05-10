@@ -99,43 +99,19 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                         Column(
                           children: [
                             TextButton(
-                              onPressed: () {
-                                /*Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const FollowPage()));*/
-                              },
+                              onPressed: null,
                               child: Text(
-                                "0",
+                                user.productoListLike.length.toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
                             ),
-                            Text(
-                              "followers",
-                            ),
+                            Text("Likes"),
                           ],
                         ),
                         const SizedBox(
-                          width: 5,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  /*Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const FollowPage()));*/
-                                },
-                                child: Text("0",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black))),
-                            Text("following"),
-                          ],
+                          width: 10,
                         ),
                       ],
                     ),
@@ -144,38 +120,48 @@ Widget _profile(BuildContext context, ProfileResponse user) {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceAround,
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Text(user.email),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    user.nick,
-                    style: TextStyle(color: Colors.grey),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 0, 10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text(user.email),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
+                        child: Text(
+                          user.nick,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Container(
-                height: 35,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                width: 320,
-                child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Edit Profile",
-                      style: TextStyle(color: Colors.black),
-                    )))
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 7),
+              child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  width: 320,
+                  child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Edit Profile",
+                        style: TextStyle(color: Colors.black),
+                      ))),
+            )
 
             /* Row(
                   children: [
