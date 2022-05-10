@@ -31,3 +31,9 @@ class DeleteProductoEvent extends ProductoEvent {
 
   const DeleteProductoEvent(this.id);
 }
+
+class FetchProductosLike extends ProductoEvent {
+  const FetchProductosLike();
+  @override
+  List<Object> get props => [];
+}

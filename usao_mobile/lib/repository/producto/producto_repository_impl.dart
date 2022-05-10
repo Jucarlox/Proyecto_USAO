@@ -128,4 +128,20 @@ class ProductoRepositoryImpl extends ProductoRepository {
       throw (error);
     }
   }
+
+  @override
+  Future<List<ProductoResponse>> fetchLikesProducto() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final response = await _client.get(
+        Uri.parse("${Constants.baseUrl}/producto/like"),
+        headers: {'Authorization': 'Bearer ${prefs.getString("token")}'});
+    if (response.statusCode == 200) {
+      return (json.decode(response.body) as List)
+          .map((i) => ProductoResponse.fromJson(i))
+          .toList();
+    } else {
+      throw Exception('Fail to load list likes');
+    }
+  }
 }

@@ -16,6 +16,12 @@ class HomePage extends StatelessWidget {
     ChatScreen(),
     PerfilScreen()
   ];
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -24,7 +24,6 @@ class _InicioScreenState extends State<InicioScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     productoRepository = ProductoRepositoryImpl();
     super.initState();
   }

@@ -7,4 +7,5 @@ abstract class ProductoRepository {
   Future deleteProducto(int id);
 
   Future likeProducto(int id);
+  Future<List<ProductoResponse>> fetchLikesProducto();
 }

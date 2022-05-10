@@ -12,14 +12,6 @@ void main() {
   runApp(const MyApp());
 }
 
-final Map<int, Color> _tealAccent700Map = {
-  100: Color(0xFFA7FFEB),
-  900: Colors.tealAccent,
-  400: Colors.tealAccent.shade400,
-  700: Colors.tealAccent.shade700,
-};
-final MaterialColor _yellow700Swatch = MaterialColor(100, _tealAccent700Map);
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

@@ -26,12 +26,6 @@ class _ProfileScreenState extends State<PerfilScreen> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
@@ -220,7 +214,6 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                 return Container(
                   alignment: Alignment.bottomCenter,
                   width: 160,
-                  height: 320,
                   child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
@@ -228,7 +221,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                       children: <Widget>[
                         Center(
                             child: Container(
-                          height: 200,
+                          height: 140,
                           decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.vertical(top: Radius.circular(20)),

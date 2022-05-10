@@ -11,9 +11,10 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
   final ProductoRepository productoRepository;
 
   ProductoBloc(this.productoRepository) : super(ProductoInitialState()) {
-    on<FetchProductoWithType>(_productoFetched);
+    on<FetchProductoWithType>(_productoFetchedGangas);
     on<DoProductoEvent>(_doProductoEvent);
     on<LikeProductoEvent>(_likeProductoEvent);
+    on<FetchProductosLike>(__productoFetchedLike);
   }
 
   void _likeProductoEvent(
@@ -27,10 +28,21 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     }
   }
 
-  void _productoFetched(
+  void _productoFetchedGangas(
       FetchProductoWithType event, Emitter<ProductoState> emit) async {
     try {
       final producto = await productoRepository.fetchGangasProducto();
+      emit(ProductoFetched(producto));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoFetchError(e.toString()));
+    }
+  }
+
+  void __productoFetchedLike(
+      FetchProductosLike event, Emitter<ProductoState> emit) async {
+    try {
+      final producto = await productoRepository.fetchLikesProducto();
       emit(ProductoFetched(producto));
       return;
     } on Exception catch (e) {
