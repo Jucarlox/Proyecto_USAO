@@ -26,4 +26,28 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             """, nativeQuery = true)
     List<Producto> busquedaGangas(@Param("param") String categoria, @Param("param2") UUID uuid);
 
+
+    @Query(value = """
+            SELECT * FROM Producto p
+            WHERE (lower(p.descripcion) like lower(concat('%', :param,'%'))
+            OR lower(p.nombre) like lower(concat('%', :param,'%')))
+            AND p.propietario_id != :param2
+            """, nativeQuery = true)
+    List<Producto> busquedaProductos(@Param("param") String string, @Param("param2") UUID uuid);
+
+
+
+    @Query(value = """
+            SELECT * FROM Producto p
+            WHERE p.propietario_id != :param2
+            """, nativeQuery = true)
+    List<Producto> busquedaProductoajenos( @Param("param2") UUID uuid);
+
+    @Query(value = """
+            SELECT * FROM Producto p
+            WHERE p.categoria = :param
+            AND p.propietario_id != :param2
+            """, nativeQuery = true)
+    List<Producto> busquedaCategoriaProductoajenos(@Param("param") String categoria,@Param("param2") UUID uuid);
+
 }

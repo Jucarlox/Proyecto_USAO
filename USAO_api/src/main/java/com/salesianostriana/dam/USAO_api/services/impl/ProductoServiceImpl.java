@@ -266,6 +266,21 @@ public class ProductoServiceImpl {
     }
 
 
+    public List<GetProductoDto> getProductosFiltrado  (User user, String string){
+
+        return productoRepository.busquedaProductos(string, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+
+    }
+
+    public List<GetProductoDto> getProductosAjenos  (User user){
+        return productoRepository.busquedaProductoajenos(user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+    }
+
+    public List<GetProductoDto> getProductosCategoria  (User user, String categoria){
+        return productoRepository.busquedaCategoriaProductoajenos(categoria, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+    }
+
+
 
 
 }

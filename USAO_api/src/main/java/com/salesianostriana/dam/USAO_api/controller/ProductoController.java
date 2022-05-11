@@ -86,4 +86,23 @@ public class ProductoController {
         return productoService.dislikeProducto(userPrincipal, id);
     }
 
+
+    @GetMapping("producto/filtro")
+    public ResponseEntity<List<GetProductoDto>> getProductosFiltrado (@AuthenticationPrincipal User userPrincipal, @RequestParam String string){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productoService.getProductosFiltrado(userPrincipal, string));
+    }
+
+    @GetMapping("producto")
+    public ResponseEntity<List<GetProductoDto>> getProductosAjenos (@AuthenticationPrincipal User userPrincipal){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productoService.getProductosAjenos(userPrincipal));
+    }
+
+    @GetMapping("producto/{categoria}")
+    public ResponseEntity<List<GetProductoDto>> getProductosAjenos (@AuthenticationPrincipal User userPrincipal, @PathVariable String categoria){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productoService.getProductosCategoria(userPrincipal,categoria));
+    }
+
 }
