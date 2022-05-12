@@ -10,11 +10,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialImportsModule } from './modules/material-imports.module';
 import { HomePageComponent } from './screens/home-page/home-page.component';
 
+//import { RegisterComponent } from './forms/register/register.component';
+import { FormularioLoginComponent } from './forms/login/formulario-login.component';
+import { DialogErrorComponent } from './dialog/error/dialog-error.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     SideMenuComponent,
-    HomePageComponent
+    HomePageComponent,
+    FormularioLoginComponent,
+    DialogErrorComponent
+    //RegisterComponent
 
   ],
   imports: [
