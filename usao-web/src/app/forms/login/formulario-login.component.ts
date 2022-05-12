@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog/dialog";
+import { MatDialog } from "@angular/material/dialog";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { DialogErrorComponent } from "src/app/dialog/error/dialog-error.component";
@@ -14,7 +14,7 @@ import { AuthService } from "src/app/services/auth.service";
 export class FormularioLoginComponent implements OnInit {
 
   LoginDto = new LoginDto();
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router,private dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private dialog: MatDialog) { }
 
 
   ngOnInit(): void { }
@@ -25,19 +25,19 @@ export class FormularioLoginComponent implements OnInit {
     this.authService.postLogin(this.LoginDto).subscribe((loginResult) => {
       localStorage.setItem('token', loginResult.token);
       this.router.navigate(['/home']);
-    }, (error) => { this.PopupError("Correo o contraseña invalida") });
+    }, () => {
+      this.dialog.open(DialogErrorComponent, {
+        height: '550px',
+        width: '400px',
+        data: ("Correo o contraseña invalida")
+      })
+    });
 
 
 
   }
 
-  PopupError(message:String){
-    this.dialog.open(DialogErrorComponent, {
-      height:'400px',
-      width:'300px',
-      data: {message}
-    })
-  }
+
 }
 
 

@@ -1,4 +1,6 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Output } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 
 @Component({
@@ -10,13 +12,14 @@ export class DialogErrorComponent implements OnInit {
 
  
   
-  @Input() message!: String;
+  
   
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: String) { }
 
   ngOnInit(): void {
-    this.message;
     
   }
 }
+
+
