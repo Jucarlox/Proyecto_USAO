@@ -26,12 +26,6 @@ class DoProductoEvent extends ProductoEvent {
   const DoProductoEvent(this.productoDto, this.imagePath);
 }
 
-class DeleteProductoEvent extends ProductoEvent {
-  final int id;
-
-  const DeleteProductoEvent(this.id);
-}
-
 class FetchProductosLike extends ProductoEvent {
   const FetchProductosLike();
   @override

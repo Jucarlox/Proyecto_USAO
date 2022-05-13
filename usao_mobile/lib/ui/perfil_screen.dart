@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:like_button/like_button.dart';
 import 'package:usao_mobile/bloc/user/user_bloc.dart';
 import 'package:usao_mobile/models/user/profile_response.dart';
+import 'package:usao_mobile/repository/producto/producto_repository.dart';
+import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/repository/user/user_repository.dart';
 import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
@@ -17,11 +21,13 @@ class PerfilScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<PerfilScreen> {
   late UserRepository userRepository;
+  late ProductoRepository productoRepository;
 
   @override
   void initState() {
     // TODO: implement initState
     userRepository = UserRepositoryImpl();
+    productoRepository = ProductoRepositoryImpl();
     super.initState();
   }
 
@@ -29,7 +35,8 @@ class _ProfileScreenState extends State<PerfilScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return UserBloc(userRepository)..add(const FetchUser());
+        return UserBloc(userRepository, productoRepository)
+          ..add(const FetchUser());
       },
       child: Scaffold(body: _createPublics(context)),
     );
@@ -249,6 +256,21 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                                 ),
                               ),
                             ),
+                            Expanded(
+                                child: GestureDetector(
+                              child: LikeButton(
+                                likeBuilder: (isLiked) {
+                                  return Icon(CupertinoIcons.delete,
+                                      color: isLiked ? Colors.red : Colors.red);
+                                },
+                                onTap: (isLiked) {
+                                  return changedata(
+                                      isLiked,
+                                      user.productoList.elementAt(index).id,
+                                      context);
+                                },
+                              ),
+                            ))
                           ],
                         )
                       ],
@@ -267,4 +289,11 @@ Widget _profile(BuildContext context, ProfileResponse user) {
       ],
     ),
   );
+}
+
+Future<bool> changedata(status, id, context) async {
+  //your code
+
+  BlocProvider.of<UserBloc>(context).add(DeleteProductoEvent(id));
+  return Future.value(!status);
 }

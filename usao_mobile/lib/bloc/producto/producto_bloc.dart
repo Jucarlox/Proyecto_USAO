@@ -61,15 +61,4 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
       emit(ProductoErrorState(e.toString()));
     }
   }
-
-  void _deleteProductoEvent(
-      DeleteProductoEvent event, Emitter<ProductoState> emit) async {
-    try {
-      final postResponse = await productoRepository.deleteProducto(event.id);
-      emit(ProductoSuccessState(postResponse));
-      return;
-    } on Exception catch (e) {
-      emit(ProductoErrorState(e.toString()));
-    }
-  }
 }

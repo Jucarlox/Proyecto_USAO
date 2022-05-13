@@ -13,3 +13,9 @@ class FetchUser extends UserEvent {
   @override
   List<Object> get props => [];
 }
+
+class DeleteProductoEvent extends UserEvent {
+  final int id;
+
+  const DeleteProductoEvent(this.id);
+}
