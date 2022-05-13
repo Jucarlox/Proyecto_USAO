@@ -159,28 +159,36 @@ public class ProductoServiceImpl {
         if (producto.isEmpty()) {
             throw new SingleEntityNotFoundException(id.toString(), Producto.class);
         } else {
+
             if(producto.get().getPropietario().getNick().equals(user.getNick())){
                 String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("https://usao-back.herokuapp.com/download/", "")
                         .replace("%20", " ");
-                Path path = storageService.load(scale);
-                String filename = StringUtils.cleanPath(String.valueOf(path)).replace("https://usao-back.herokuapp.com/download/", "")
-                        .replace("%20", " ");
-                Path pathScalse = Paths.get(filename);
-                storageService.deleteFile(pathScalse);
+                System.out.println(scale);
+                if(scale.contains("http://")){
+                    productoRepository.deleteById(id);
+                }else{
+                    Path path = storageService.load(scale);
+                    String filename = StringUtils.cleanPath(String.valueOf(path)).replace("https://usao-back.herokuapp.com/download/", "")
+                            .replace("%20", " ");
+                    Path pathScalse = Paths.get(filename);
+                    storageService.deleteFile(pathScalse);
 
 
-                String original = StringUtils.cleanPath(String.valueOf(producto.get().getFileOriginal())).replace("https://usao-back.herokuapp.com/download/", "")
-                        .replace("%20", " ");
-                Path path2 = storageService.load(original);
-                String filename2 = StringUtils.cleanPath(String.valueOf(path2)).replace("https://usao-back.herokuapp.com/download/", "")
-                        .replace("%20", " ");
-                Path pathOriginal = Paths.get(filename2);
-                storageService.deleteFile(pathOriginal);
+                    String original = StringUtils.cleanPath(String.valueOf(producto.get().getFileOriginal())).replace("https://usao-back.herokuapp.com/download/", "")
+                            .replace("%20", " ");
+                    Path path2 = storageService.load(original);
+                    String filename2 = StringUtils.cleanPath(String.valueOf(path2)).replace("https://usao-back.herokuapp.com/download/", "")
+                            .replace("%20", " ");
+                    Path pathOriginal = Paths.get(filename2);
+
+                    storageService.deleteFile(pathOriginal);
 
 
 
 
-                productoRepository.deleteById(id);
+                    productoRepository.deleteById(id);
+                }
+
 
                 return ResponseEntity.noContent().build();
             }else {
