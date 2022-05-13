@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<HomePage> {
-  int _currentIndex = 0;
+  int _currentIndex = 4;
 
   List<Widget> pages = [
     const InicioScreen(),
@@ -41,15 +41,9 @@ class _MenuScreenState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return ProductoBloc(productoRepository)
-          ..add(const FetchProductoWithType());
-      },
-      child: Scaffold(
-          body: pages[_currentIndex],
-          bottomNavigationBar: _buildBottomBar(context)),
-    );
+    return Scaffold(
+        body: pages[_currentIndex],
+        bottomNavigationBar: _buildBottomBar(context));
   }
 
   Widget _buildBottomBar(BuildContext context) {

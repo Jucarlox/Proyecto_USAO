@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
       //theme: ThemeData(accentColor: Colors.tealAccent.shade700),
       initialRoute: '/login',
       routes: {
-        '/': (context) => HomePage(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomePage(),
+
         //       '/post-form': (context) => const PostForm(),
       },
     );

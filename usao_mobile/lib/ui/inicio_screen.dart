@@ -36,7 +36,8 @@ class _InicioScreenState extends State<InicioScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return ProductoBloc(productoRepository)..add(FetchProductoWithType());
+        return ProductoBloc(productoRepository)
+          ..add(const FetchProductoWithType());
       },
       child: Scaffold(
         body: _createPublics(context),
