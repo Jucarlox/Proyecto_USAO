@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<HomePage> {
-  int _currentIndex = 4;
+  int _currentIndex = 0;
 
   List<Widget> pages = [
     const InicioScreen(),

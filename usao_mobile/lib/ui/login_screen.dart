@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 final prefs = await SharedPreferences.getInstance();
                 // Shared preferences > guardo el token
                 prefs.setString('token', state.loginResponse.token);
+                prefs.setString('id', state.loginResponse.id);
                 //prefs.setString('avatar', state.loginResponse.avatar);
                 Navigator.pushNamed(context, '/home');
               } else if (state is LoginErrorState) {

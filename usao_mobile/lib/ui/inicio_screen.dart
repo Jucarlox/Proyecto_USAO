@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
@@ -18,10 +19,19 @@ class InicioScreen extends StatefulWidget {
 }
 
 class _InicioScreenState extends State<InicioScreen> {
+  String id = "";
+  void loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id = prefs.getString('id')!;
+    });
+  }
+
   late ProductoRepository productoRepository;
 
   @override
   void initState() {
+    loadCounter();
     productoRepository = ProductoRepositoryImpl();
     super.initState();
   }
@@ -40,13 +50,13 @@ class _InicioScreenState extends State<InicioScreen> {
           ..add(const FetchProductoWithType());
       },
       child: Scaffold(
-        body: _createPublics(context),
+        body: _createPublics(context, id),
       ),
     );
   }
 }
 
-Widget _createPublics(BuildContext context) {
+Widget _createPublics(BuildContext context, String id) {
   return BlocBuilder<ProductoBloc, ProductoState>(
     builder: (context, state) {
       if (state is ProductoInitialState) {
@@ -54,7 +64,7 @@ Widget _createPublics(BuildContext context) {
       } else if (state is ProductoErrorState) {
         return Text("error");
       } else if (state is ProductoFetched) {
-        return _createPopularView(context, state.productos);
+        return _createPopularView(context, state.productos, id);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -62,7 +72,8 @@ Widget _createPublics(BuildContext context) {
   );
 }
 
-Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
+Widget _createPopularView(
+    BuildContext context, List<ProductoResponse> movies, String id) {
   final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 60.0),
@@ -80,7 +91,7 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
           child: ListView.separated(
             physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
-              return _post(context, movies[index]);
+              return _post(context, movies[index], id);
             },
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             scrollDirection: Axis.horizontal,
@@ -96,7 +107,7 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
   );
 }
 
-Widget _post(BuildContext context, ProductoResponse data) {
+Widget _post(BuildContext context, ProductoResponse data, String id) {
   return Container(
     alignment: Alignment.bottomCenter,
     width: 160,
@@ -133,7 +144,8 @@ Widget _post(BuildContext context, ProductoResponse data) {
             children: [
               Expanded(
                 child: ListTile(
-                  title: Text(data.nombre, style: KTextStyle.textFieldHeading),
+                  title: Text(data.precio.toString(),
+                      style: KTextStyle.textFieldHeading),
                   subtitle: Text(
                     data.precio.toString() + " €",
                     overflow: TextOverflow.ellipsis,
@@ -144,9 +156,9 @@ Widget _post(BuildContext context, ProductoResponse data) {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
                 child: LikeButton(
-                  likeBuilder: (isLiked) {
+                  likeBuilder: (bool isliked) {
                     return Icon(CupertinoIcons.heart_fill,
-                        color: isLiked
+                        color: data.idUsersLike.contains(id)
                             ? Colors.red
                             : Color.fromARGB(255, 216, 216, 216));
                   },
@@ -167,5 +179,6 @@ Future<bool> changedata(status, id, context) async {
   //your code
 
   BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
+  Navigator.pushNamed(context, '/home');
   return Future.value(!status);
 }

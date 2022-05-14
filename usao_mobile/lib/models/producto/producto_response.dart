@@ -7,6 +7,7 @@ class ProductoResponse {
     required this.precio,
     required this.propietario,
     required this.fileScale,
+    required this.idUsersLike,
   });
   late final int id;
   late final String nombre;
@@ -15,6 +16,7 @@ class ProductoResponse {
   late final double precio;
   late final Propietario propietario;
   late final String fileScale;
+  late final List<String> idUsersLike;
 
   ProductoResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -24,6 +26,7 @@ class ProductoResponse {
     precio = json['precio'];
     propietario = Propietario.fromJson(json['propietario']);
     fileScale = json['fileScale'];
+    idUsersLike = List.castFrom<dynamic, String>(json['idUsersLike']);
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class ProductoResponse {
     _data['precio'] = precio;
     _data['propietario'] = propietario.toJson();
     _data['fileScale'] = fileScale;
+    _data['idUsersLike'] = idUsersLike;
     return _data;
   }
 }
