@@ -4,6 +4,9 @@ import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto3;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.*;
 
+import java.util.UUID;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,5 +21,6 @@ public class GetProductoDto {
     private double precio;
     private GetUserDto3 propietario;
     private String fileScale;
+    private List<UUID> idUsersLike;
 
 }

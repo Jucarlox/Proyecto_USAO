@@ -211,7 +211,7 @@ public class ProductoServiceImpl {
 
 
 
-            List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+            List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(), p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
             return getProductoDtos;
 
 
@@ -239,7 +239,7 @@ public class ProductoServiceImpl {
 
 
 
-            List<GetProductoDto> getProductoDtos = listGangas.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+            List<GetProductoDto> getProductoDtos = listGangas.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
 
             return getProductoDtos;
 
@@ -249,7 +249,7 @@ public class ProductoServiceImpl {
 
     public List<GetProductoDto> getListLike(User user){
 
-        List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+        List<GetProductoDto> getProductoDtos = user.getProductosLike().stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
 
         return getProductoDtos;
     }
@@ -279,16 +279,16 @@ public class ProductoServiceImpl {
 
     public List<GetProductoDto> getProductosFiltrado  (User user, String string){
 
-        return productoRepository.busquedaProductos(string, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+        return productoRepository.busquedaProductos(string, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
 
     }
 
     public List<GetProductoDto> getProductosAjenos  (User user){
-        return productoRepository.busquedaProductoajenos(user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+        return productoRepository.busquedaProductoajenos(user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
     }
 
     public List<GetProductoDto> getProductosCategoria  (User user, String categoria){
-        return productoRepository.busquedaCategoriaProductoajenos(categoria, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList();
+        return productoRepository.busquedaCategoriaProductoajenos(categoria, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
     }
 
 

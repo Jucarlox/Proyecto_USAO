@@ -39,8 +39,8 @@ public class UserDtoConverter {
                 .nick(user.getNick())
                 .email(user.getEmail())
                 .role(user.getRoles())
-                .productoList(productoList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList())
-                .productoListLike(productoListLike.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale())).toList())
+                .productoList(productoList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(), p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList())
+                .productoListLike(productoListLike.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(), p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList())
                 .build();
 
 

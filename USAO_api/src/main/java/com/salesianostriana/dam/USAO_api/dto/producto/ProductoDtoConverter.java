@@ -19,7 +19,9 @@ public class ProductoDtoConverter {
                 .categoria(producto.getCategoria())
                 .precio(producto.getPrecio())
                 .propietario(userDtoConverter.convertUserEntityToGetUserDto(producto.getPropietario()))
+                .idUsersLike(producto.getUsuariosLike().stream().map(user -> user.getId()).toList())
                 .build();
     }
 
 }
+
