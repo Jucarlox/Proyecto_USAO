@@ -45,7 +45,7 @@ public class Producto {
     private User propietario;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "productosLike")
+    @ManyToMany(mappedBy = "productosLike", fetch = FetchType.EAGER)
     private List<User> usuariosLike = new ArrayList<>();
 
     @PreRemove
