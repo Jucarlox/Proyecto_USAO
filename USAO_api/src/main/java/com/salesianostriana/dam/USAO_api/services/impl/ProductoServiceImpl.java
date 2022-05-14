@@ -163,8 +163,8 @@ public class ProductoServiceImpl {
             if(producto.get().getPropietario().getNick().equals(user.getNick())){
                 String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("https://usao-back.herokuapp.com/download/", "")
                         .replace("%20", " ");
-                System.out.println(scale);
-                if(scale.contains("http://")){
+
+                if(!scale.contains("download")){
                     productoRepository.deleteById(id);
                 }else{
                     Path path = storageService.load(scale);
@@ -192,7 +192,7 @@ public class ProductoServiceImpl {
 
                 return ResponseEntity.noContent().build();
             }else {
-                throw new DynamicException("No eres propietario de este post");
+                throw new DynamicException("No eres propietario de este producto");
             }
 
 
@@ -205,9 +205,9 @@ public class ProductoServiceImpl {
         Optional<Producto> producto = productoRepository.findById(id);
 
         if(producto.isPresent()){
-            user.getProductosLike().add(producto.get());
+            user.Like(producto.get());
             userEntityRepository.save(user);
-
+            productoRepository.save(producto.get());
 
 
 
@@ -258,11 +258,14 @@ public class ProductoServiceImpl {
     public ResponseEntity dislikeProducto(User user, Long id){
 
         Optional<Producto> producto = productoRepository.findById(id);
+        Optional<User> user1 = userEntityRepository.findById(user.getId());
 
         if(producto.isPresent()){
 
-            user.getProductosLike().remove(producto);
-            userEntityRepository.save(user);
+            user1.get().removeLike(producto.get());
+
+            userEntityRepository.save(user1.get());
+            productoRepository.save(producto.get());
 
             return ResponseEntity.noContent().build();
 

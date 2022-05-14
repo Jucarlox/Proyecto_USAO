@@ -4,6 +4,8 @@ import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 
@@ -42,10 +44,22 @@ public class Producto {
     @ManyToOne(fetch = FetchType.EAGER)
     private User propietario;
 
+    @Builder.Default
+    @ManyToMany(mappedBy = "productosLike")
+    private List<User> usuariosLike = new ArrayList<>();
+
     @PreRemove
     public void borrarProducto(){
         propietario.setProductosLike(null);
+        for (User u : this.usuariosLike) { u.getProductosLike().remove(this);
+        }
     }
+
+
+
+
+
+
 
 
 }

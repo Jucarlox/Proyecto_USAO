@@ -62,10 +62,8 @@ public class User implements UserDetails {
 
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "productosLike",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id"))
-    private List<Producto> productosLike= new ArrayList<>();
+    @JoinTable(name = "like_table", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
+    private List<Producto> productosLike = new ArrayList<>();
 
 
     @Override
@@ -98,6 +96,18 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void Like(Producto b) {
+        productosLike.add(b);
+        b.getUsuariosLike().add(this);
+    }
+
+    public void removeLike(Producto b) {
+        productosLike.remove(b);
+        b.getUsuariosLike().remove(this);
+    }
+
+
 
 
 
