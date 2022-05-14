@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
@@ -167,6 +168,9 @@ Widget _post(BuildContext context, ProductoResponse data) {
 Future<bool> changedata(status, id, context) async {
   //your code
 
-  BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
+  BlocProvider.of<ProductoBloc>(context).add(DislikeProductoEvent(id));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setInt('indice', 1);
+  Navigator.pushNamed(context, '/home');
   return Future.value(!status);
 }

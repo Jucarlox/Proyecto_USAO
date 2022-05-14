@@ -130,6 +130,34 @@ class ProductoRepositoryImpl extends ProductoRepository {
   }
 
   @override
+  Future dislikeProducto(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Map<String, String> headers = {
+        "Content-Type": "multipart/form-data",
+        "Authorization": "Bearer " + token!
+      };
+
+      var request = http.MultipartRequest(
+          'DELETE', Uri.parse("${Constants.baseUrl}/producto/dislike/${id}"));
+
+      request.headers.addAll(headers);
+
+      var response = await request.send();
+      if (response.statusCode == 204) {
+        return null;
+      } else {
+        throw Exception('Fail to delete post');
+      }
+    } catch (error) {
+      print('Error add project $error');
+      throw (error);
+    }
+  }
+
+  @override
   Future<List<ProductoResponse>> fetchLikesProducto() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

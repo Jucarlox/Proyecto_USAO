@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/bloc/user/user_bloc.dart';
 import 'package:usao_mobile/models/user/profile_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
@@ -168,23 +169,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                         "Edit Profile",
                         style: TextStyle(color: Colors.black),
                       ))),
-            )
-
-            /* Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 120.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.white),
-                        onPressed: () {},
-                        child: const Text(
-                          "Edit Profile",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),*/
+            ),
           ],
         ),
         const Divider(
@@ -295,5 +280,8 @@ Future<bool> changedata(status, id, context) async {
   //your code
 
   BlocProvider.of<UserBloc>(context).add(DeleteProductoEvent(id));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setInt('indice', 4);
+  Navigator.pushNamed(context, '/home');
   return Future.value(!status);
 }

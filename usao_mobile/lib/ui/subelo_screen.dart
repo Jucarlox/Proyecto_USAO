@@ -62,7 +62,8 @@ class _ProductoFormState extends State<SubeloScreen> {
                   state is ProductoErrorState;
             }, listener: (context, state) async {
               if (state is ProductoSuccessState) {
-                final prefs = await SharedPreferences.getInstance();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setInt('indice', 4);
                 Navigator.pushNamed(context, '/home');
               } else if (state is ProductoErrorState) {
                 _showSnackbar(context, state.message);

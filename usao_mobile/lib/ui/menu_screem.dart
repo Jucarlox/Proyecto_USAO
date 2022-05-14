@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
@@ -22,6 +25,15 @@ class HomePage extends StatefulWidget {
 class _MenuScreenState extends State<HomePage> {
   int _currentIndex = 0;
 
+  void loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Timer(Duration(milliseconds: 200), () {
+      setState(() {
+        _currentIndex = prefs.getInt('indice')!;
+      });
+    });
+  }
+
   List<Widget> pages = [
     const InicioScreen(),
     const FavoritosScreen(),
@@ -36,6 +48,7 @@ class _MenuScreenState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     productoRepository = ProductoRepositoryImpl();
+    loadCounter();
     super.initState();
   }
 

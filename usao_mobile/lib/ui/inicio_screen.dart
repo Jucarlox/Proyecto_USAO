@@ -166,7 +166,7 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
                     return changedata(isLiked, data.id, context);
                   },
                 ),
-              )
+              ),
             ],
           )
         ],
@@ -179,6 +179,8 @@ Future<bool> changedata(status, id, context) async {
   //your code
 
   BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setInt('indice', 1);
   Navigator.pushNamed(context, '/home');
   return Future.value(!status);
 }

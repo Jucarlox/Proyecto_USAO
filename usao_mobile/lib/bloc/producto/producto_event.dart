@@ -19,6 +19,11 @@ class LikeProductoEvent extends ProductoEvent {
   const LikeProductoEvent(this.id);
 }
 
+class DislikeProductoEvent extends ProductoEvent {
+  final int id;
+  const DislikeProductoEvent(this.id);
+}
+
 class DoProductoEvent extends ProductoEvent {
   final ProductoDto productoDto;
   final String imagePath;
