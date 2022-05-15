@@ -55,6 +55,12 @@ dependencies:
   insta_like_button: ^0.1.1
   flutter_keyboard_visibility: ^5.2.0
   like_button: ^2.0.4
+  cloud_firestore: ^3.1.15
+  firebase_core: ^1.17.0
+  flutter_chat_bubble: ^2.0.0
+  firebase_auth: ^3.3.18
+  cupertino_list_tile: ^0.2.1
+  flutter_mobx: ^2.0.6+1
   
   
 

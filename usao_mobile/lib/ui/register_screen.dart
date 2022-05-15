@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,6 +48,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController dateController = TextEditingController();
   bool publicController = true;
 
+  final auth = FirebaseAuth.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
   @override
   void initState() {
     authRepository = AuthRepositoryImpl();
@@ -75,6 +80,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               if (state is RegisterSuccessState) {
                 // Shared preferences > guardo el token
                 //prefs.setString('avatar', state.registerResponse.avatar);
+                createUserInFirestore(
+                    state.registerResponse.nick,
+                    state.registerResponse.email,
+                    state.registerResponse.avatar,
+                    state.registerResponse.id);
                 Navigator.pushNamed(
                   context,
                   '/home',
@@ -469,5 +479,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                     )))));
+  }
+
+  void createUserInFirestore(
+      String nick, String email, String filePath, String uid) {
+    users.add({'nick': nick, 'email': email, 'avatar': filePath, 'uid': uid});
   }
 }

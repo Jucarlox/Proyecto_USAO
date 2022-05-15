@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:usao_mobile/repository/preferences_utils.dart';
 import 'package:usao_mobile/ui/login_screen.dart';
@@ -6,9 +7,11 @@ import 'package:usao_mobile/ui/perfil_screen.dart';
 import 'package:usao_mobile/ui/register_screen.dart';
 import 'package:usao_mobile/ui/subelo_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   PreferenceUtils.init();
+
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) => HomePage(),
 
         //       '/post-form': (context) => const PostForm(),
       },

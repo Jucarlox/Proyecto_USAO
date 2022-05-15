@@ -12,6 +12,7 @@ import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/ui/chat_screen.dart';
 import 'package:usao_mobile/ui/favoritos_screen.dart';
 import 'package:usao_mobile/ui/inicio_screen.dart';
+import 'package:usao_mobile/ui/people.dart';
 import 'package:usao_mobile/ui/perfil_screen.dart';
 import 'package:usao_mobile/ui/subelo_screen.dart';
 
@@ -38,7 +39,7 @@ class _MenuScreenState extends State<HomePage> {
     const InicioScreen(),
     const FavoritosScreen(),
     const SubeloScreen(),
-    const ChatScreen(),
+    const People(),
     const PerfilScreen()
   ];
 
