@@ -38,6 +38,15 @@ class ProductoFetched extends ProductoState {
   List<Object> get props => [productos];
 }
 
+class ProductoIdFetched extends ProductoState {
+  final ProductoResponse producto;
+
+  const ProductoIdFetched(this.producto);
+
+  @override
+  List<Object> get props => [producto];
+}
+
 class ProductoFetchError extends ProductoState {
   final String message;
   const ProductoFetchError(this.message);

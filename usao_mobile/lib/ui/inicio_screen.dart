@@ -130,10 +130,10 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
                   ),
                   child: GestureDetector(
                     onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailProductScreen()),
-                    ),
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                DetailProductScreen(id: data.id))),
                     child: ListTile(
                         leading: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),

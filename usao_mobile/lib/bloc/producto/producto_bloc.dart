@@ -16,12 +16,24 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     on<LikeProductoEvent>(_likeProductoEvent);
     on<FetchProductosLike>(__productoFetchedLike);
     on<DislikeProductoEvent>(_dislikeProductoEvent);
+    on<ProductoIdEvent>(_productoIdEvent);
   }
 
   void _likeProductoEvent(
       LikeProductoEvent event, Emitter<ProductoState> emit) async {
     try {
       final postResponse = await productoRepository.likeProducto(event.id);
+      emit(ProductoSuccessState(postResponse));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoErrorState(e.toString()));
+    }
+  }
+
+  void _productoIdEvent(
+      ProductoIdEvent event, Emitter<ProductoState> emit) async {
+    try {
+      final postResponse = await productoRepository.productoId(event.id);
       emit(ProductoSuccessState(postResponse));
       return;
     } on Exception catch (e) {
