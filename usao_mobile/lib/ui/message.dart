@@ -6,7 +6,7 @@ import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:basic_utils/basic_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/styles/colors.dart';
 
@@ -80,6 +80,54 @@ class _ChatDetailState extends State<ChatDetail> {
     });
   }
 
+  String modifyMessage(String msg) {
+    String result = msg;
+    String prueba = msg.replaceAll(' ', 'wz');
+    late String result1, result2, result3, result4, result5, result6;
+    for (var i = 0; i < prueba.length; i++) {
+      if (i == 25) {
+        result1 = StringUtils.addCharAtPosition(prueba, '\n', 25);
+      }
+
+      if (i == 50) {
+        result2 = StringUtils.addCharAtPosition(result1, '\n', 50);
+      }
+      if (i == 75) {
+        result3 = StringUtils.addCharAtPosition(result2, '\n', 75);
+      }
+      if (i == 100) {
+        result4 = StringUtils.addCharAtPosition(result3, '\n', 100);
+      }
+      if (i == 125) {
+        result5 = StringUtils.addCharAtPosition(result4, '\n', 125);
+      }
+      if (i == 150) {
+        result6 = StringUtils.addCharAtPosition(result5, '\n', 150);
+      }
+    }
+
+    if (prueba.length >= 150) {
+      return result6.replaceAll('wz', ' ');
+    }
+    if (prueba.length >= 125) {
+      return result5.replaceAll('wz', ' ');
+    }
+    if (prueba.length >= 100) {
+      return result4.replaceAll('wz', ' ');
+    }
+    if (prueba.length >= 75) {
+      return result3.replaceAll('wz', ' ');
+    }
+    if (prueba.length >= 50) {
+      return result2.replaceAll('wz', ' ');
+    }
+    if (prueba.length >= 25) {
+      return result1.replaceAll('wz', ' ');
+    }
+
+    return prueba.replaceAll('wz', ' ');
+  }
+
   bool isSender(String friend) {
     return friend == prefs.getString('id');
   }
@@ -115,6 +163,7 @@ class _ChatDetailState extends State<ChatDetail> {
         if (snapshot.hasData) {
           var data;
           return Scaffold(
+            backgroundColor: Color.fromARGB(255, 49, 47, 47),
             appBar: CupertinoNavigationBar(
               middle: Text(friendName),
             ),
@@ -133,7 +182,7 @@ class _ChatDetailState extends State<ChatDetail> {
                             child: ChatBubble(
                               clipper: ChatBubbleClipper6(
                                 nipSize: 0,
-                                radius: 25,
+                                radius: 0,
                                 type: isSender(data['uid'].toString())
                                     ? BubbleType.sendBubble
                                     : BubbleType.receiverBubble,
@@ -141,8 +190,8 @@ class _ChatDetailState extends State<ChatDetail> {
                               alignment: getAlignment(data['uid'].toString()),
                               margin: EdgeInsets.only(top: 20),
                               backGroundColor: isSender(data['uid'].toString())
-                                  ? AppColors.cyan
-                                  : Color.fromARGB(255, 238, 176, 228),
+                                  ? Color.fromARGB(255, 202, 245, 169)
+                                  : Colors.white,
                               child: Container(
                                 constraints: BoxConstraints(
                                   maxWidth:
@@ -198,7 +247,8 @@ class _ChatDetailState extends State<ChatDetail> {
                       ),
                       CupertinoButton(
                           child: Icon(Icons.send_sharp),
-                          onPressed: () => sendMessage(_textController.text))
+                          onPressed: () =>
+                              sendMessage(modifyMessage(_textController.text)))
                     ],
                   )
                 ],

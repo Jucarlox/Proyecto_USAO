@@ -10,6 +10,7 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 
 import 'package:usao_mobile/styles/text.dart';
 import 'package:like_button/like_button.dart';
+import 'package:usao_mobile/ui/detail_product.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({Key? key}) : super(key: key);
@@ -118,28 +119,35 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
         children: <Widget>[
           Center(
               child: Container(
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              image: DecorationImage(
-                image: NetworkImage(data.fileScale),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ListTile(
-                leading: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                imageUrl: data.propietario.avatar,
-                width: 30,
-                height: 30,
-                fit: BoxFit.cover,
-              ),
-            )),
-          )),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                    image: DecorationImage(
+                      image: NetworkImage(data.fileScale),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailProductScreen()),
+                    ),
+                    child: ListTile(
+                        leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        imageUrl: data.propietario.avatar,
+                        width: 30,
+                        height: 30,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
+                  ))),
           Row(
             children: [
               Expanded(

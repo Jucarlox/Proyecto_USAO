@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/home': (context) => HomePage(),
+        '/home': (context) => const HomePage(),
 
         //       '/post-form': (context) => const PostForm(),
       },
