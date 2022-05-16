@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatDetail extends StatefulWidget {
@@ -21,37 +22,52 @@ class _ChatDetailState extends State<ChatDetail> {
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final friendUid;
   final friendName;
-  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
   var chatDocId;
   var _textController = new TextEditingController();
   _ChatDetailState(this.friendUid, this.friendName);
+
+  Future<String> dosharePreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString('id').toString();
+  }
+
+  late SharedPreferences prefs;
   @override
   void initState() {
     super.initState();
+    dosharePreferences();
     checkUser();
   }
 
   void checkUser() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    (QuerySnapshot querySnapshot) async {
-      if (querySnapshot.docs.isNotEmpty) {
-        setState(() {
-          chatDocId = querySnapshot.docs.single.id;
-        });
+    await chats
+        .where('users',
+            isEqualTo: {friendUid: null, prefs.getString('id'): null})
+        .limit(1)
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) async {
+            if (querySnapshot.docs.isNotEmpty) {
+              setState(() {
+                chatDocId = querySnapshot.docs.single.id;
+              });
 
-        print(chatDocId);
-      } else {
-        await chats.add({
-          'users': {prefs.getString('id'): null, friendUid: null}
-        }).then((value) => {chatDocId = value});
-      }
-      ;
-    };
+              print(chatDocId);
+            } else {
+              await chats.add({
+                'users': {prefs.getString('id'): null, friendUid: null}
+              }).then((value) => {chatDocId = value});
+            }
+          },
+        )
+        .catchError((error) {});
   }
 
   void sendMessage(String msg) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'createdOn': FieldValue.serverTimestamp(),
@@ -63,11 +79,11 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   bool isSender(String friend) {
-    return friend == currentUserId;
+    return friend == friendUid;
   }
 
   Alignment getAlignment(friend) {
-    if (friend == currentUserId) {
+    if (friend == prefs.getString('id')) {
       return Alignment.topRight;
     }
     return Alignment.topLeft;
@@ -76,17 +92,29 @@ class _ChatDetailState extends State<ChatDetail> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: chats
-            .doc(chatDocId)
-            .collection('messages')
-            .orderBy('createdOn', descending: true)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      stream: chats
+          .doc(chatDocId)
+          .collection('messages')
+          .orderBy('createdOn', descending: true)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Something went wrong"),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+
+        if (snapshot.hasData) {
           var data;
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: Text(friendName),
-              previousPageTitle: "Back",
             ),
             child: SafeArea(
               child: Column(
@@ -96,7 +124,7 @@ class _ChatDetailState extends State<ChatDetail> {
                       reverse: true,
                       children: snapshot.data!.docs.map(
                         (DocumentSnapshot document) {
-                          data = document.data();
+                          data = document.data()!;
                           print(document.toString());
                           print(data['msg']);
                           return Padding(
@@ -106,13 +134,13 @@ class _ChatDetailState extends State<ChatDetail> {
                               clipper: ChatBubbleClipper6(
                                 nipSize: 0,
                                 radius: 0,
-                                type: isSender(data['uid'].toString())
+                                type: isSender(friendUid)
                                     ? BubbleType.sendBubble
                                     : BubbleType.receiverBubble,
                               ),
                               alignment: getAlignment(data['uid'].toString()),
                               margin: EdgeInsets.only(top: 20),
-                              backGroundColor: isSender(data['uid'].toString())
+                              backGroundColor: isSender(friendUid)
                                   ? Color(0xFF08C187)
                                   : Color(0xffE7E7ED),
                               child: Container(
@@ -128,8 +156,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                       children: [
                                         Text(data['msg'],
                                             style: TextStyle(
-                                                color: isSender(
-                                                        data['uid'].toString())
+                                                fontSize: 20,
+                                                color: isSender(friendUid)
                                                     ? Colors.white
                                                     : Colors.black),
                                             maxLines: 100,
@@ -146,9 +174,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                                   .toDate()
                                                   .toString(),
                                           style: TextStyle(
-                                              fontSize: 10,
-                                              color: isSender(
-                                                      data['uid'].toString())
+                                              fontSize: 8,
+                                              color: isSender(friendUid)
                                                   ? Colors.white
                                                   : Colors.black),
                                         )
@@ -183,6 +210,10 @@ class _ChatDetailState extends State<ChatDetail> {
               ),
             ),
           );
-        });
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 }

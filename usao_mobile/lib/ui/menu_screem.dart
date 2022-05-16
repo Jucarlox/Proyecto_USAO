@@ -39,7 +39,7 @@ class _MenuScreenState extends State<HomePage> {
     const InicioScreen(),
     const FavoritosScreen(),
     const SubeloScreen(),
-    const People(),
+    const ChatScreen(),
     const PerfilScreen()
   ];
 
