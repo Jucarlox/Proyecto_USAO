@@ -181,7 +181,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: ChatBubble(
                               clipper: ChatBubbleClipper6(
-                                nipSize: 0,
+                                nipSize: 3,
                                 radius: 0,
                                 type: isSender(data['uid'].toString())
                                     ? BubbleType.sendBubble
