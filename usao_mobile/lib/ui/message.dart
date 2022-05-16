@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usao_mobile/styles/colors.dart';
 
 class ChatDetail extends StatefulWidget {
   final friendUid;
@@ -79,7 +81,7 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   bool isSender(String friend) {
-    return friend == friendUid;
+    return friend == prefs.getString('id');
   }
 
   Alignment getAlignment(friend) {
@@ -112,11 +114,11 @@ class _ChatDetailState extends State<ChatDetail> {
 
         if (snapshot.hasData) {
           var data;
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
+          return Scaffold(
+            appBar: CupertinoNavigationBar(
               middle: Text(friendName),
             ),
-            child: SafeArea(
+            body: SafeArea(
               child: Column(
                 children: [
                   Expanded(
@@ -124,25 +126,23 @@ class _ChatDetailState extends State<ChatDetail> {
                       reverse: true,
                       children: snapshot.data!.docs.map(
                         (DocumentSnapshot document) {
-                          data = document.data()!;
-                          print(document.toString());
-                          print(data['msg']);
+                          data = document.data();
                           return Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: ChatBubble(
                               clipper: ChatBubbleClipper6(
                                 nipSize: 0,
-                                radius: 0,
-                                type: isSender(friendUid)
+                                radius: 25,
+                                type: isSender(data['uid'].toString())
                                     ? BubbleType.sendBubble
                                     : BubbleType.receiverBubble,
                               ),
                               alignment: getAlignment(data['uid'].toString()),
                               margin: EdgeInsets.only(top: 20),
-                              backGroundColor: isSender(friendUid)
-                                  ? Color(0xFF08C187)
-                                  : Color(0xffE7E7ED),
+                              backGroundColor: isSender(data['uid'].toString())
+                                  ? AppColors.cyan
+                                  : Color.fromARGB(255, 238, 176, 228),
                               child: Container(
                                 constraints: BoxConstraints(
                                   maxWidth:
@@ -155,11 +155,9 @@ class _ChatDetailState extends State<ChatDetail> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(data['msg'],
-                                            style: TextStyle(
+                                            style: GoogleFonts.amiri(
                                                 fontSize: 20,
-                                                color: isSender(friendUid)
-                                                    ? Colors.white
-                                                    : Colors.black),
+                                                color: Colors.black),
                                             maxLines: 100,
                                             overflow: TextOverflow.ellipsis)
                                       ],
@@ -174,10 +172,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                                   .toDate()
                                                   .toString(),
                                           style: TextStyle(
-                                              fontSize: 8,
-                                              color: isSender(friendUid)
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                              fontSize: 8, color: Colors.white),
                                         )
                                       ],
                                     )
