@@ -291,6 +291,19 @@ public class ProductoServiceImpl {
         return productoRepository.busquedaCategoriaProductoajenos(categoria, user.getId()).stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(),p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList();
     }
 
+    public GetProductoDto getProductoId(User user, Long id){
+        Optional<Producto> p =  productoRepository.findById(id);
+
+        if (p.isPresent()){
+            GetProductoDto productoDto = new GetProductoDto(p.get().getId(), p.get().getNombre(), p.get().getDescripcion(), p.get().getCategoria(), p.get().getPrecio(), userDtoConverter.convertUserEntityToGetUserDto(p.get().getPropietario()), p.get().getFileScale(), p.get().getUsuariosLike().stream().map(a -> a.getId()).toList());
+            return productoDto;
+        }else {
+            return null;
+        }
+
+
+    }
+
 
 
 

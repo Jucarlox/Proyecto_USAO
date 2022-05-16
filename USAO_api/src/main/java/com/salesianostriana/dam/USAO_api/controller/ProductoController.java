@@ -48,6 +48,17 @@ public class ProductoController {
                     .body(productoDtoConverter.convertProductoToGetProductoDto(saved));
     }
 
+    @GetMapping("/productos/{id}")
+    public ResponseEntity<GetProductoDto> productoId( @AuthenticationPrincipal User userPrincipal, @PathVariable Long id) throws IOException, VideoException {
+        GetProductoDto saved = productoService.getProductoId( userPrincipal, id);
+
+        if (saved == null)
+            return ResponseEntity.badRequest().build();
+        else
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(saved);
+    }
+
     @DeleteMapping("/producto/{id}")
     public ResponseEntity<?> deleteProducto(@AuthenticationPrincipal User userPrincipal, @PathVariable Long id) throws IOException {
         return productoService.deleteProducto(userPrincipal, id);
