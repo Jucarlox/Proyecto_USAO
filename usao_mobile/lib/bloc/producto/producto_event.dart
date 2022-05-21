@@ -19,6 +19,11 @@ class LikeProductoEvent extends ProductoEvent {
   const LikeProductoEvent(this.id);
 }
 
+class SearchProductoEvent extends ProductoEvent {
+  final String text;
+  const SearchProductoEvent(this.text);
+}
+
 class ProductoIdEvent extends ProductoEvent {
   final int id;
   const ProductoIdEvent(this.id);

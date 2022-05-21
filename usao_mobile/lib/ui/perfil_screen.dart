@@ -12,6 +12,7 @@ import 'package:usao_mobile/repository/user/user_repository.dart';
 import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/error_screen.dart';
+import 'package:usao_mobile/ui/menu_screem.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -282,6 +283,11 @@ Future<bool> changedata(status, id, context) async {
   BlocProvider.of<UserBloc>(context).add(DeleteProductoEvent(id));
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setInt('indice', 4);
-  Navigator.pushNamed(context, '/home');
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomePage(),
+    ),
+    (Route route) => false,
+  );
   return Future.value(!status);
 }

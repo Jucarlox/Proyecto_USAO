@@ -13,6 +13,7 @@ import 'package:usao_mobile/models/producto/producto_dto.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
+import 'package:usao_mobile/ui/menu_screem.dart';
 
 class SubeloScreen extends StatefulWidget {
   const SubeloScreen({Key? key}) : super(key: key);
@@ -64,7 +65,13 @@ class _ProductoFormState extends State<SubeloScreen> {
               if (state is ProductoSuccessState) {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setInt('indice', 4);
-                Navigator.pushNamed(context, '/home');
+                //Navigator.pushNamed(context, '/home');
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage(),
+                  ),
+                  (Route route) => false,
+                );
               } else if (state is ProductoErrorState) {
                 _showSnackbar(context, state.message);
               }

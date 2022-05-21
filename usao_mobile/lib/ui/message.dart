@@ -21,6 +21,7 @@ class ChatDetail extends StatefulWidget {
 }
 
 class _ChatDetailState extends State<ChatDetail> {
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final friendUid;
   final friendName;
@@ -166,6 +167,63 @@ class _ChatDetailState extends State<ChatDetail> {
             backgroundColor: Color.fromARGB(255, 49, 47, 47),
             appBar: CupertinoNavigationBar(
               middle: Text(friendName),
+              trailing: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUser)
+                      .collection('chats')
+                      .get()
+                      .then((value) => {
+                            for (var doc in value.docs)
+                              {
+                                if (doc.data().containsValue(friendName))
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(currentUser)
+                                      .collection('chats')
+                                      .doc(doc.id)
+                                      .delete(),
+                              }
+                          });
+
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .get()
+                      .then((value) => {
+                            for (var doc1 in value.docs)
+                              {
+                                if (doc1.data().containsValue(friendName))
+                                  {
+                                    print(doc1),
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(doc1.id)
+                                        .collection('chats')
+                                        .get()
+                                        .then((value) => {
+                                              for (var doc2 in value.docs)
+                                                {
+                                                  if (doc2.data().containsValue(
+                                                      prefs.get('id')))
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(doc1.id)
+                                                        .collection('chats')
+                                                        .doc(doc2.id)
+                                                        .delete(),
+                                                }
+                                            })
+                                  }
+                              }
+                          });
+                },
+                child: Icon(
+                  CupertinoIcons.delete_solid,
+                  color: Colors.red,
+                ),
+              ),
             ),
             body: SafeArea(
               child: Column(

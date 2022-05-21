@@ -13,6 +13,7 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:usao_mobile/ui/menu_screem.dart';
 
 class DetailProductScreen extends StatefulWidget {
   DetailProductScreen({Key? key, this.id}) : super(key: key);
@@ -42,19 +43,22 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     super.initState();
   }
 
+  bool a = true;
+
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
         return ProductoBloc(productoRepository)..add(ProductoIdEvent(id));
       },
       child: Scaffold(
-        body: _createPublics(context, uid, currentUser),
+        body: _createPublics(context, uid, currentUser, a),
       ),
     );
   }
 }
 
-Widget _createPublics(BuildContext context, String uid, String currentUser) {
+Widget _createPublics(
+    BuildContext context, String uid, String currentUser, bool a) {
   return BlocBuilder<ProductoBloc, ProductoState>(
     builder: (context, state) {
       if (state is ProductoInitialState) {
@@ -62,7 +66,7 @@ Widget _createPublics(BuildContext context, String uid, String currentUser) {
       } else if (state is ProductoErrorState) {
         return Text("error");
       } else if (state is ProductoSuccessState) {
-        return _post(context, state.productoResponse, uid, currentUser);
+        return _post(context, state.productoResponse, uid, currentUser, a);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -71,7 +75,7 @@ Widget _createPublics(BuildContext context, String uid, String currentUser) {
 }
 
 Widget _post(BuildContext context, ProductoResponse data, String uid,
-    String currentUser) {
+    String currentUser, bool a) {
   return Scaffold(
     backgroundColor: AppColors.kBgColor,
     appBar: AppBar(
@@ -187,36 +191,62 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                 onTap: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  if (FirebaseFirestore.instance
+
+                  FirebaseFirestore.instance
                       .collection('users')
                       .doc(currentUser)
                       .collection('chats')
-                      .where('uid', isEqualTo: data.propietario.id)
-                      .parameters
-                      .isEmpty) {
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(currentUser)
-                        .collection('chats')
-                        .add({
-                      'email': data.propietario.email,
-                      'nick': data.propietario.nick,
-                      'uid': data.propietario.id
-                    });
-
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc('azOAR6DORzgkDWRvPukhCxmfgGu1')
-                        .collection('chats')
-                        .add({
-                      'email': prefs.get('email'),
-                      'nick': prefs.get('nick'),
-                      'uid': prefs.get('id'),
-                    });
-                  }
+                      .get()
+                      .then((value) => {
+                            for (var doc in value.docs)
+                              {
+                                if (!doc
+                                    .data()
+                                    .containsValue(data.propietario.nick))
+                                  {
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(currentUser)
+                                        .collection('chats')
+                                        .add({
+                                      'email': data.propietario.email,
+                                      'nick': data.propietario.nick,
+                                      'uid': data.propietario.id
+                                    }),
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .get()
+                                        .then((value) => {
+                                              for (var doc in value.docs)
+                                                {
+                                                  if (doc.data().containsValue(
+                                                      data.propietario.id))
+                                                    {
+                                                      FirebaseFirestore.instance
+                                                          .collection('users')
+                                                          .doc(doc.id)
+                                                          .collection('chats')
+                                                          .add({
+                                                        'email':
+                                                            prefs.get('email'),
+                                                        'nick':
+                                                            prefs.get('nick'),
+                                                        'uid': prefs.get('id'),
+                                                      })
+                                                    }
+                                                }
+                                            })
+                                  }
+                              }
+                          });
 
                   prefs.setInt('indice', 3);
-                  Navigator.pushNamed(context, '/home');
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HomePage(),
+                    ),
+                    (Route route) => false,
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -246,6 +276,11 @@ Future<bool> changedata(status, id, context) async {
   BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setInt('indice', 1);
-  Navigator.pushNamed(context, '/home');
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomePage(),
+    ),
+    (Route route) => false,
+  );
   return Future.value(!status);
 }
