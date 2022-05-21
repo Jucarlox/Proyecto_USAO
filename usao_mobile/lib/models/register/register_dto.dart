@@ -5,16 +5,16 @@ class RegisterDto {
     required this.fechaNacimiento,
     required this.password,
     required this.password2,
-    required this.privacity,
     required this.avatar,
+    required this.localizacion,
   });
   late final String nick;
   late final String email;
   late final String fechaNacimiento;
   late final String password;
   late final String password2;
-  late final bool privacity;
   late final String avatar;
+  late final String localizacion;
 
   RegisterDto.fromJson(Map<String, dynamic> json) {
     nick = json['nick'];
@@ -22,8 +22,8 @@ class RegisterDto {
     fechaNacimiento = json['fechaNacimiento'];
     password = json['password'];
     password2 = json['password2'];
-    privacity = json['privacity'];
     avatar = json['avatar'];
+    localizacion = json['localizacion'];
   }
 
   Map<String, dynamic> toJson() {
@@ -33,8 +33,8 @@ class RegisterDto {
     _data['fechaNacimiento'] = fechaNacimiento;
     _data['password'] = password;
     _data['password2'] = password2;
-    _data['privacity'] = privacity;
     _data['avatar'] = avatar;
+    _data['localizacion'] = localizacion;
     return _data;
   }
 }

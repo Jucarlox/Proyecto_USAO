@@ -10,6 +10,7 @@ import 'package:usao_mobile/models/login/login_response.dart';
 import 'package:usao_mobile/models/register/register_dto.dart';
 import 'package:usao_mobile/models/register/register_response.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:diacritic/diacritic.dart';
 
 import '../constants.dart';
 import 'auth_repository.dart';
@@ -29,6 +30,8 @@ class AuthRepositoryImpl extends AuthRepository {
     if (response.statusCode == 201) {
       prefs.setString(
           'token', LoginResponse.fromJson(json.decode(response.body)).token);
+      prefs.setString(
+          'id', LoginResponse.fromJson(json.decode(response.body)).id);
       return LoginResponse.fromJson(json.decode(response.body));
     } else {
       throw Exception('Fail to login');
@@ -46,13 +49,12 @@ class AuthRepositoryImpl extends AuthRepository {
         "email": registerDto.email,
         "password": registerDto.password,
         "password2": registerDto.password2,
-        "avatar": "",
+        "avatar": registerDto.avatar,
         "fechaNacimiento": registerDto.fechaNacimiento,
-        "privacity": registerDto.privacity
+        "categoria": "false",
+        "localizacion": removeDiacritics(registerDto.localizacion.toLowerCase())
       });
 
-      print(data);
-      print(filePath);
       var request = http.MultipartRequest(
           'POST', Uri.parse("https://usao-back.herokuapp.com/auth/register"))
         ..files.add(http.MultipartFile.fromString('user', data,
@@ -67,13 +69,13 @@ class AuthRepositoryImpl extends AuthRepository {
         LoginDto loginDto =
             LoginDto(email: registerDto.email, password: registerDto.password);
         login(loginDto);
+        print(registerDto.avatar);
         return RegisterResponse.fromJson(
             jsonDecode(await response.stream.bytesToString()));
       } else {
         throw Exception('Fail to register');
       }
     } catch (error) {
-      print('Error add project $error');
       throw (error);
     }
   }

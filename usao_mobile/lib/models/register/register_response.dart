@@ -5,14 +5,14 @@ class RegisterResponse {
     required this.email,
     required this.fechaNacimiento,
     required this.avatar,
-    required this.estado,
+    required this.role,
   });
   late final String id;
   late final String nick;
   late final String email;
   late final String fechaNacimiento;
   late final String avatar;
-  late final String estado;
+  late final String role;
 
   RegisterResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -20,7 +20,7 @@ class RegisterResponse {
     email = json['email'];
     fechaNacimiento = json['fechaNacimiento'];
     avatar = json['avatar'];
-    estado = json['estado'];
+    role = json['role'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,7 +30,7 @@ class RegisterResponse {
     _data['email'] = email;
     _data['fechaNacimiento'] = fechaNacimiento;
     _data['avatar'] = avatar;
-    _data['estado'] = estado;
+    _data['role'] = role;
     return _data;
   }
 }

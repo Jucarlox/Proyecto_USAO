@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'package:usao_mobile/models/login/login_dto.dart';
 import 'package:usao_mobile/repository/auth/auth_repository.dart';
 import 'package:usao_mobile/repository/auth/auth_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
+import 'package:usao_mobile/ui/chat_screen.dart';
 import 'package:usao_mobile/widgets/custom_header.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late AuthRepository authRepository;
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -50,9 +54,12 @@ class _LoginScreenState extends State<LoginScreen> {
               if (state is LoginSuccessState) {
                 final prefs = await SharedPreferences.getInstance();
                 // Shared preferences > guardo el token
-                //prefs.setString('token', state.loginResponse.token);
+                prefs.setString('token', state.loginResponse.token);
+                prefs.setString('id', state.loginResponse.id);
+                prefs.setString('nick', state.loginResponse.nike);
+                signIn(state.loginResponse.email, passwordController.text);
                 //prefs.setString('avatar', state.loginResponse.avatar);
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/home');
               } else if (state is LoginErrorState) {
                 _showSnackbar(context, state.message);
               }
@@ -211,5 +218,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     )))));
+  }
+
+  void signIn(String email, String password) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt('indice', 3);
+        Navigator.pushNamed(context, '/home');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
+      }
+    }
   }
 }

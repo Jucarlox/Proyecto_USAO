@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +18,7 @@ import 'package:usao_mobile/repository/auth/auth_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/widgets/custom_header.dart';
 import '../bloc/auth/login/login_bloc.dart';
+import 'package:searchfield/searchfield.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -31,13 +35,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController password2Controller = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController localizacionController = TextEditingController();
   String filePath = '';
   String _selectedDate = '';
   String _dateCount = '';
   String _range = '';
   String _rangeCount = '';
+  TextEditingController dropdownValue = TextEditingController(text: 'one');
+  String _selectedItem = '';
+  String? selectedValue;
+
   TextEditingController dateController = TextEditingController();
   bool publicController = true;
+
+  final auth = FirebaseAuth.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   void initState() {
@@ -66,12 +78,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   state is RegisterErrorState;
             }, listener: (context, state) async {
               if (state is RegisterSuccessState) {
-                final prefs = await SharedPreferences.getInstance();
                 // Shared preferences > guardo el token
-                prefs.setString('avatar', state.registerResponse.avatar);
+                //prefs.setString('avatar', state.registerResponse.avatar);
+                createUserInFirestore(
+                    state.registerResponse.nick,
+                    state.registerResponse.email,
+                    state.registerResponse.avatar,
+                    state.registerResponse.id);
                 Navigator.pushNamed(
                   context,
-                  '/',
+                  '/home',
                 );
               } else if (state is RegisterErrorState) {
                 _showSnackbar(context, state.message);
@@ -135,7 +151,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                               ),
-
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
@@ -150,8 +165,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       suffixIconColor: AppColors.cyan,
                                       hintText: 'Nick',
                                       focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white))),
+                                          borderSide: BorderSide(
+                                              color: AppColors.cyan))),
                                   onSaved: (String? value) {
                                     // This optional block of code can be used to run
                                     // code when the user saves the form.
@@ -171,8 +186,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                                       hintText: 'Email',
                                       focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white))),
+                                          borderSide: BorderSide(
+                                              color: AppColors.cyan))),
                                   onSaved: (String? value) {
                                     // This optional block of code can be used to run
                                     // code when the user saves the form.
@@ -194,8 +209,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       suffixIconColor: Colors.white,
                                       hintText: 'Password',
                                       focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white))),
+                                          borderSide: BorderSide(
+                                              color: AppColors.cyan))),
                                   onSaved: (String? value) {
                                     // This optional block of code can be used to run
                                     // code when the user saves the form.
@@ -217,34 +232,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       suffixIconColor: Colors.white,
                                       hintText: 'Repeat Password',
                                       focusedBorder: UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white))),
+                                          borderSide: BorderSide(
+                                              color: AppColors.cyan))),
                                   onSaved: (String? value) {
                                     // This optional block of code can be used to run
                                     // code when the user saves the form.
                                   },
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                width: deviceWidth - 100,
-                                child: Row(
-                                  children: [
-                                    Text("Público:"),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 50.0),
-                                      child: Switch(
-                                        activeColor: AppColors.cyan,
-                                        value: publicController,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            publicController = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
                               Container(
@@ -283,7 +276,104 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   },
                                 ),
                               ),
-                              //avatar
+                              Container(
+                                margin: const EdgeInsets.only(top: 20),
+                                width: deviceWidth - 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SearchField(
+                                  searchStyle: TextStyle(color: AppColors.cyan),
+                                  hint: 'Localización',
+                                  searchInputDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColors.cyan,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 2,
+                                        color: AppColors.cyan,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  maxSuggestionsInViewPort: 6,
+                                  itemHeight: 50,
+                                  suggestionsDecoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  onSuggestionTap:
+                                      (SearchFieldListItem<String> x) {
+                                    setState(() {
+                                      _selectedItem = x.item!;
+                                    });
+                                  },
+                                  suggestions: [
+                                    'Álava',
+                                    'Albacete',
+                                    'Alicante',
+                                    'Almería',
+                                    'Asturias',
+                                    'Ávila',
+                                    'Badajoz',
+                                    'Barcelona',
+                                    'Burgos',
+                                    'Cáceres',
+                                    'Cádiz',
+                                    'Cantabria',
+                                    'Castellón',
+                                    'Ceuta',
+                                    'Ciudad Real',
+                                    'Córdoba',
+                                    'Cuenca',
+                                    'Gerona',
+                                    'Granada',
+                                    'Guadalajara',
+                                    'Guipúzcoa',
+                                    'Huelva',
+                                    'Huesca',
+                                    'Islas Baleares',
+                                    'Jaén',
+                                    'La Coruña',
+                                    'La Rioja',
+                                    'Las Palmas',
+                                    'León',
+                                    'Lérida',
+                                    'Lugo',
+                                    'Madrid',
+                                    'Málaga',
+                                    'Melilla',
+                                    'Murcia',
+                                    'Navarra',
+                                    'Orense',
+                                    'Palencia',
+                                    'Pontevedra',
+                                    'Salamanca',
+                                    'Santa Cruzde Tenerife',
+                                    'Segovia',
+                                    'Sevilla',
+                                    'Soria',
+                                    'Tarragona',
+                                    'Teruel',
+                                    'Toledo',
+                                    'Valencia',
+                                    'Valladolid',
+                                    'Vizcaya',
+                                    'Zamora',
+                                    'Zaragoza'
+                                  ]
+                                      .map((country) => SearchFieldListItem(
+                                          country,
+                                          item: country))
+                                      .toList(),
+                                ),
+                              ),
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
@@ -305,8 +395,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       builder: (context, state) {
                                         if (state
                                             is ImageSelectedSuccessState) {
-                                          print(
-                                              'PATH ${state.pickedFile.path}');
                                           filePath = state.pickedFile.path;
                                           return Column(children: [
                                             Image.file(
@@ -362,7 +450,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     password: passwordController.text,
                                     password2: password2Controller.text,
                                     fechaNacimiento: dateController.text,
-                                    privacity: publicController);
+                                    localizacion: _selectedItem);
+
                                 BlocProvider.of<RegisterBloc>(context).add(
                                     DoRegisterEvent(registerDto, filePath));
                               }
@@ -390,5 +479,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                     )))));
+  }
+
+  void createUserInFirestore(
+      String nick, String email, String filePath, String uid) {
+    users.add({'nick': nick, 'email': email, 'avatar': filePath, 'uid': uid});
   }
 }
