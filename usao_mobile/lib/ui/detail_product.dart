@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +25,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   final id;
   _DetailProductScreenState(this.id);
   late ProductoRepository productoRepository;
-
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
   String uid = "";
   void loadCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -46,13 +48,13 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
         return ProductoBloc(productoRepository)..add(ProductoIdEvent(id));
       },
       child: Scaffold(
-        body: _createPublics(context, uid),
+        body: _createPublics(context, uid, currentUser),
       ),
     );
   }
 }
 
-Widget _createPublics(BuildContext context, String uid) {
+Widget _createPublics(BuildContext context, String uid, String currentUser) {
   return BlocBuilder<ProductoBloc, ProductoState>(
     builder: (context, state) {
       if (state is ProductoInitialState) {
@@ -60,7 +62,7 @@ Widget _createPublics(BuildContext context, String uid) {
       } else if (state is ProductoErrorState) {
         return Text("error");
       } else if (state is ProductoSuccessState) {
-        return _post(context, state.productoResponse, uid);
+        return _post(context, state.productoResponse, uid, currentUser);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -68,7 +70,8 @@ Widget _createPublics(BuildContext context, String uid) {
   );
 }
 
-Widget _post(BuildContext context, ProductoResponse data, String uid) {
+Widget _post(BuildContext context, ProductoResponse data, String uid,
+    String currentUser) {
   return Scaffold(
     backgroundColor: AppColors.kBgColor,
     appBar: AppBar(
@@ -179,6 +182,58 @@ Widget _post(BuildContext context, ProductoResponse data, String uid) {
             ),
           ),
           SizedBox(width: 20),
+          Expanded(
+            child: InkWell(
+                onTap: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  if (FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUser)
+                      .collection('chats')
+                      .where('uid', isEqualTo: data.propietario.id)
+                      .parameters
+                      .isEmpty) {
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(currentUser)
+                        .collection('chats')
+                        .add({
+                      'email': data.propietario.email,
+                      'nick': data.propietario.nick,
+                      'uid': data.propietario.id
+                    });
+
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc('azOAR6DORzgkDWRvPukhCxmfgGu1')
+                        .collection('chats')
+                        .add({
+                      'email': prefs.get('email'),
+                      'nick': prefs.get('nick'),
+                      'uid': prefs.get('id'),
+                    });
+                  }
+
+                  prefs.setInt('indice', 3);
+                  Navigator.pushNamed(context, '/home');
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    'Chat',
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                )),
+          ),
         ],
       ),
     ),

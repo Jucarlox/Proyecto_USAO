@@ -78,8 +78,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   state is RegisterErrorState;
             }, listener: (context, state) async {
               if (state is RegisterSuccessState) {
-                // Shared preferences > guardo el token
+                SharedPreferences prefs = await SharedPreferences.getInstance();
                 //prefs.setString('avatar', state.registerResponse.avatar);
+                prefs.setString('id', state.registerResponse.id);
+                prefs.setString('nick', state.registerResponse.nick);
+                prefs.setString('email', state.registerResponse.email);
                 createUserInFirestore(
                     state.registerResponse.nick,
                     state.registerResponse.email,
@@ -483,6 +486,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void createUserInFirestore(
       String nick, String email, String filePath, String uid) {
-    users.add({'nick': nick, 'email': email, 'avatar': filePath, 'uid': uid});
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: email, password: passwordController.text)
+        .then((value) => users.doc(value.user!.uid).set(
+            {'nick': nick, 'email': email, 'avatar': filePath, 'uid': uid}));
+    //users.add({'nick': nick, 'email': email, 'avatar': filePath, 'uid': uid});
   }
 }

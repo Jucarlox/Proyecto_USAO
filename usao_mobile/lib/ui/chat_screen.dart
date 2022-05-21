@@ -13,8 +13,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  var currentUser = FirebaseAuth.instance.currentUser?.uid;
-
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
   void callChatDetailScreen(BuildContext context, String name, String uid) {
     Navigator.push(
         context,
@@ -28,7 +27,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
-            .where('uid', isNotEqualTo: currentUser)
+            .doc(currentUser)
+            .collection('chats')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
