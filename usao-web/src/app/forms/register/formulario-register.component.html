@@ -1,0 +1,66 @@
+
+<div class="login-page">
+
+
+  <div class="form">
+    <h1>REGISTRO</h1>
+    <form method="post">
+
+
+      <div class="campos">
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Nick</mat-label>
+          <input type="text" matInput placeholder="Write titule"
+            [(ngModel)]="RegisterDto.nick" name="nick">
+        </mat-form-field>
+
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput placeholder="Write titule"
+            [(ngModel)]="RegisterDto.email" name="email">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input type="date" matInput [matDatepicker]="picker" [(ngModel)]="RegisterDto.fechaNacimiento" name="fechaNacimiento">
+        <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker  #picker></mat-datepicker>
+      </mat-form-field>
+
+
+      <div class="campos">
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Contraseña</mat-label>
+          <input type="password" matInput placeholder="Write titule"
+            [(ngModel)]="RegisterDto.password" name="password">
+        </mat-form-field>
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Repite la Contraseña</mat-label>
+          <input type="password" matInput placeholder="Write titule"
+            [(ngModel)]="RegisterDto.password2" name="password2">
+        </mat-form-field>
+      </div>
+
+      <div class="campos">
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Provincia</mat-label>
+          <input type="text" matInput placeholder="Write titule"
+            [(ngModel)]="RegisterDto.localizacion" name="localizacion">
+        </mat-form-field>
+      </div>
+
+      
+      <input type="file"  placeholder="Write titule"
+      [(ngModel)]="RegisterDto.avatar" name="file" >
+      
+
+
+      <br>
+      <br>
+      <br>
+      <button type="button" (click)="onSubmit()" class="btn btn-primary">REGISTRAR</button>
+      <p class="message">Ya posees una cuenta? <a href="http://localhost:4200/login">Logueate ahora</a></p>
+    </form>
+  </div>
+</div>
