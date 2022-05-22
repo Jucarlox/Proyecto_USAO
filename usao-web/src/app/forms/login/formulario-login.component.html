@@ -1,0 +1,26 @@
+
+<div class="login-page">
+    
+    
+    <div class="form">
+        <h1>LOGIN</h1>
+<form method="post">
+    
+    <mat-form-field class="input" appearance="fill">
+      <mat-label>Email</mat-label>
+        <input type="email" matInput placeholder="Write titule" [(ngModel)]="LoginDto.email" name="email">
+      </mat-form-field>
+  
+          
+      <mat-form-field class="input" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password"  matInput placeholder="Write titule" [(ngModel)]="LoginDto.password" name="password">
+      </mat-form-field>
+        <br>
+        <br>
+        <br>
+      <button type="button" (click)="onSubmit()" class="btn btn-primary">LOGUEAR</button>
+      <p class="message">No estas registrado? <a href="http://localhost:4200/register">Create una nueva cuenta ahora</a></p>
+    </form>
+    </div>
+</div>
