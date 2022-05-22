@@ -3,6 +3,7 @@ import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/message.dart';
 
@@ -48,10 +49,11 @@ class _ChatScreenState extends State<ChatScreen> {
             return CustomScrollView(
               slivers: [
                 CupertinoSliverNavigationBar(
+                  backgroundColor: AppColors.cyan,
                   automaticallyImplyLeading: false,
                   largeTitle: Text(
                     "Chats",
-                    style: KTextStyle.headerTextStyle,
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 SliverList(
@@ -63,8 +65,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         return CupertinoListTile(
                           onTap: () => callChatDetailScreen(
                               context, data['nick'], data['uid']),
-                          title: Text(data['nick']),
-                          subtitle: Text(data['email']),
+                          title: Text(
+                            data['nick'],
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          subtitle: Text(data['email'],
+                              style: TextStyle(fontSize: 16)),
                         );
                       },
                     ).toList(),

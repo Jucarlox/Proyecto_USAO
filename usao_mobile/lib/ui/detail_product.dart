@@ -204,6 +204,52 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                 onTap: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
+                  print(currentUser);
+
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUser)
+                      .collection('chats')
+                      .limit(1)
+                      .get()
+                      .then((snapshot) {
+                    print(snapshot.size);
+                    if (snapshot.size == 0) {
+                      print('aaaaa');
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(currentUser)
+                          .collection('chats')
+                          .add({
+                        'email': data.propietario.email,
+                        'nick': data.propietario.nick,
+                        'uid': data.propietario.id
+                      });
+
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .get()
+                          .then((value) => {
+                                for (var doc in value.docs)
+                                  {
+                                    if (doc
+                                        .data()
+                                        .containsValue(data.propietario.id))
+                                      {
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(doc.id)
+                                            .collection('chats')
+                                            .add({
+                                          'email': prefs.get('email'),
+                                          'nick': prefs.get('nick'),
+                                          'uid': prefs.get('id'),
+                                        })
+                                      }
+                                  }
+                              });
+                    }
+                  });
 
                   FirebaseFirestore.instance
                       .collection('users')
@@ -213,6 +259,8 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                       .then((value) => {
                             for (var doc in value.docs)
                               {
+                                print(doc),
+                                print('aaaaaaaaaa'),
                                 if (!doc
                                     .data()
                                     .containsValue(data.propietario.nick))

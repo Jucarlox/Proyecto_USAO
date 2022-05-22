@@ -27,7 +27,8 @@ class _ChatDetailState extends State<ChatDetail> {
   final friendName;
 
   var chatDocId;
-  var _textController = new TextEditingController();
+
+  TextEditingController _textController = TextEditingController();
   _ChatDetailState(this.friendUid, this.friendName);
 
   Future<String> dosharePreferences() async {
@@ -44,15 +45,12 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   void checkUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await chats
-        .where('users',
-            isEqualTo: {friendUid: null, prefs.getString('id'): null})
+        .where('users', isEqualTo: {friendUid: null, currentUser: null})
         .limit(1)
         .get()
         .then(
-          (QuerySnapshot querySnapshot) async {
+          (QuerySnapshot querySnapshot) {
             if (querySnapshot.docs.isNotEmpty) {
               setState(() {
                 chatDocId = querySnapshot.docs.single.id;
@@ -60,8 +58,8 @@ class _ChatDetailState extends State<ChatDetail> {
 
               print(chatDocId);
             } else {
-              await chats.add({
-                'users': {prefs.getString('id'): null, friendUid: null}
+              chats.add({
+                'users': {currentUser: null, friendUid: null}
               }).then((value) => {chatDocId = value});
             }
           },
@@ -69,12 +67,12 @@ class _ChatDetailState extends State<ChatDetail> {
         .catchError((error) {});
   }
 
-  void sendMessage(String msg) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void sendMessage(String msg) {
+    print(msg);
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'createdOn': FieldValue.serverTimestamp(),
-      'uid': prefs.getString('id'),
+      'uid': currentUser,
       'msg': msg
     }).then((value) {
       _textController.text = '';
@@ -130,11 +128,11 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   bool isSender(String friend) {
-    return friend == prefs.getString('id');
+    return friend == currentUser;
   }
 
   Alignment getAlignment(friend) {
-    if (friend == prefs.getString('id')) {
+    if (friend == currentUser) {
       return Alignment.topRight;
     }
     return Alignment.topLeft;
@@ -166,7 +164,11 @@ class _ChatDetailState extends State<ChatDetail> {
           return Scaffold(
             backgroundColor: Color.fromARGB(255, 49, 47, 47),
             appBar: CupertinoNavigationBar(
-              middle: Text(friendName),
+              backgroundColor: AppColors.cyan,
+              middle: Text(
+                friendName,
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
@@ -303,10 +305,16 @@ class _ChatDetailState extends State<ChatDetail> {
                           ),
                         ),
                       ),
-                      CupertinoButton(
-                          child: Icon(Icons.send_sharp),
-                          onPressed: () =>
-                              sendMessage(modifyMessage(_textController.text)))
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                            child: Icon(
+                              Icons.send_sharp,
+                              color: AppColors.cyan,
+                            ),
+                            onTap: () => sendMessage(
+                                modifyMessage(_textController.text))),
+                      )
                     ],
                   )
                 ],
