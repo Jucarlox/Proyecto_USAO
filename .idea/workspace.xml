@@ -5,88 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79a03ed0-a567-4593-aea0-c45a3ceef464" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/UsaoApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/config/StorageProperties.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/controller/FileController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/GlobalRestControllerAdvice.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/config/ConfiguracionValidacion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/DynamicException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/EntityNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/FileNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/FollowListNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/ListEntityNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/NickUserNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/SingleEntityNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/StorageException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/excepciones/UnsupportedMediaType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/modelo/ApiError.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/modelo/ApiSubError.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/modelo/ApiValidationSubError.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/errores/modelo/MiDefaultErrorAttributes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/models/Estado.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/AuthenticationController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/PasswordEncoderConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/dto/JwtUserResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/dto/LoginDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/jwt/JwtAccessDeniedHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/jwt/JwtAuthenticationEntryPoint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/jwt/JwtAuthorizationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/security/jwt/JwtProvider.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/services/StorageService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/services/base/BaseService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/services/impl/FileSystemStorageServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/CreateUserDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/CreateUserDtoEdit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/GetUserDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/GetUserDto2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/GetUserDto3.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/dto/UserDtoConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/model/UserRole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/repository/UserEntityRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/users/services/UserEntityService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/utils/MediaTypeUrlResource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/anotaciones/PasswordsMatch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/anotaciones/UserEmailUniqueValueMatch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/anotaciones/UserNickUniqueValueMatch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/validadores/PasswordsMatchValidator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/validadores/UserEmailUniqueValueMatchValitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/salesianostriana/dam/USAO/validacion/validadores/UserNickUniqueValueMatchValitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/postgrelocal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/salesianostriana/dam/USAO/MiarmaApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/system.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/b1e98ebd75d86c83a1dd024abeb81bee.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker1238765212.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker1890863389.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker1890863389_959793.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker369911854.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker369911854_939225.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker829179177.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker829179177_606594.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker893000682.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/image_picker893000682_621911.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/soleado.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/soleado_291983.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/soleado_404073.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/soleado_418876.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_300745.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_300883.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_712342.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_786560.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_786675.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_902770.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/trueno_902881.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,23 +36,11 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/USAO" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/USAO_api" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

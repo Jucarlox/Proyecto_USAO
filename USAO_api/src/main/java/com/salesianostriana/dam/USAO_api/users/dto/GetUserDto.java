@@ -1,11 +1,15 @@
 package com.salesianostriana.dam.USAO_api.users.dto;
 
 
-import com.salesianostriana.dam.USAO_api.models.Estado;
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto;
+
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto2;
+import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,8 +23,9 @@ public class GetUserDto {
     private String email;
     private LocalDate fechaNacimiento;
     private String avatar;
-    private Estado estado;
-    //private List<GetPostDto> postList;
+    private UserRole role;
+    private List<GetProductoDto> productoList;
+    private List<GetProductoDto> productoListLike;
 
 
 }

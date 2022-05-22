@@ -1,12 +1,14 @@
 package com.salesianostriana.dam.USAO_api.users.model;
 
-import com.salesianostriana.dam.USAO_api.models.Estado;
+import com.salesianostriana.dam.USAO_api.models.Producto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,23 +51,19 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole roles;
+
     private String avatar;
 
-    @Enumerated(EnumType.STRING)
-    private Estado privacity;
+    private String localizacion;
 
-
-
+    @Builder.Default
+    @OneToMany(mappedBy = "propietario")
+    private List<Producto> productoList = new ArrayList<>();
 
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "follows",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "following_id"))
-    private List<User> follows = new ArrayList<>();
-
-
-
+    @JoinTable(name = "like_table", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
+    private List<Producto> productosLike = new ArrayList<>();
 
 
     @Override
@@ -98,6 +96,18 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void Like(Producto b) {
+        productosLike.add(b);
+        b.getUsuariosLike().add(this);
+    }
+
+    public void removeLike(Producto b) {
+        productosLike.remove(b);
+        b.getUsuariosLike().remove(this);
+    }
+
+
 
 
 

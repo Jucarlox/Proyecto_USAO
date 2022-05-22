@@ -1,8 +1,10 @@
 package com.salesianostriana.dam.USAO_api.users.services;
 
 
+import com.salesianostriana.dam.USAO_api.errores.excepciones.DynamicException;
+import com.salesianostriana.dam.USAO_api.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.USAO_api.errores.excepciones.UnsupportedMediaType;
-import com.salesianostriana.dam.USAO_api.models.Estado;
+import com.salesianostriana.dam.USAO_api.repository.ProductoRepository;
 import com.salesianostriana.dam.USAO_api.services.StorageService;
 import com.salesianostriana.dam.USAO_api.services.base.BaseService;
 import com.salesianostriana.dam.USAO_api.users.dto.*;
@@ -12,6 +14,7 @@ import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,6 +43,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
     private final StorageService storageService;
     private final UserEntityRepository userEntityRepository;
     private final UserDtoConverter userDtoConverter;
+    private final ProductoRepository productoRepository;
 
 
 
@@ -77,8 +81,8 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
                         .nick(newUser.getNick())
                         .email(newUser.getEmail())
                         .fechaNacimiento(newUser.getFechaNacimiento())
-                        .roles(UserRole.USER)
-                        .privacity(newUser.isPrivacity() ? Estado.PRIVADO : Estado.PUBLICO)
+                        .roles(newUser.isCategoria() ? UserRole.ADMIN : UserRole.USER)
+                        .localizacion(newUser.getLocalizacion())
                         .build();
                 try {
                     return save(user);
@@ -93,39 +97,32 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
     }
 
 
-    /*public GetUserDto visializarPerfif(User user, UUID id) {
+    public GetUserDto visializarPerfif(User user, UUID id) {
 
         Optional<User> userBuscado = userEntityRepository.findById(id);
 
         if (userBuscado.isPresent()) {
 
-            if (userBuscado.get().getPrivacity().equals(Estado.PUBLICO)) {
-                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), postRepository.findByUser(userBuscado.get()));
-
-            } else {
-                for (User usuarioDeLaLista : userEntityRepository.findFollowers(userBuscado.get().getId())) {
-                    if (usuarioDeLaLista.getId().equals(user.getId())) {
-                        return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), postRepository.findByUser(userBuscado.get()));
-                    }
-                }
-                throw new DynamicException("Cuenta privada, no sigues al usuario");
+            if (userBuscado.get().getRoles().equals(UserRole.USER)) {
+                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
             }
+
         }
         throw new SingleEntityNotFoundException(id.toString(), User.class);
 
-    }*/
+    }
 
 
-    /*public GetUserDto visializarMiPerfif(User user, UUID id) {
+    public GetUserDto visializarMiPerfif(User user, UUID id) {
 
         Optional<User> userBuscado = userEntityRepository.findById(id);
 
 
-                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), postRepository.findByUser(userBuscado.get()));
+                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
 
 
 
-    }*/
+    }
 
 
     public User userEdit(MultipartFile file, CreateUserDtoEdit createUserDto, User userLogeado) throws IOException {
@@ -133,7 +130,8 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
 
         userLogeado.setPassword(createUserDto.getPassword());
         userLogeado.setFechaNacimiento(createUserDto.getFechaNacimiento());
-        userLogeado.setPrivacity(createUserDto.isPrivacity() ? Estado.PRIVADO : Estado.PUBLICO);
+        userLogeado.setLocalizacion(createUserDto.getLocalizacion());
+        userLogeado.setNick(createUserDto.getNick());
 
         String extension = StringUtils.getFilenameExtension(StringUtils.cleanPath(file.getOriginalFilename()));
 
@@ -161,6 +159,27 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
             throw new UnsupportedMediaType(imagenExtension);
         }
         return repositorio.save(userLogeado);
+    }
+
+
+    public ResponseEntity deleteUser (User user, UUID uuid) throws IOException {
+
+        if(user.getRoles().equals(UserRole.ADMIN)){
+
+
+            String file = StringUtils.cleanPath(String.valueOf(user.getAvatar())).replace("http://localhost:8080/download/", "")
+                    .replace("%20", " ");
+            Path path = storageService.load(file);
+            String filename = StringUtils.cleanPath(String.valueOf(path)).replace("http://localhost:8080/download/", "")
+                    .replace("%20", " ");
+            Path pathFile = Paths.get(filename);
+            storageService.deleteFile(pathFile);
+
+            userEntityRepository.deleteById(uuid);
+            return ResponseEntity.noContent().build();
+        }else {
+            throw new DynamicException("El usuario no es ADMIN");
+        }
     }
 
 

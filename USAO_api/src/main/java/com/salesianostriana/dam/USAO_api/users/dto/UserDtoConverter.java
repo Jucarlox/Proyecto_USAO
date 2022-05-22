@@ -1,6 +1,9 @@
 package com.salesianostriana.dam.USAO_api.users.dto;
 
 
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto;
+import com.salesianostriana.dam.USAO_api.dto.producto.GetProductoDto2;
+import com.salesianostriana.dam.USAO_api.models.Producto;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,13 +23,14 @@ public class UserDtoConverter {
                 .fechaNacimiento(user.getFechaNacimiento())
                 .nick(user.getNick())
                 .email(user.getEmail())
-                .estado(user.getPrivacity())
+                .localizacion(user.getLocalizacion())
+                .role(user.getRoles())
                 .build();
 
 
     }
 
-    /*public GetUserDto convertUserEntityToGetUserDto2(User user, List<Post> postList) {
+    public GetUserDto convertUserEntityToGetUserDto2(User user, List<Producto> productoList, List<Producto> productoListLike) {
 
         return GetUserDto.builder()
                 .id(user.getId())
@@ -34,12 +38,13 @@ public class UserDtoConverter {
                 .fechaNacimiento(user.getFechaNacimiento())
                 .nick(user.getNick())
                 .email(user.getEmail())
-                .estado(user.getPrivacity())
-                .postList(postList.stream().map(p -> new GetPostDto(p.getId(), p.getTitle(), p.getDescripcion(), p.getFileScale(), p.getPrivacity(), convertUserEntityToGetUserDto(p.getUser()))).toList())
+                .role(user.getRoles())
+                .productoList(productoList.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(), p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList())
+                .productoListLike(productoListLike.stream().map(p -> new GetProductoDto(p.getId(), p.getNombre(), p.getDescripcion(), p.getCategoria(), p.getPrecio(), convertUserEntityToGetUserDto(p.getPropietario()), p.getFileScale(), p.getUsuariosLike().stream().map(a -> a.getId()).toList())).toList())
                 .build();
 
 
-    }*/
+    }
 
 
     public GetUserDto2 convertUserEntityToGetUserDto7(User user) {
