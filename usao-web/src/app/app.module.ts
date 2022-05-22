@@ -13,6 +13,13 @@ import { HomePageComponent } from './screens/home-page/home-page.component';
 //import { RegisterComponent } from './forms/register/register.component';
 import { FormularioLoginComponent } from './forms/login/formulario-login.component';
 import { DialogErrorComponent } from './dialog/error/dialog-error.component';
+import { FormularioRegisterComponent } from './forms/register/formulario-register.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+
 
 
 @NgModule({
@@ -21,8 +28,9 @@ import { DialogErrorComponent } from './dialog/error/dialog-error.component';
     SideMenuComponent,
     HomePageComponent,
     FormularioLoginComponent,
-    DialogErrorComponent
-    //RegisterComponent
+    FormularioRegisterComponent,
+    DialogErrorComponent,
+    
 
   ],
   imports: [
@@ -31,7 +39,11 @@ import { DialogErrorComponent } from './dialog/error/dialog-error.component';
     BrowserAnimationsModule,
     MaterialImportsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

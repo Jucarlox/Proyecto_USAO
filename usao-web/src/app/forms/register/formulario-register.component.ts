@@ -3,36 +3,45 @@ import { MatDialog } from "@angular/material/dialog";
 
 import { ActivatedRoute, Router } from "@angular/router";
 import { DialogErrorComponent } from "src/app/dialog/error/dialog-error.component";
-import { LoginDto } from "src/app/dto/login";
+import { RegisterDto } from "src/app/dto/register";
+
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
-  selector: 'app-formulario-login',
-  templateUrl: './formulario-login.component.html',
-  styleUrls: ['./formulario-login.component.css']
+  selector: 'app-formulario-register',
+  templateUrl: './formulario-register.component.html',
+  styleUrls: ['./formulario-register.component.css']
 })
-export class FormularioLoginComponent implements OnInit {
+export class FormularioRegisterComponent implements OnInit {
 
-  LoginDto = new LoginDto();
+  RegisterDto = new RegisterDto();
+  
+  fileToUpload: File | null = null;
+
+
   constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private dialog: MatDialog) { }
 
 
   ngOnInit(): void { }
 
+ 
+
   onSubmit() {
 
+    
 
-    this.authService.postLogin(this.LoginDto).subscribe((loginResult) => {
-      if(loginResult.role=='ADMIN'){
-        localStorage.setItem('token', loginResult.token);
+    
+    console.log(this.RegisterDto.fechaNacimiento)
+    console.log(this.RegisterDto.nick)
+    console.log(this.RegisterDto.email)
+    console.log(this.RegisterDto.password)
+    console.log(this.RegisterDto.password2)
+    console.log(this.RegisterDto.localizacion)
+    this.authService.postRegister(this.RegisterDto).subscribe(() => {
+     
+        
         this.router.navigate(['/home']);
-      }else{
-        this.dialog.open(DialogErrorComponent, {
-          height: '550px',
-          width: '400px',
-          data: ("No posees una cuenta Admin")
-        })
-      }
+
       
     }, () => {
       this.dialog.open(DialogErrorComponent, {

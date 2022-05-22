@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginDto } from '../dto/login';
+import { RegisterDto } from '../dto/register';
 import { LoginResponse } from '../interfaces/login.interface';
+import { RegisterResponse } from '../interfaces/register.interface';
 
 const URL= `${environment.apiBaseUrl}`;
 
@@ -26,4 +28,10 @@ const DEFAULT_HEADERS = {
     let requestUrl = `${URL}/auth/login`;
     return this.http.post<LoginResponse>(requestUrl, dto, DEFAULT_HEADERS);
   }
+
+  postRegister(dto: RegisterDto): Observable<RegisterResponse> {
+    let requestUrl = `${URL}/auth/register`;
+    return this.http.post<RegisterResponse>(requestUrl, dto, DEFAULT_HEADERS);
+  }
+
   }
