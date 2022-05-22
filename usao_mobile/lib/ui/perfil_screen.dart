@@ -12,6 +12,7 @@ import 'package:usao_mobile/repository/user/user_repository.dart';
 import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/error_screen.dart';
+import 'package:usao_mobile/ui/menu_screem.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -190,78 +191,87 @@ Widget _profile(BuildContext context, ProfileResponse user) {
               itemCount: user.productoList.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  alignment: Alignment.bottomCenter,
-                  width: 160,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Wrap(
-                      children: <Widget>[
-                        Center(
-                            child: Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  user.productoList.elementAt(index).fileScale),
-                              fit: BoxFit.cover,
-                            ),
+                    child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Wrap(
+                    children: <Widget>[
+                      Center(
+                          child: Container(
+                        height: 130,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                user.productoList.elementAt(index).fileScale),
+                            fit: BoxFit.cover,
                           ),
-                          child: ListTile(
-                              leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              imageUrl: user.avatar,
-                              width: 30,
-                              height: 30,
-                              fit: BoxFit.cover,
+                        ),
+                        child: ListTile(
+                            leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                          )),
+                            imageUrl: user.avatar,
+                            width: 30,
+                            height: 30,
+                            fit: BoxFit.cover,
+                          ),
                         )),
-                        Row(
+                      )),
+                      Container(
+                        height: 69,
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListTile(
                                 title: Text(
                                     user.productoList.elementAt(index).nombre,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     style: KTextStyle.textFieldHeading),
-                                subtitle: Text(
-                                  user.productoList
-                                          .elementAt(index)
-                                          .precio
-                                          .toString() +
-                                      " €",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
+                                subtitle: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 4, 0, 11),
+                                  child: Text(
+                                    user.productoList
+                                            .elementAt(index)
+                                            .precio
+                                            .toString() +
+                                        " €",
+                                    maxLines: 2,
+                                    style: KTextStyle.textFieldHintStyle,
+                                  ),
                                 ),
                               ),
                             ),
-                            Expanded(
-                                child: GestureDetector(
-                              child: LikeButton(
-                                likeBuilder: (isLiked) {
-                                  return Icon(CupertinoIcons.delete,
-                                      color: isLiked ? Colors.red : Colors.red);
-                                },
-                                onTap: (isLiked) {
-                                  return changedata(
-                                      isLiked,
-                                      user.productoList.elementAt(index).id,
-                                      context);
-                                },
+                            Container(
+                              padding: EdgeInsets.only(right: 10),
+                              child: GestureDetector(
+                                child: LikeButton(
+                                  likeBuilder: (isLiked) {
+                                    return Icon(CupertinoIcons.delete,
+                                        color:
+                                            isLiked ? Colors.red : Colors.red);
+                                  },
+                                  onTap: (isLiked) {
+                                    return changedata(
+                                        isLiked,
+                                        user.productoList.elementAt(index).id,
+                                        context);
+                                  },
+                                ),
                               ),
-                            ))
+                            ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                );
+                ));
               }),
         ),
         /*Container(
@@ -282,6 +292,11 @@ Future<bool> changedata(status, id, context) async {
   BlocProvider.of<UserBloc>(context).add(DeleteProductoEvent(id));
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setInt('indice', 4);
-  Navigator.pushNamed(context, '/home');
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomePage(),
+    ),
+    (Route route) => false,
+  );
   return Future.value(!status);
 }

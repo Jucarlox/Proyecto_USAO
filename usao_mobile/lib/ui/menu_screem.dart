@@ -28,7 +28,7 @@ class _MenuScreenState extends State<HomePage> {
 
   void loadCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 400), () {
       setState(() {
         _currentIndex = prefs.getInt('indice')!;
       });

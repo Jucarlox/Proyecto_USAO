@@ -5,6 +5,7 @@ import 'package:usao_mobile/ui/login_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 import 'package:usao_mobile/ui/perfil_screen.dart';
 import 'package:usao_mobile/ui/register_screen.dart';
+import 'package:usao_mobile/ui/search_screen.dart';
 import 'package:usao_mobile/ui/subelo_screen.dart';
 
 Future<void> main() async {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomePage(),
+        '/search': (context) => SearchScreen(),
 
         //       '/post-form': (context) => const PostForm(),
       },

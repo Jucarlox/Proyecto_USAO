@@ -17,6 +17,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     on<FetchProductosLike>(__productoFetchedLike);
     on<DislikeProductoEvent>(_dislikeProductoEvent);
     on<ProductoIdEvent>(_productoIdEvent);
+    on<SearchProductoEvent>(_productoFetchedSearch);
   }
 
   void _likeProductoEvent(
@@ -56,6 +57,17 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
       FetchProductoWithType event, Emitter<ProductoState> emit) async {
     try {
       final producto = await productoRepository.fetchGangasProducto();
+      emit(ProductoFetched(producto));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoFetchError(e.toString()));
+    }
+  }
+
+  void _productoFetchedSearch(
+      SearchProductoEvent event, Emitter<ProductoState> emit) async {
+    try {
+      final producto = await productoRepository.fetchSearchProducto(event.text);
       emit(ProductoFetched(producto));
       return;
     } on Exception catch (e) {

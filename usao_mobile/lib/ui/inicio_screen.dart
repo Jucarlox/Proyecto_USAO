@@ -11,6 +11,8 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:usao_mobile/ui/detail_product.dart';
+import 'package:usao_mobile/ui/menu_screem.dart';
+import 'package:usao_mobile/ui/search_screen.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({Key? key}) : super(key: key);
@@ -29,7 +31,8 @@ class _InicioScreenState extends State<InicioScreen> {
   }
 
   late ProductoRepository productoRepository;
-
+  TextEditingController textController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     loadCounter();
@@ -51,13 +54,14 @@ class _InicioScreenState extends State<InicioScreen> {
           ..add(const FetchProductoWithType());
       },
       child: Scaffold(
-        body: _createPublics(context, id),
+        body: _createPublics(context, id, _formKey, textController),
       ),
     );
   }
 }
 
-Widget _createPublics(BuildContext context, String id) {
+Widget _createPublics(BuildContext context, String id, GlobalKey _formkey,
+    TextEditingController textController) {
   return BlocBuilder<ProductoBloc, ProductoState>(
     builder: (context, state) {
       if (state is ProductoInitialState) {
@@ -65,7 +69,8 @@ Widget _createPublics(BuildContext context, String id) {
       } else if (state is ProductoErrorState) {
         return Text("error");
       } else if (state is ProductoFetched) {
-        return _createPopularView(context, state.productos, id);
+        return _createPopularView(
+            context, state.productos, id, _formkey, textController);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -73,13 +78,72 @@ Widget _createPublics(BuildContext context, String id) {
   );
 }
 
-Widget _createPopularView(
-    BuildContext context, List<ProductoResponse> movies, String id) {
+Widget _createPopularView(BuildContext context, List<ProductoResponse> movies,
+    String id, GlobalKey _formkey, TextEditingController textController) {
   final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 60.0),
     child: Column(
       children: [
+        Form(
+          key: _formkey,
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: textController,
+                    cursorColor: Colors.grey,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          borderSide: BorderSide.none),
+                      hintText: 'Search',
+                      hintStyle: TextStyle(fontSize: 17.0, color: Colors.grey),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      suffixIcon: Container(
+                          padding: EdgeInsets.all(15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SearchScreen(
+                                      text: textController.text,
+                                    ),
+                                  ));
+                            },
+                            child: Icon(CupertinoIcons.search),
+                          )),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
@@ -171,7 +235,11 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
                             : Color.fromARGB(255, 216, 216, 216));
                   },
                   onTap: (isLiked) {
-                    return changedata(isLiked, data.id, context);
+                    if (data.idUsersLike.contains(id)) {
+                      return dislike(isLiked, data.id, context);
+                    } else {
+                      return like(isLiked, data.id, context);
+                    }
                   },
                 ),
               ),
@@ -183,12 +251,32 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
   );
 }
 
-Future<bool> changedata(status, id, context) async {
+Future<bool> like(status, id, context) async {
   //your code
 
   BlocProvider.of<ProductoBloc>(context).add(LikeProductoEvent(id));
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setInt('indice', 1);
-  Navigator.pushNamed(context, '/home');
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomePage(),
+    ),
+    (Route route) => false,
+  );
+  return Future.value(!status);
+}
+
+Future<bool> dislike(status, id, context) async {
+  //your code
+
+  BlocProvider.of<ProductoBloc>(context).add(DislikeProductoEvent(id));
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setInt('indice', 0);
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomePage(),
+    ),
+    (Route route) => false,
+  );
   return Future.value(!status);
 }

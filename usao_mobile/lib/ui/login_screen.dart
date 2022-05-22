@@ -57,9 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 prefs.setString('token', state.loginResponse.token);
                 prefs.setString('id', state.loginResponse.id);
                 prefs.setString('nick', state.loginResponse.nike);
+                prefs.setString('email', state.loginResponse.email);
                 signIn(state.loginResponse.email, passwordController.text);
                 //prefs.setString('avatar', state.loginResponse.avatar);
-                Navigator.pushNamed(context, '/home');
+
               } else if (state is LoginErrorState) {
                 _showSnackbar(context, state.message);
               }
@@ -221,23 +222,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signIn(String email, String password) async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt('indice', 3);
-        Navigator.pushNamed(context, '/home');
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-      }
-    }
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    print(userCredential.user!.uid);
+    print('holaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('indice', 0);
+    Navigator.pushNamed(context, '/home');
   }
 }

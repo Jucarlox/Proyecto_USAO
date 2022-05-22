@@ -1,48 +1,57 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
-import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/detail_product.dart';
+import 'package:usao_mobile/ui/inicio_screen.dart';
 
-class FavoritosScreen extends StatefulWidget {
-  const FavoritosScreen({Key? key}) : super(key: key);
+import '../models/producto/producto_response.dart';
+
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key, this.text}) : super(key: key);
+  final text;
 
   @override
-  _FavoritosScreenState createState() => _FavoritosScreenState();
+  _FavoritosScreenState createState() => _FavoritosScreenState(text);
 }
 
-class _FavoritosScreenState extends State<FavoritosScreen> {
-  late ProductoRepository productoRepository;
+String id = "";
+void loadCounter() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  id = prefs.getString('id')!;
+}
+
+class _FavoritosScreenState extends State<SearchScreen> {
+  final text;
+  _FavoritosScreenState(this.text);
+  late ProductoRepository productoRepository;
   @override
   void initState() {
-    // TODO: implement initState
+    loadCounter();
     productoRepository = ProductoRepositoryImpl();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return ProductoBloc(productoRepository)..add(FetchProductosLike());
+        return ProductoBloc(productoRepository)..add(SearchProductoEvent(text));
       },
       child: Scaffold(
+        appBar: CupertinoNavigationBar(
+          middle: Text(
+            "Busquedas",
+            style: KTextStyle.headerTextStyle,
+          ),
+        ),
         body: _createPublics(context),
       ),
     );
@@ -56,12 +65,10 @@ Widget _createPublics(BuildContext context) {
         return const Center(child: CircularProgressIndicator());
       } else if (state is ProductoErrorState) {
         return Text("error");
-      } else if (state is ProductoLoading) {
-        return Text('Loadind');
       } else if (state is ProductoFetched) {
         return _createPopularView(context, state.productos);
       } else {
-        return Center(child: Text("No hay post publicos actualmente"));
+        return Center(child: Text("No hay productos"));
       }
     },
   );
@@ -69,18 +76,10 @@ Widget _createPublics(BuildContext context) {
 
 Widget _createPopularView(
     BuildContext context, List<ProductoResponse> productos) {
-  final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 60.0),
     child: Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            "Favoritos",
-            style: KTextStyle.headerTextStyle,
-          ),
-        ),
         Flexible(
           child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -185,14 +184,4 @@ Widget _createPopularView(
       ],
     ),
   );
-}
-
-Future<bool> changedata(status, id, context) async {
-  //your code
-
-  BlocProvider.of<ProductoBloc>(context).add(DislikeProductoEvent(id));
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setInt('indice', 1);
-  Navigator.pushNamed(context, '/home');
-  return Future.value(!status);
 }

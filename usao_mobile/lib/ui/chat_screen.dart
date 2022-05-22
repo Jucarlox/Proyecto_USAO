@@ -3,6 +3,8 @@ import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:usao_mobile/styles/colors.dart';
+import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/message.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,8 +15,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  var currentUser = FirebaseAuth.instance.currentUser?.uid;
-
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
   void callChatDetailScreen(BuildContext context, String name, String uid) {
     Navigator.push(
         context,
@@ -28,7 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
-            .where('uid', isNotEqualTo: currentUser)
+            .doc(currentUser)
+            .collection('chats')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -47,7 +49,12 @@ class _ChatScreenState extends State<ChatScreen> {
             return CustomScrollView(
               slivers: [
                 CupertinoSliverNavigationBar(
-                  largeTitle: Text("Chats"),
+                  backgroundColor: AppColors.cyan,
+                  automaticallyImplyLeading: false,
+                  largeTitle: Text(
+                    "Chats",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -58,8 +65,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         return CupertinoListTile(
                           onTap: () => callChatDetailScreen(
                               context, data['nick'], data['uid']),
-                          title: Text(data['nick']),
-                          subtitle: Text(data['email']),
+                          title: Text(
+                            data['nick'],
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          subtitle: Text(data['email'],
+                              style: TextStyle(fontSize: 16)),
                         );
                       },
                     ).toList(),
