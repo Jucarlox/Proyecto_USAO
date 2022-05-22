@@ -80,6 +80,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
     backgroundColor: AppColors.kBgColor,
     appBar: AppBar(
       backgroundColor: AppColors.kBgColor,
+      iconTheme: IconThemeData(color: Colors.black),
       elevation: 0,
     ),
     body: Column(
@@ -88,7 +89,19 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
           height: MediaQuery.of(context).size.height * .67,
           padding: const EdgeInsets.only(bottom: 30),
           width: double.infinity,
-          child: Image.network(data.fileScale),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                data.propietario.nick,
+                style: GoogleFonts.poppins(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Image.network(data.fileScale)
+            ],
+          ),
         ),
         Expanded(
           child: Stack(

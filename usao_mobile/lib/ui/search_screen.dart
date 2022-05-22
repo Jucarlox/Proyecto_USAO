@@ -8,6 +8,7 @@ import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
+import 'package:usao_mobile/ui/detail_product.dart';
 import 'package:usao_mobile/ui/inicio_screen.dart';
 
 import '../models/producto/producto_response.dart';
@@ -73,100 +74,114 @@ Widget _createPublics(BuildContext context) {
   );
 }
 
-Widget _createPopularView(BuildContext context, List<ProductoResponse> movies) {
-  final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
+Widget _createPopularView(
+    BuildContext context, List<ProductoResponse> productos) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 60.0),
     child: Column(
       children: [
-        SizedBox(
-          height: 300,
-          child: ListView.separated(
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return _post(context, movies[index]);
-            },
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) => const VerticalDivider(
-              color: Colors.transparent,
-              width: 6.0,
-            ),
-            itemCount: movies.length,
-          ),
-        )
-      ],
-    ),
-  );
-}
-
-Widget _post(BuildContext context, ProductoResponse data) {
-  return Container(
-    alignment: Alignment.bottomCenter,
-    width: 160,
-    height: 320,
-    child: Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Wrap(
-        children: <Widget>[
-          Center(
-              child: Container(
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              image: DecorationImage(
-                image: NetworkImage(data.fileScale),
-                fit: BoxFit.cover,
+        Flexible(
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
-            ),
-            child: ListTile(
-                leading: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                imageUrl: data.propietario.avatar,
-                width: 30,
-                height: 30,
-                fit: BoxFit.cover,
-              ),
-            )),
-          )),
-          Row(
-            children: [
-              Expanded(
-                child: ListTile(
-                  title: Text(data.nombre, style: KTextStyle.textFieldHeading),
-                  subtitle: Text(
-                    data.precio.toString() + " €",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+              itemCount: productos.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                    child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Wrap(
+                    children: <Widget>[
+                      Center(
+                          child: Container(
+                              height: 130,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      productos.elementAt(index).fileScale),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            DetailProductScreen(
+                                                id: productos
+                                                    .elementAt(index)
+                                                    .id))),
+                                child: ListTile(
+                                    leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    imageUrl: productos
+                                        .elementAt(index)
+                                        .propietario
+                                        .avatar,
+                                    width: 30,
+                                    height: 30,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                              ))),
+                      Container(
+                        height: 69,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(productos.elementAt(index).nombre,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: KTextStyle.textFieldHeading),
+                                subtitle: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 4, 0, 11),
+                                  child: Text(
+                                    productos
+                                            .elementAt(index)
+                                            .precio
+                                            .toString() +
+                                        " €",
+                                    maxLines: 2,
+                                    style: KTextStyle.textFieldHintStyle,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(right: 10),
+                              child: GestureDetector(
+                                child: LikeButton(
+                                  likeBuilder: (isLiked) {
+                                    return Icon(CupertinoIcons.heart_fill,
+                                        color: isLiked
+                                            ? Color.fromARGB(255, 216, 216, 216)
+                                            : Colors.red);
+                                  },
+                                  onTap: (isLiked) {
+                                    return changedata(isLiked,
+                                        productos.elementAt(index).id, context);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                child: LikeButton(
-                  likeBuilder: (bool isliked) {
-                    return Icon(CupertinoIcons.heart_fill,
-                        color: data.idUsersLike.contains(id)
-                            ? Colors.red
-                            : Color.fromARGB(255, 216, 216, 216));
-                  },
-                  onTap: (isLiked) {
-                    if (data.idUsersLike.contains(id)) {
-                      return dislike(isLiked, data.id, context);
-                    } else {
-                      return like(isLiked, data.id, context);
-                    }
-                  },
-                ),
-              )
-            ],
-          )
-        ],
-      ),
+                ));
+              }),
+        ),
+      ],
     ),
   );
 }
