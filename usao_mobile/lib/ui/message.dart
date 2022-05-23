@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,32 +41,66 @@ class _ChatDetailState extends State<ChatDetail> {
   late SharedPreferences prefs;
   @override
   void initState() {
+    getdata();
     super.initState();
     dosharePreferences();
     checkUser();
   }
 
-  void checkUser() async {
-    await chats
-        .where('users', isEqualTo: {friendUid: null, currentUser: null})
-        .limit(1)
-        .get()
-        .then(
-          (QuerySnapshot querySnapshot) {
-            if (querySnapshot.docs.isNotEmpty) {
-              setState(() {
-                chatDocId = querySnapshot.docs.single.id;
-              });
+  String idFri = "";
+  void loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      FirebaseFirestore.instance.collection('users').get().then((value) => {
+            for (var doc1 in value.docs)
+              {
+                print(doc1.data().entries.first),
+                if (doc1.data().containsValue(friendName))
+                  {idFri = doc1.id.toString()}
+              }
+          });
+    });
+  }
 
-              print(chatDocId);
-            } else {
-              chats.add({
-                'users': {currentUser: null, friendUid: null}
-              }).then((value) => {chatDocId = value});
+  void getdata() async {
+    final prefs = await SharedPreferences.getInstance();
+    print(friendName);
+    String id = 'ayayay';
+    FirebaseFirestore.instance.collection('users').get().then((value) => {
+          for (var doc1 in value.docs)
+            {
+              print(doc1.data().entries.first),
+              if (doc1.data().containsValue(friendName))
+                {prefs.setString('idFri', doc1.id.toString())}
             }
-          },
-        )
-        .catchError((error) {});
+        });
+  }
+
+  void checkUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    Timer(Duration(milliseconds: 400), () {
+      chats
+          .where('users',
+              isEqualTo: {prefs.getString('idFri'): null, currentUser: null})
+          .limit(1)
+          .get()
+          .then(
+            (QuerySnapshot querySnapshot) {
+              if (querySnapshot.docs.isNotEmpty) {
+                setState(() {
+                  chatDocId = querySnapshot.docs.single.id;
+                });
+
+                print(chatDocId);
+              } else {
+                chats.add({
+                  'users': {currentUser: null, prefs.getString('idFri'): null}
+                }).then((value) => {chatDocId = value});
+              }
+            },
+          )
+          .catchError((error) {});
+    });
   }
 
   void sendMessage(String msg) {
@@ -154,9 +190,10 @@ class _ChatDetailState extends State<ChatDetail> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Scaffold(
+              body: Center(
             child: Text("Loading"),
-          );
+          ));
         }
 
         if (snapshot.hasData) {

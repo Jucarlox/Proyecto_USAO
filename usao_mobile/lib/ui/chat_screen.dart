@@ -40,9 +40,10 @@ class _ChatScreenState extends State<ChatScreen> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Scaffold(
+                body: Center(
               child: Text("Loading"),
-            );
+            ));
           }
 
           if (snapshot.hasData) {
