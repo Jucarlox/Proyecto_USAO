@@ -1,6 +1,6 @@
 
-insert into "user" ("avatar", "email", "fecha_nacimiento", "localizacion", "nick", "password", "roles", "id") values ('https://thumbs.dreamstime.com/b/mujer-an%C3%B3nima-con-el-icono-del-retrato-del-pelo-rizado-74202298.jpg', 'elena@gmail.com', '2002-08-12', 'sevilla', '_eleena.12', '$2a$12$S/njzQwuR4.gbRDrYltBaukI1WpEvTZYC1rfyDvbWXee8yP7vRcgm', 'USER', '45bcc33a4e9111ec81d30242ac130006');
-
+insert into "user" ("avatar", "email", "fecha_nacimiento", "localizacion", "nick", "password", "roles", "id") values ('https://thumbs.dreamstime.com/b/mujer-an%C3%B3nima-con-el-icono-del-retrato-del-pelo-rizado-74202298.jpg', 'elena@gmail.com', '2002-08-12', 'sevilla', '_eleena.12', '$2a$10$Gr41FTg7BnKPfTfmyeutR.VCtCw2hBJs76xIQmftOo30xGnZ6P3YK', 'USER', '45bcc33a4e9111ec81d30242ac130006');
+insert into "user" ("avatar", "email", "fecha_nacimiento", "localizacion", "nick", "password", "roles", "id") values ('https://static1.abc.es/media/summum/2021/10/01/maxi_iglesias-kXKH--620x349@abc.jpeg', 'juka@gmail.com', '2002-01-18', 'sevilla', 'jukar', '$2a$10$oVzkMHrVJZNrz9IEEEC/5OSvYKF82GFITcXUD6tzv1K6xynlPuhtK', 'USER', '45bcc33a4e9111ec81f20242ac130006');
 
 
 
@@ -12,3 +12,7 @@ insert into "producto" ("categoria", "descripcion", "file_original", "file_scale
 insert into "producto" ("categoria", "descripcion", "file_original", "file_scale", "nombre", "precio", "propietario_id", "id") values ('motos', 'moto roja guapisima loco', 'https://thumb.pccomponentes.com/w-530-530/articles/29/294500/1557-injusa-moto-electrica-racing-fighter-24v-rojo-negro.jpg', 'https://thumb.pccomponentes.com/w-530-530/articles/29/294500/1557-injusa-moto-electrica-racing-fighter-24v-rojo-negro.jpg', 'Moto Roja', '3.400', '45bcc33a4e9111ec81d30242ac130006' , NEXTVAL('hibernate_sequence'))
 insert into "producto" ("categoria", "descripcion", "file_original", "file_scale", "nombre", "precio", "propietario_id", "id") values ('motos', 'moto azul guapisima loco', 'https://m.media-amazon.com/images/I/81kEeV81nSL._AC_SX425_.jpg', 'https://m.media-amazon.com/images/I/81kEeV81nSL._AC_SX425_.jpg', 'Suzuki GSX R1000', '10.000', '45bcc33a4e9111ec81d30242ac130006' , NEXTVAL('hibernate_sequence'))
 insert into "producto" ("categoria", "descripcion", "file_original", "file_scale", "nombre", "precio", "propietario_id", "id") values ('motos', 'moto amarilla guapisima loco', 'https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/f0ef49fd-a623-4f0c-b7fc-1a8bfcafd50f?rule=hw396_70', 'https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/f0ef49fd-a623-4f0c-b7fc-1a8bfcafd50f?rule=hw396_70', 'Moto 125 yamaha amarilla', '3.000', '45bcc33a4e9111ec81d30242ac130006' , NEXTVAL('hibernate_sequence'))
+
+
+
+insert into "producto" ("categoria", "descripcion", "file_original", "file_scale", "nombre", "precio", "propietario_id", "id") values ('moda', 'camiseta amarilla guapisima loco', 'https://www.ggifts.es/media/catalog/product/cache/b8bcb4c9720b854e3b23c20e1c2b9f20/5/8/5857-005-P-es_5.jpg', 'https://www.ggifts.es/media/catalog/product/cache/b8bcb4c9720b854e3b23c20e1c2b9f20/5/8/5857-005-P-es_5.jpg', 'Camiseta amarilla del shein', '10', '45bcc33a4e9111ec81f20242ac130006' , NEXTVAL('hibernate_sequence'))
