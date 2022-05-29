@@ -11,6 +11,7 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/repository/user/user_repository.dart';
 import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
+import 'package:usao_mobile/ui/edit_producto_screen.dart';
 import 'package:usao_mobile/ui/error_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 
@@ -247,6 +248,19 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                                   ),
                                 ),
                               ),
+                            ),
+                            CupertinoButton(
+                              child: Icon(
+                                CupertinoIcons.square_pencil,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => EditProductoScreen(
+                                          id: user.productoList
+                                              .elementAt(index)
+                                              .id))),
                             ),
                             Container(
                               padding: EdgeInsets.only(right: 10),

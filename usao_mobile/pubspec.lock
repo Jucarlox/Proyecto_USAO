@@ -618,6 +618,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.3"
+  scroll_bars_common:
+    dependency: transitive
+    description:
+      name: scroll_bars_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  scroll_bottom_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: scroll_bottom_navigation_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   searchfield:
     dependency: "direct main"
     description:

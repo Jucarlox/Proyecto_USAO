@@ -9,6 +9,15 @@ abstract class ProductoState extends Equatable {
 
 class ProductoInitialState extends ProductoState {}
 
+class ProductoEditState extends ProductoState {
+  final ProductoResponse productoResponse;
+
+  const ProductoEditState(this.productoResponse);
+
+  @override
+  List<Object> get props => [productoResponse];
+}
+
 class ProductoLoading extends ProductoState {}
 
 class ProductoSuccessState extends ProductoState {
@@ -30,12 +39,22 @@ class ProductoErrorState extends ProductoState {
 }
 
 class ProductoFetched extends ProductoState {
-  final List<ProductoResponse> productos;
+  final List<ProductoResponse> productosSearch;
 
-  const ProductoFetched(this.productos);
+  const ProductoFetched(this.productosSearch);
 
   @override
-  List<Object> get props => [productos];
+  List<Object> get props => [productosSearch];
+}
+
+class ProductoFetchedAll extends ProductoState {
+  final List<ProductoResponse> productoGangas;
+  final List<ProductoResponse> productoAll;
+
+  const ProductoFetchedAll(this.productoGangas, this.productoAll);
+
+  @override
+  List<Object> get props => [productoGangas, productoAll];
 }
 
 class ProductoIdFetched extends ProductoState {

@@ -9,6 +9,7 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/styles/colors.dart';
 
@@ -314,11 +315,17 @@ class _ChatDetailState extends State<ChatDetail> {
                                         Text(
                                           data['createdOn'] == null
                                               ? DateTime.now().toString()
-                                              : data['createdOn']
-                                                  .toDate()
+                                              : DateFormat('kk:mm  yyyy-MM-dd')
+                                                  .format(data['createdOn']
+                                                      .toDate())
                                                   .toString(),
                                           style: TextStyle(
-                                              fontSize: 8, color: Colors.white),
+                                            fontSize: 10,
+                                            color:
+                                                isSender(data['uid'].toString())
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                          ),
                                         )
                                       ],
                                     )

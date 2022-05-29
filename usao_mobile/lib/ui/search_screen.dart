@@ -66,7 +66,7 @@ Widget _createPublics(BuildContext context) {
       } else if (state is ProductoErrorState) {
         return Text("error");
       } else if (state is ProductoFetched) {
-        return _createPopularView(context, state.productos);
+        return _createPopularView(context, state.productosSearch);
       } else {
         return Center(child: Text("No hay productos"));
       }

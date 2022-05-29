@@ -7,6 +7,7 @@ import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
+import 'package:usao_mobile/styles/colors.dart';
 
 import 'package:usao_mobile/styles/text.dart';
 import 'package:like_button/like_button.dart';
@@ -48,15 +49,15 @@ class _InicioScreenState extends State<InicioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return ProductoBloc(productoRepository)
-          ..add(const FetchProductoWithType());
-      },
-      child: Scaffold(
-        body: _createPublics(context, id, _formKey, textController),
-      ),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) {
+            return ProductoBloc(productoRepository)..add(FetchAllProducto());
+          }),
+        ],
+        child: Scaffold(
+          body: _createPublics(context, id, _formKey, textController),
+        ));
   }
 }
 
@@ -68,9 +69,9 @@ Widget _createPublics(BuildContext context, String id, GlobalKey _formkey,
         return const Center(child: CircularProgressIndicator());
       } else if (state is ProductoErrorState) {
         return Text("error");
-      } else if (state is ProductoFetched) {
-        return _createPopularView(
-            context, state.productos, id, _formkey, textController);
+      } else if (state is ProductoFetchedAll) {
+        return _createPopularView(context, state.productoGangas,
+            state.productoAll, id, _formkey, textController);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -78,8 +79,13 @@ Widget _createPublics(BuildContext context, String id, GlobalKey _formkey,
   );
 }
 
-Widget _createPopularView(BuildContext context, List<ProductoResponse> movies,
-    String id, GlobalKey _formkey, TextEditingController textController) {
+Widget _createPopularView(
+    BuildContext context,
+    List<ProductoResponse> gangas,
+    List<ProductoResponse> all,
+    String id,
+    GlobalKey _formkey,
+    TextEditingController textController) {
   final contentHeight = 4.0 * (MediaQuery.of(context).size.width / 2.4) / 3;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 60.0),
@@ -156,7 +162,7 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies,
           child: ListView.separated(
             physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
-              return _post(context, movies[index], id);
+              return _post(context, gangas[index], id);
             },
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             scrollDirection: Axis.horizontal,
@@ -164,9 +170,123 @@ Widget _createPopularView(BuildContext context, List<ProductoResponse> movies,
               color: Colors.transparent,
               width: 6.0,
             ),
-            itemCount: movies.length,
+            itemCount: gangas.length,
           ),
-        )
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            "Productos",
+            style: KTextStyle.headerTextStyle,
+          ),
+        ),
+        Flexible(
+          child: GridView.builder(
+              physics: BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: all.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                    child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Wrap(
+                    children: <Widget>[
+                      Center(
+                          child: Container(
+                              height: 130,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      all.elementAt(index).fileScale),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            DetailProductScreen(
+                                                id: all.elementAt(index).id))),
+                                child: ListTile(
+                                    leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    imageUrl:
+                                        all.elementAt(index).propietario.avatar,
+                                    width: 30,
+                                    height: 30,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                              ))),
+                      Container(
+                        height: 69,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(all.elementAt(index).nombre,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: KTextStyle.textFieldHeading),
+                                subtitle: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 4, 0, 11),
+                                  child: Text(
+                                    all.elementAt(index).precio.toString() +
+                                        " €",
+                                    maxLines: 2,
+                                    style: KTextStyle.textFieldHintStyle,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(right: 10),
+                              child: GestureDetector(
+                                child: LikeButton(
+                                  likeBuilder: (bool isliked) {
+                                    return Icon(CupertinoIcons.heart_fill,
+                                        color: all
+                                                .elementAt(index)
+                                                .idUsersLike
+                                                .contains(id)
+                                            ? AppColors.cyan
+                                            : Color.fromARGB(
+                                                255, 216, 216, 216));
+                                  },
+                                  onTap: (isLiked) {
+                                    if (all
+                                        .elementAt(index)
+                                        .idUsersLike
+                                        .contains(id)) {
+                                      return dislike(isLiked,
+                                          all.elementAt(index).id, context);
+                                    } else {
+                                      return like(isLiked,
+                                          all.elementAt(index).id, context);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ));
+              }),
+        ),
       ],
     ),
   );
@@ -231,7 +351,7 @@ Widget _post(BuildContext context, ProductoResponse data, String id) {
                   likeBuilder: (bool isliked) {
                     return Icon(CupertinoIcons.heart_fill,
                         color: data.idUsersLike.contains(id)
-                            ? Colors.red
+                            ? AppColors.cyan
                             : Color.fromARGB(255, 216, 216, 216));
                   },
                   onTap: (isLiked) {

@@ -14,6 +14,7 @@ import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
+import 'package:usao_mobile/ui/message.dart';
 
 class DetailProductScreen extends StatefulWidget {
   DetailProductScreen({Key? key, this.id}) : super(key: key);
@@ -189,7 +190,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                 likeBuilder: (bool isliked) {
                   return Icon(CupertinoIcons.heart_fill,
                       color: data.idUsersLike.contains(uid)
-                          ? Colors.red
+                          ? AppColors.cyan
                           : Color.fromARGB(255, 216, 216, 216));
                 },
                 onTap: (isLiked) {
@@ -301,13 +302,12 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                               }
                           });
 
-                  prefs.setInt('indice', 3);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage(),
-                    ),
-                    (Route route) => false,
-                  );
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => ChatDetail(
+                              friendUid: data.propietario.id,
+                              friendName: data.propietario.nick)));
                 },
                 child: Container(
                   alignment: Alignment.center,
