@@ -63,15 +63,20 @@ class _ChatScreenState extends State<ChatScreen> {
                       (DocumentSnapshot document) {
                         Map<String, dynamic> data =
                             document.data() as Map<String, dynamic>;
-                        return CupertinoListTile(
-                          onTap: () => callChatDetailScreen(
-                              context, data['nick'], data['uid']),
-                          title: Text(
-                            data['nick'],
-                            style: TextStyle(fontSize: 25),
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+                            child: CupertinoListTile(
+                              onTap: () => callChatDetailScreen(
+                                  context, data['nick'], data['uid']),
+                              title: Text(
+                                data['nick'],
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              subtitle: Text(data['email'],
+                                  style: TextStyle(fontSize: 12)),
+                            ),
                           ),
-                          subtitle: Text(data['email'],
-                              style: TextStyle(fontSize: 16)),
                         );
                       },
                     ).toList(),

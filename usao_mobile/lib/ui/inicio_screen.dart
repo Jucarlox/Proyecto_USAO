@@ -56,8 +56,13 @@ class _InicioScreenState extends State<InicioScreen> {
           }),
         ],
         child: Scaffold(
-          body: _createPublics(context, id, _formKey, textController),
-        ));
+            body: SafeArea(
+                child: Stack(children: [
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: _createPublics(context, id, _formKey, textController),
+          )
+        ]))));
   }
 }
 
@@ -180,113 +185,121 @@ Widget _createPopularView(
             style: KTextStyle.headerTextStyle,
           ),
         ),
-        Flexible(
-          child: GridView.builder(
-              physics: BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemCount: all.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                    child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Wrap(
-                    children: <Widget>[
-                      Center(
-                          child: Container(
-                              height: 130,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20)),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      all.elementAt(index).fileScale),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            DetailProductScreen(
-                                                id: all.elementAt(index).id))),
-                                child: ListTile(
-                                    leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: CachedNetworkImage(
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                    imageUrl:
-                                        all.elementAt(index).propietario.avatar,
-                                    width: 30,
-                                    height: 30,
+        SizedBox(
+          height: MediaQuery.of(context).size.height * (all.length / 7),
+          child: Flexible(
+            child: GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: all.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                      child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Wrap(
+                      children: <Widget>[
+                        Center(
+                            child: Container(
+                                height: 130,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20)),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        all.elementAt(index).fileScale),
                                     fit: BoxFit.cover,
                                   ),
-                                )),
-                              ))),
-                      Container(
-                        height: 69,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListTile(
-                                title: Text(all.elementAt(index).nombre,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: KTextStyle.textFieldHeading),
-                                subtitle: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 4, 0, 11),
-                                  child: Text(
-                                    all.elementAt(index).precio.toString() +
-                                        " €",
-                                    maxLines: 2,
-                                    style: KTextStyle.textFieldHintStyle,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              DetailProductScreen(
+                                                  id: all
+                                                      .elementAt(index)
+                                                      .id))),
+                                  child: ListTile(
+                                      leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: CachedNetworkImage(
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      imageUrl: all
+                                          .elementAt(index)
+                                          .propietario
+                                          .avatar,
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                                ))),
+                        Container(
+                          height: 69,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ListTile(
+                                  title: Text(all.elementAt(index).nombre,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: KTextStyle.textFieldHeading),
+                                  subtitle: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 4, 0, 11),
+                                    child: Text(
+                                      all.elementAt(index).precio.toString() +
+                                          " €",
+                                      maxLines: 2,
+                                      style: KTextStyle.textFieldHintStyle,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                child: LikeButton(
-                                  likeBuilder: (bool isliked) {
-                                    return Icon(CupertinoIcons.heart_fill,
-                                        color: all
-                                                .elementAt(index)
-                                                .idUsersLike
-                                                .contains(id)
-                                            ? AppColors.cyan
-                                            : Color.fromARGB(
-                                                255, 216, 216, 216));
-                                  },
-                                  onTap: (isLiked) {
-                                    if (all
-                                        .elementAt(index)
-                                        .idUsersLike
-                                        .contains(id)) {
-                                      return dislike(isLiked,
-                                          all.elementAt(index).id, context);
-                                    } else {
-                                      return like(isLiked,
-                                          all.elementAt(index).id, context);
-                                    }
-                                  },
+                              Container(
+                                padding: EdgeInsets.only(right: 10),
+                                child: GestureDetector(
+                                  child: LikeButton(
+                                    likeBuilder: (bool isliked) {
+                                      return Icon(CupertinoIcons.heart_fill,
+                                          color: all
+                                                  .elementAt(index)
+                                                  .idUsersLike
+                                                  .contains(id)
+                                              ? AppColors.cyan
+                                              : Color.fromARGB(
+                                                  255, 216, 216, 216));
+                                    },
+                                    onTap: (isLiked) {
+                                      if (all
+                                          .elementAt(index)
+                                          .idUsersLike
+                                          .contains(id)) {
+                                        return dislike(isLiked,
+                                            all.elementAt(index).id, context);
+                                      } else {
+                                        return like(isLiked,
+                                            all.elementAt(index).id, context);
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ));
-              }),
-        ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ));
+                }),
+          ),
+        )
       ],
     ),
   );

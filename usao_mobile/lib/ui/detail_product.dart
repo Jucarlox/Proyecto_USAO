@@ -13,6 +13,7 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:usao_mobile/ui/image_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 import 'package:usao_mobile/ui/message.dart';
 
@@ -100,7 +101,16 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Image.network(data.fileScale)
+              GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              ImageScreen(image: data.fileScale))),
+                  child: Image.network(
+                    data.fileScale,
+                    width: MediaQuery.of(context).size.height / 3,
+                  ))
             ],
           ),
         ),

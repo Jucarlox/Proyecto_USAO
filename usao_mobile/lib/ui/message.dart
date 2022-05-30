@@ -258,6 +258,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                   }
                               }
                           });
+
+                  Navigator.pop(context);
                 },
                 child: Icon(
                   CupertinoIcons.delete_solid,

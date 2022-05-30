@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
+import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/detail_product.dart';
 import 'package:usao_mobile/ui/inicio_screen.dart';
@@ -77,7 +78,7 @@ Widget _createPublics(BuildContext context) {
 Widget _createPopularView(
     BuildContext context, List<ProductoResponse> productos) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 60.0),
+    padding: const EdgeInsets.all(5),
     child: Column(
       children: [
         Flexible(
@@ -160,15 +161,31 @@ Widget _createPopularView(
                               padding: EdgeInsets.only(right: 10),
                               child: GestureDetector(
                                 child: LikeButton(
-                                  likeBuilder: (isLiked) {
+                                  likeBuilder: (bool isliked) {
                                     return Icon(CupertinoIcons.heart_fill,
-                                        color: isLiked
-                                            ? Color.fromARGB(255, 216, 216, 216)
-                                            : Colors.red);
+                                        color: productos
+                                                .elementAt(index)
+                                                .idUsersLike
+                                                .contains(id)
+                                            ? AppColors.cyan
+                                            : Color.fromARGB(
+                                                255, 216, 216, 216));
                                   },
                                   onTap: (isLiked) {
-                                    return changedata(isLiked,
-                                        productos.elementAt(index).id, context);
+                                    if (productos
+                                        .elementAt(index)
+                                        .idUsersLike
+                                        .contains(id)) {
+                                      return dislike(
+                                          isLiked,
+                                          productos.elementAt(index).id,
+                                          context);
+                                    } else {
+                                      return like(
+                                          isLiked,
+                                          productos.elementAt(index).id,
+                                          context);
+                                    }
                                   },
                                 ),
                               ),
