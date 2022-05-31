@@ -75,19 +75,14 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                   state is ProductoSuccessState;
             }, listener: (context, state) async {
               if (state is ProductoSuccessState) {
-                print(state.productoResponse.nombre);
-                nombre = state.productoResponse.nombre;
-                descripcion = state.productoResponse.descripcion;
-                precio = state.productoResponse.precio.toString();
-                categoria = state.productoResponse.categoria;
               } else if (state is ProductoErrorState) {
                 _showSnackbar(context, state.message);
               }
             }, buildWhen: (context, state) {
-              return state is ProductoInitialState;
+              return state is ProductoInitialEditState;
             }, builder: (ctx, state) {
-              if (state is ProductoInitialState) {
-                return buildForm(ctx);
+              if (state is ProductoInitialEditState) {
+                return buildForm(ctx, state.productoResponse);
               } else {
                 return CircularProgressIndicator();
               }
@@ -103,7 +98,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Widget buildForm(BuildContext context) {
+  Widget buildForm(BuildContext context, ProductoResponse productoResponse) {
     double deviceWidth = MediaQuery.of(context).size.width;
     sleep(const Duration(seconds: 10));
     return Form(
@@ -143,7 +138,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                         color: AppColors.cyan,
                                       ),
                                       suffixIconColor: AppColors.cyan,
-                                      hintText: nombre,
+                                      hintText: productoResponse.nombre,
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -164,7 +159,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: descripcion,
+                                      hintText: productoResponse.descripcion,
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -186,7 +181,8 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: precio.toString(),
+                                      hintText:
+                                          productoResponse.precio.toString(),
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -210,7 +206,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                       ),
                                     ),
                                     DropdownButton<String>(
-                                      value: dropdownValue,
+                                      value: productoResponse.categoria,
                                       elevation: 8,
                                       style: const TextStyle(
                                           color: AppColors.cyan),
@@ -297,16 +293,16 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                               if (_formKey.currentState!.validate()) {
                                 final productoDto = ProductoDto(
                                     nombre: titleController.text.isEmpty
-                                        ? nombre
+                                        ? productoResponse.nombre
                                         : titleController.text,
                                     descripcion:
                                         descripcionController.text.isEmpty
-                                            ? descripcion
+                                            ? productoResponse.descripcion
                                             : descripcionController.text,
                                     fileOriginal: "",
                                     fileScale: "",
                                     precio: double.parse(precioController.text),
-                                    categoria: dropdownValue);
+                                    categoria: productoResponse.categoria);
 
                                 BlocProvider.of<ProductoBloc>(context).add(
                                     EditProductoEvent(

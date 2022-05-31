@@ -9,10 +9,10 @@ abstract class ProductoState extends Equatable {
 
 class ProductoInitialState extends ProductoState {}
 
-class ProductoEditState extends ProductoState {
-  final ProductoResponse productoResponse;
+class ProductoInitialEditState extends ProductoState {
+  final ProductoInitialEditState productoResponse;
 
-  const ProductoEditState(this.productoResponse);
+  const ProductoInitialEditState(this.productoResponse);
 
   @override
   List<Object> get props => [productoResponse];
