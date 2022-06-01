@@ -19,7 +19,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     on<ProductoIdEvent>(_productoIdEvent);
     on<SearchProductoEvent>(_productoFetchedSearch);
     on<EditProductoEvent>(_editProductoEvent);
-    on<ProductoIdEvent>(_productoIdEditEvent);
+    on<ProductoIdEvent2>(_productoIdEditEvent);
   }
 
   void _likeProductoEvent(
@@ -45,7 +45,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
   }
 
   void _productoIdEditEvent(
-      ProductoIdEvent event, Emitter<ProductoState> emit) async {
+      ProductoIdEvent2 event, Emitter<ProductoState> emit) async {
     try {
       final postResponse = await productoRepository.productoId(event.id);
       emit(ProductoInitialEditState(postResponse));

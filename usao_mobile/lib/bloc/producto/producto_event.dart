@@ -36,6 +36,11 @@ class ProductoIdEvent extends ProductoEvent {
   const ProductoIdEvent(this.id);
 }
 
+class ProductoIdEvent2 extends ProductoEvent {
+  final int id;
+  const ProductoIdEvent2(this.id);
+}
+
 class DislikeProductoEvent extends ProductoEvent {
   final int id;
   const DislikeProductoEvent(this.id);

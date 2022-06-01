@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,7 +57,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) {
-            return ProductoBloc(productoRepository)..add(ProductoIdEvent(id));
+            return ProductoBloc(productoRepository)..add(ProductoIdEvent2(id));
           }),
         ],
         child: Scaffold(
@@ -81,10 +82,14 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
             }, buildWhen: (context, state) {
               return state is ProductoInitialEditState;
             }, builder: (ctx, state) {
-              if (state is ProductoInitialEditState) {
+              if (state is ProductoInitialState) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ProductoErrorState) {
+                return Text("error");
+              } else if (state is ProductoInitialEditState) {
                 return buildForm(ctx, state.productoResponse);
               } else {
-                return CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
             })),
       ),
@@ -99,8 +104,13 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
   }
 
   Widget buildForm(BuildContext context, ProductoResponse productoResponse) {
+    dropdownValue = productoResponse.categoria;
+    titleController = TextEditingController(text: productoResponse.nombre);
+    descripcionController =
+        TextEditingController(text: productoResponse.descripcion);
+    precioController =
+        TextEditingController(text: productoResponse.precio.toString());
     double deviceWidth = MediaQuery.of(context).size.width;
-    sleep(const Duration(seconds: 10));
     return Form(
         key: _formKey,
         child: SafeArea(
@@ -116,7 +126,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 50, 0, 30),
                             child: Text(
-                              'Crear Producto',
+                              'Editar Producto',
                               style: TextStyle(
                                   fontSize: 50, color: AppColors.cyan),
                             ),
@@ -132,13 +142,13 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                 child: TextFormField(
                                   style: TextStyle(color: AppColors.cyan),
                                   controller: titleController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.person,
                                         color: AppColors.cyan,
                                       ),
                                       suffixIconColor: AppColors.cyan,
-                                      hintText: productoResponse.nombre,
+                                      hintText: 'Nombre del Producto',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -154,12 +164,12 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                 child: TextFormField(
                                   style: TextStyle(color: AppColors.cyan),
                                   controller: descripcionController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: productoResponse.descripcion,
+                                      hintText: 'Descripcion del Producto',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -176,13 +186,12 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                   keyboardType: TextInputType.number,
                                   style: TextStyle(color: AppColors.cyan),
                                   controller: precioController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText:
-                                          productoResponse.precio.toString(),
+                                      hintText: 'Precio del Producto',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -206,7 +215,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                       ),
                                     ),
                                     DropdownButton<String>(
-                                      value: productoResponse.categoria,
+                                      value: dropdownValue,
                                       elevation: 8,
                                       style: const TextStyle(
                                           color: AppColors.cyan),
@@ -292,21 +301,25 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
                                 final productoDto = ProductoDto(
-                                    nombre: titleController.text.isEmpty
-                                        ? productoResponse.nombre
-                                        : titleController.text,
-                                    descripcion:
-                                        descripcionController.text.isEmpty
-                                            ? productoResponse.descripcion
-                                            : descripcionController.text,
+                                    nombre: titleController.text,
+                                    descripcion: descripcionController.text,
                                     fileOriginal: "",
                                     fileScale: "",
                                     precio: double.parse(precioController.text),
-                                    categoria: productoResponse.categoria);
+                                    categoria: dropdownValue);
+                                if (filePath == '') {
+                                  BlocProvider.of<ProductoBloc>(context).add(
+                                      DoProductoEvent(productoDto,
+                                          productoResponse.fileScale));
+                                } else {
+                                  BlocProvider.of<ProductoBloc>(context).add(
+                                      DoProductoEvent(productoDto, filePath));
+                                }
 
-                                BlocProvider.of<ProductoBloc>(context).add(
-                                    EditProductoEvent(
-                                        id, filePath, productoDto));
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => HomePage()));
                               }
                             },
                             child: Padding(

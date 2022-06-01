@@ -10,7 +10,7 @@ abstract class ProductoState extends Equatable {
 class ProductoInitialState extends ProductoState {}
 
 class ProductoInitialEditState extends ProductoState {
-  final ProductoInitialEditState productoResponse;
+  final ProductoResponse productoResponse;
 
   const ProductoInitialEditState(this.productoResponse);
 
