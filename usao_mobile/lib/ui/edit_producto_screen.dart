@@ -76,6 +76,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                   state is ProductoSuccessState;
             }, listener: (context, state) async {
               if (state is ProductoSuccessState) {
+                Navigator.pop(context);
               } else if (state is ProductoErrorState) {
                 _showSnackbar(context, state.message);
               }
@@ -307,19 +308,17 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                     fileScale: "",
                                     precio: double.parse(precioController.text),
                                     categoria: dropdownValue);
-                                if (filePath == '') {
+                                if (filePath.isEmpty) {
                                   BlocProvider.of<ProductoBloc>(context).add(
-                                      DoProductoEvent(productoDto,
-                                          productoResponse.fileScale));
+                                      EditProductoEvent(
+                                          productoResponse.id,
+                                          productoResponse.fileScale,
+                                          productoDto));
                                 } else {
                                   BlocProvider.of<ProductoBloc>(context).add(
-                                      DoProductoEvent(productoDto, filePath));
+                                      EditProductoEvent(productoResponse.id,
+                                          filePath, productoDto));
                                 }
-
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) => HomePage()));
                               }
                             },
                             child: Padding(

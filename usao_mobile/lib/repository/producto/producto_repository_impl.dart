@@ -227,7 +227,7 @@ class ProductoRepositoryImpl extends ProductoRepository {
       });
 
       var request = http.MultipartRequest(
-          'POST', Uri.parse("${Constants.baseUrl}/producto/${id}"))
+          'PUT', Uri.parse("${Constants.baseUrl}/producto/${id}"))
         ..files.add(http.MultipartFile.fromString('producto', data,
             contentType: MediaType('application', 'json')))
         ..files.add(await http.MultipartFile.fromPath('file', image));
