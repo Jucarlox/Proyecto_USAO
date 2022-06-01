@@ -101,25 +101,31 @@ public class ProductoServiceImpl {
                 String extension = StringUtils.getFilenameExtension(StringUtils.cleanPath(file.getOriginalFilename()));
                 List<String> allExtension = Arrays.asList("png", "gif", "jpg", "svg", "mp4");
 
+
                 if (!allExtension.contains(extension)) {
                     throw new UnsupportedMediaType(allExtension);
                 } else {
                     String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("http://localhost:8080/download/", "")
                             .replace("%20", " ");
-                    Path path = storageService.load(scale);
-                    String filename = StringUtils.cleanPath(String.valueOf(path)).replace("http://localhost:8080/download/", "")
-                            .replace("%20", " ");
-                    Path pathScalse = Paths.get(filename);
-                    storageService.deleteFile(pathScalse);
+
+                    if(scale.contains("download")){
+                        Path path = storageService.load(scale);
+                        String filename = StringUtils.cleanPath(String.valueOf(path)).replace("http://localhost:8080/download/", "")
+                                .replace("%20", " ");
+                        Path pathScalse = Paths.get(filename);
+                        storageService.deleteFile(pathScalse);
 
 
-                    String original = StringUtils.cleanPath(String.valueOf(producto.get().getFileOriginal())).replace("http://localhost:8080/download/", "")
-                            .replace("%20", " ");
-                    Path path2 = storageService.load(original);
-                    String filename2 = StringUtils.cleanPath(String.valueOf(path2)).replace("http://localhost:8080/download/", "")
-                            .replace("%20", " ");
-                    Path pathOriginal = Paths.get(filename2);
-                    storageService.deleteFile(pathOriginal);
+                        String original = StringUtils.cleanPath(String.valueOf(producto.get().getFileOriginal())).replace("http://localhost:8080/download/", "")
+                                .replace("%20", " ");
+                        Path path2 = storageService.load(original);
+                        String filename2 = StringUtils.cleanPath(String.valueOf(path2)).replace("http://localhost:8080/download/", "")
+                                .replace("%20", " ");
+                        Path pathOriginal = Paths.get(filename2);
+                        storageService.deleteFile(pathOriginal);
+                    }
+
+
 
 
                     String filenameOriginal = storageService.original(file);
