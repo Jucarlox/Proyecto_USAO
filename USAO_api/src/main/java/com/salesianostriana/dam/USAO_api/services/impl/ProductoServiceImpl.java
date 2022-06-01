@@ -105,7 +105,7 @@ public class ProductoServiceImpl {
                 if (!allExtension.contains(extension)) {
                     throw new UnsupportedMediaType(allExtension);
                 } else {
-                    String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("http://localhost:8080/download/", "")
+                    /*String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("http://localhost:8080/download/", "")
                             .replace("%20", " ");
 
                     if(scale.contains("download")){
@@ -123,7 +123,7 @@ public class ProductoServiceImpl {
                                 .replace("%20", " ");
                         Path pathOriginal = Paths.get(filename2);
                         storageService.deleteFile(pathOriginal);
-                    }
+                    }*/
 
 
 
