@@ -308,6 +308,8 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                     fileScale: "",
                                     precio: double.parse(precioController.text),
                                     categoria: dropdownValue);
+                                print(filePath);
+                                print(productoResponse.fileScale);
                                 if (filePath.isEmpty) {
                                   BlocProvider.of<ProductoBloc>(context).add(
                                       EditProductoEvent(

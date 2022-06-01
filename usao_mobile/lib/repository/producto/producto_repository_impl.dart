@@ -226,6 +226,10 @@ class ProductoRepositoryImpl extends ProductoRepository {
         "fileScale": productoDto.fileScale,
       });
 
+      if (productoDto.fileScale == image) {
+        throw Exception('Debe cambiar la imagen del producto');
+      }
+
       var request = http.MultipartRequest(
           'PUT', Uri.parse("${Constants.baseUrl}/producto/${id}"))
         ..files.add(http.MultipartFile.fromString('producto', data,
