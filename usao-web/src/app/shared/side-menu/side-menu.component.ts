@@ -16,4 +16,12 @@ export class SideMenuComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.router.url);
   }
+
+  isLogin(){
+    return this.router.url == '/';
+  }
+
+  isNotLogin(){
+    return this.router.url !== '/';
+  }
 }

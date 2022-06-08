@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PropietarioResponse } from 'src/app/interfaces/propietario.interface';
-import { PropietarioService } from 'src/app/services/propietario.service';
+import {MatTableDataSource} from '@angular/material/table';
+import { UserResponse } from 'src/app/interfaces/user.interface';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-lista-usuarios',
@@ -9,14 +10,23 @@ import { PropietarioService } from 'src/app/services/propietario.service';
 })
 export class ListaUsuariosComponent implements OnInit {
 
-  propietarioList!: PropietarioResponse[] ;
-
-
-  constructor(private propietarioService : PropietarioService) { }
+  userList!: UserResponse[] ;
+  
+  displayedColumns: string[] = ['id', 'avatar', 'fechaNacimiento'];
+  dataSource : any;
+  constructor(private userService : UserService) { }
 
   ngOnInit(): void {
-    this.propietarioService.getListPropietario().subscribe(propietarioResponse => {
-      this.propietarioList = propietarioResponse;
+    this.userService.getListUser().subscribe(usersResponse => {
+      this.userList = usersResponse;
+      this.dataSource = new MatTableDataSource(this.userList);
     });
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  
 }
