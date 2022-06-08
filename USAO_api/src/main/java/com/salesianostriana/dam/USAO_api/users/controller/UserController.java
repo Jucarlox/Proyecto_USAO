@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -61,6 +63,15 @@ public class UserController {
     @DeleteMapping("/profile/{id}")
     public ResponseEntity<?> deleteUser (@AuthenticationPrincipal User userPrincipal, @PathVariable UUID id) throws IOException{
         return userEntityService.deleteUser(userPrincipal,id);
+    }
+
+
+
+
+    @GetMapping("/listUsers")
+    public ResponseEntity<List<GetUserDto3>> listUsers() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userEntityService.listUsers());
     }
 
 

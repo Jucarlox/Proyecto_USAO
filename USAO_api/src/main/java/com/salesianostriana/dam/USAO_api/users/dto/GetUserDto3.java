@@ -23,4 +23,5 @@ public class GetUserDto3 {
     private String avatar;
     private UserRole role;
 
+
 }

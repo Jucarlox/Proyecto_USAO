@@ -12,6 +12,7 @@ import com.salesianostriana.dam.USAO_api.users.dto.*;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -180,6 +181,19 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
         }else {
             throw new DynamicException("El usuario no es ADMIN");
         }
+    }
+
+
+
+    public List<GetUserDto3> listUsers() {
+
+        List<User> listUsers = userEntityRepository.findByRoles(UserRole.USER);
+
+        List<GetUserDto3> userDto3List = listUsers.stream().map(u ->new GetUserDto3(u.getId(),u.getAvatar(),u.getEmail(),u.getLocalizacion(),u.getFechaNacimiento(),u.getNick(), u.getRoles())).toList();
+        return userDto3List;
+
+
+
     }
 
 
