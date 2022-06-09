@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ProductoResponse } from '../interfaces/producto.interface';
 import { UserResponse } from '../interfaces/user.interface';
 
 const URL= `${environment.apiBaseUrl}`;
@@ -19,17 +20,17 @@ const DEFAULT_HEADERS = {
   })
 
 
-  export class UserService {
+  export class ProductoService {
   constructor(private http : HttpClient) { }
 
-  getListUser():Observable<UserResponse[]>{
-    let url= `${URL}/listUsers`
-    return this.http.get<UserResponse[]>(url, DEFAULT_HEADERS);
+  getListProductos():Observable<ProductoResponse[]>{
+    let url= `${URL}/producto`
+    return this.http.get<ProductoResponse[]>(url, DEFAULT_HEADERS);
   }
 
 
-  deleteUser(id: String){
-    let url= `${URL}/profile/${id}`
+  deleteProducto(id: String){
+    let url= `${URL}/producto/${id}`
     return this.http.delete<UserResponse[]>(url, DEFAULT_HEADERS);
   }
 

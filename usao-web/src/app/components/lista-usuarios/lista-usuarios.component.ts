@@ -12,13 +12,13 @@ export class ListaUsuariosComponent implements OnInit {
 
   userList!: UserResponse[] ;
   
-  displayedColumns: string[] = ['id', 'avatar', 'fechaNacimiento'];
+  displayedColumns: string[] = ['avatar', 'fechaNacimiento', 'email', 'nick', 'localizacion','actions'];
   dataSource : any;
   constructor(private userService : UserService) { }
 
   ngOnInit(): void {
     this.userService.getListUser().subscribe(usersResponse => {
-      this.userList = usersResponse;
+      this.userList = usersResponse.slice(0,20);
       this.dataSource = new MatTableDataSource(this.userList);
     });
   }
@@ -26,6 +26,11 @@ export class ListaUsuariosComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  deleteUser(id:String){
+    console.log(id);
+    this.userService.deleteUser(id).subscribe();
   }
 
   

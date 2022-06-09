@@ -35,10 +35,13 @@ table {
     
   }
 
+  
+
   ::placeholder{
     color:#ffffff !important;
   }
 
+  
 
 
   .container-1 input#search::-webkit-input-placeholder {
