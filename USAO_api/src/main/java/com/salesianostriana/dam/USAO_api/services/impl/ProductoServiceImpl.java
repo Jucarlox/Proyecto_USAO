@@ -12,6 +12,7 @@ import com.salesianostriana.dam.USAO_api.services.StorageService;
 import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto3;
 import com.salesianostriana.dam.USAO_api.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.USAO_api.users.model.User;
+import com.salesianostriana.dam.USAO_api.users.model.UserRole;
 import com.salesianostriana.dam.USAO_api.users.repository.UserEntityRepository;
 import io.github.techgnious.exception.VideoException;
 import lombok.RequiredArgsConstructor;
@@ -166,11 +167,12 @@ public class ProductoServiceImpl {
             throw new SingleEntityNotFoundException(id.toString(), Producto.class);
         } else {
 
-            if(producto.get().getPropietario().getNick().equals(user.getNick())){
+            if(producto.get().getPropietario().getNick().equals(user.getNick()) || user.getRoles().equals(UserRole.ADMIN)){
                 String scale = StringUtils.cleanPath(String.valueOf(producto.get().getFileScale())).replace("https://usao-back.herokuapp.com/download/", "")
                         .replace("%20", " ");
 
                 if(!scale.contains("download")){
+
                     productoRepository.deleteById(id);
                 }else{
                     Path path = storageService.load(scale);
@@ -188,7 +190,6 @@ public class ProductoServiceImpl {
                     Path pathOriginal = Paths.get(filename2);
 
                     storageService.deleteFile(pathOriginal);
-
 
 
 

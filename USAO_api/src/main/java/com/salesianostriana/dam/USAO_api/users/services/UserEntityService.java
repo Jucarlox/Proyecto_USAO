@@ -47,7 +47,6 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
     private final ProductoRepository productoRepository;
 
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return this.repositorio.findFirstByEmail(email).orElseThrow(() -> new UsernameNotFoundException("El " + email + " no encontrado"));
@@ -76,20 +75,20 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
                     .replace("10.0.2.2", "localhost");
 
 
-                User user = User.builder()
-                        .password(passwordEncoder.encode(newUser.getPassword()))
-                        .avatar(uri)
-                        .nick(newUser.getNick())
-                        .email(newUser.getEmail())
-                        .fechaNacimiento(newUser.getFechaNacimiento())
-                        .roles(newUser.isCategoria() ? UserRole.ADMIN : UserRole.USER)
-                        .localizacion(newUser.getLocalizacion())
-                        .build();
-                try {
-                    return save(user);
-                } catch (DataIntegrityViolationException ex) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de ese usuario ya existe");
-                }
+            User user = User.builder()
+                    .password(passwordEncoder.encode(newUser.getPassword()))
+                    .avatar(uri)
+                    .nick(newUser.getNick())
+                    .email(newUser.getEmail())
+                    .fechaNacimiento(newUser.getFechaNacimiento())
+                    .roles(newUser.isCategoria() ? UserRole.ADMIN : UserRole.USER)
+                    .localizacion(newUser.getLocalizacion())
+                    .build();
+            try {
+                return save(user);
+            } catch (DataIntegrityViolationException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de ese usuario ya existe");
+            }
 
         } else {
             throw new UnsupportedMediaType(imagenExtension);
@@ -119,8 +118,7 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
         Optional<User> userBuscado = userEntityRepository.findById(id);
 
 
-                return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
-
+        return userDtoConverter.convertUserEntityToGetUserDto2(userBuscado.get(), productoRepository.findByPropietario(userBuscado.get()), userBuscado.get().getProductosLike());
 
 
     }
@@ -163,35 +161,42 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
     }
 
 
-    public ResponseEntity deleteUser (User user, UUID uuid) throws IOException {
+    public ResponseEntity deleteUser(User user, UUID uuid) throws IOException {
 
-        if(user.getRoles().equals(UserRole.ADMIN)){
+        if (user.getRoles().equals(UserRole.ADMIN)) {
 
 
             String file = StringUtils.cleanPath(String.valueOf(user.getAvatar())).replace("http://localhost:8080/download/", "")
                     .replace("%20", " ");
-            Path path = storageService.load(file);
-            String filename = StringUtils.cleanPath(String.valueOf(path)).replace("http://localhost:8080/download/", "")
-                    .replace("%20", " ");
-            Path pathFile = Paths.get(filename);
-            storageService.deleteFile(pathFile);
 
-            userEntityRepository.deleteById(uuid);
-            return ResponseEntity.noContent().build();
-        }else {
+            if (!file.contains("download")) {
+
+                userEntityRepository.deleteById(uuid);
+                return ResponseEntity.noContent().build();
+            } else {
+                Path path = storageService.load(file);
+                String filename = StringUtils.cleanPath(String.valueOf(path)).replace("http://localhost:8080/download/", "")
+                        .replace("%20", " ");
+                Path pathFile = Paths.get(filename);
+                storageService.deleteFile(pathFile);
+
+
+
+                userEntityRepository.deleteById(uuid);
+                return ResponseEntity.noContent().build();
+            }
+        } else {
             throw new DynamicException("El usuario no es ADMIN");
         }
     }
-
 
 
     public List<GetUserDto3> listUsers() {
 
         List<User> listUsers = userEntityRepository.findByRoles(UserRole.USER);
 
-        List<GetUserDto3> userDto3List = listUsers.stream().map(u ->new GetUserDto3(u.getId(),u.getAvatar(),u.getEmail(),u.getLocalizacion(),u.getFechaNacimiento(),u.getNick(), u.getRoles())).toList();
+        List<GetUserDto3> userDto3List = listUsers.stream().map(u -> new GetUserDto3(u.getId(), u.getAvatar(), u.getEmail(), u.getLocalizacion(), u.getFechaNacimiento(), u.getNick(), u.getRoles())).toList();
         return userDto3List;
-
 
 
     }

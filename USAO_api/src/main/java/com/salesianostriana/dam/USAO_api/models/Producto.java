@@ -2,6 +2,8 @@ package com.salesianostriana.dam.USAO_api.models;
 
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class Producto {
 
     private String fileScale;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.EAGER)
     private User propietario;
 
