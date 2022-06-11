@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import { ProductoResponse } from 'src/app/interfaces/producto.interface';
-import { UserResponse } from 'src/app/interfaces/user.interface';
 import { ProductoService } from 'src/app/services/producto.service';
-import { UserService } from 'src/app/services/user.service';
+
 
 @Component({
   selector: 'app-lista-productos',
@@ -31,8 +30,9 @@ export class ListaProductosComponent implements OnInit {
   }
 
   deleteProdcuto(id:String){
-    console.log(id);
-    this.productoService.deleteProducto(id).subscribe();
+    this.productoService.deleteProducto(id).subscribe(vacio=>{
+      location.reload();
+    });
   }
 
   

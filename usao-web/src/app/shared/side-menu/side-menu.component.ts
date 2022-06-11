@@ -24,4 +24,10 @@ export class SideMenuComponent implements OnInit {
   isNotLogin(){
     return this.router.url !== '/';
   }
+
+
+  logOut(){
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
 }
