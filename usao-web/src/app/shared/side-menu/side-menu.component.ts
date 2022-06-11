@@ -18,11 +18,11 @@ export class SideMenuComponent implements OnInit {
   }
 
   isLogin(){
-    return this.router.url == '/';
+    return this.router.url == '/login';
   }
 
   isNotLogin(){
-    return this.router.url !== '/';
+    return this.router.url !== '/login';
   }
 
 
