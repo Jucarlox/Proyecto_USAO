@@ -222,9 +222,7 @@ public class FileSystemStorageServiceImpl implements StorageService {
         try {
             if (mediaTypeUrlResource.exists() || mediaTypeUrlResource.isReadable()) {
                 Files.delete(filename);
-            } else {
-                throw new FileNotFoundException(
-                        "Could not read file: " + filename);
+            
             }
         } catch (MalformedURLException e) {
             throw new FileNotFoundException("Could not read file: " + filename, e);
