@@ -136,7 +136,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                           Text(
                             data.nombre,
                             style: GoogleFonts.poppins(
-                              fontSize: 22,
+                              fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

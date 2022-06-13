@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,19 +12,30 @@ import 'package:usao_mobile/bloc/auth/register/register_bloc.dart';
 import 'package:usao_mobile/bloc/image_pick/image_pick_bloc.dart';
 import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_dto.dart';
+import 'package:usao_mobile/models/producto/producto_response.dart';
+import 'package:usao_mobile/models/register/register_response.dart';
+import 'package:usao_mobile/models/user/editUserDto.dart';
+import 'package:usao_mobile/models/user/profile_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
+import 'package:usao_mobile/repository/user/user_repository.dart';
+import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 
-class SubeloScreen extends StatefulWidget {
-  const SubeloScreen({Key? key}) : super(key: key);
+import '../bloc/user/user_bloc.dart';
 
+class EditUserScreen extends StatefulWidget {
+  const EditUserScreen({Key? key, this.id}) : super(key: key);
+  final id;
   @override
-  _ProductoFormState createState() => _ProductoFormState();
+  _UserEditFormState createState() => _UserEditFormState(id);
 }
 
-class _ProductoFormState extends State<SubeloScreen> {
+class _UserEditFormState extends State<EditUserScreen> {
+  final id;
+  _UserEditFormState(this.id);
+  late UserRepository userRepository;
   late ProductoRepository productoRepository;
   final _formKey = GlobalKey<FormState>();
   String filePath = '';
@@ -31,28 +43,37 @@ class _ProductoFormState extends State<SubeloScreen> {
   String _dateCount = '';
   String _range = '';
   String _rangeCount = '';
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descripcionController = TextEditingController();
-  TextEditingController precioController = TextEditingController();
-  TextEditingController categoriaController = TextEditingController();
+  TextEditingController nickController = TextEditingController();
+  TextEditingController fechaNacimientoController = TextEditingController();
+  TextEditingController localizacionController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   String _selectedItem = '';
   String dropdownValue = 'coches';
+  String nombre = '';
+  String descripcion = '';
+  String precio = '';
+  String categoria = 'coche';
 
   @override
   void initState() {
+    userRepository = UserRepositoryImpl();
     productoRepository = ProductoRepositoryImpl();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return ProductoBloc(productoRepository);
-      },
-      child: Scaffold(
-          appBar: CupertinoNavigationBar(), body: _createBody(context)),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) {
+            return UserBloc(userRepository, productoRepository)
+              ..add(const FetchUserEdit());
+          }),
+        ],
+        child: Scaffold(
+          appBar: CupertinoNavigationBar(),
+          body: _createBody(context),
+        ));
   }
 
   _createBody(BuildContext context) {
@@ -60,31 +81,34 @@ class _ProductoFormState extends State<SubeloScreen> {
       body: Center(
         child: Container(
             padding: const EdgeInsets.all(20),
-            child: BlocConsumer<ProductoBloc, ProductoState>(
-                listenWhen: (context, state) {
-              return state is ProductoSuccessState ||
-                  state is ProductoErrorState;
+            child:
+                BlocConsumer<UserBloc, UserState>(listenWhen: (context, state) {
+              return state is UserFetchError || state is FetchUserEdit;
             }, listener: (context, state) async {
-              if (state is ProductoSuccessState) {
+              if (state is UserEditState) {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setInt('indice', 4);
-                //Navigator.pushNamed(context, '/home');
+
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (BuildContext context) => HomePage(),
                   ),
                   (Route route) => false,
                 );
-              } else if (state is ProductoErrorState) {
+              } else if (state is UserFetchError) {
                 _showSnackbar(context, state.message);
               }
             }, buildWhen: (context, state) {
-              return state is ProductoInitialState;
+              return state is UserInitialEditState;
             }, builder: (ctx, state) {
-              if (state is ProductoInitialState) {
-                return buildForm(ctx);
+              if (state is UserInitial) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is UserFetchError) {
+                return Text("error");
+              } else if (state is UserInitialEditState) {
+                return buildForm(ctx, state.editResponse);
               } else {
-                return buildForm(ctx);
+                return const Center(child: CircularProgressIndicator());
               }
             })),
       ),
@@ -98,7 +122,12 @@ class _ProductoFormState extends State<SubeloScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Widget buildForm(BuildContext context) {
+  Widget buildForm(BuildContext context, ProfileResponse editResponse) {
+    nickController = TextEditingController(text: editResponse.nick);
+    fechaNacimientoController =
+        TextEditingController(text: editResponse.fechaNacimiento);
+    //localizacionController =
+    //TextEditingController(text: editResponse.localizacion);
     double deviceWidth = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
@@ -115,7 +144,7 @@ class _ProductoFormState extends State<SubeloScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 50, 0, 30),
                             child: Text(
-                              'Crear Producto',
+                              'Editar User',
                               style: TextStyle(
                                   fontSize: 50, color: AppColors.cyan),
                             ),
@@ -130,14 +159,14 @@ class _ProductoFormState extends State<SubeloScreen> {
                                 width: deviceWidth - 100,
                                 child: TextFormField(
                                   style: TextStyle(color: AppColors.cyan),
-                                  controller: titleController,
+                                  controller: nickController,
                                   decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.person,
                                         color: AppColors.cyan,
                                       ),
                                       suffixIconColor: AppColors.cyan,
-                                      hintText: 'Nombre del Producto',
+                                      hintText: 'Nombre del Usuario',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -152,13 +181,13 @@ class _ProductoFormState extends State<SubeloScreen> {
                                 width: deviceWidth - 100,
                                 child: TextFormField(
                                   style: TextStyle(color: AppColors.cyan),
-                                  controller: descripcionController,
+                                  controller: fechaNacimientoController,
                                   decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: 'Descripcion del Producto',
+                                      hintText: 'Fecha',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -174,13 +203,13 @@ class _ProductoFormState extends State<SubeloScreen> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
                                   style: TextStyle(color: AppColors.cyan),
-                                  controller: precioController,
+                                  controller: localizacionController,
                                   decoration: const InputDecoration(
                                       suffixIcon: Icon(
                                         Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: 'Precio del Producto',
+                                      hintText: 'Localizacion',
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: AppColors.cyan))),
@@ -193,47 +222,23 @@ class _ProductoFormState extends State<SubeloScreen> {
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 12),
-                                      child: Text(
-                                        "Categoria: ",
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                    ),
-                                    DropdownButton<String>(
-                                      value: dropdownValue,
-                                      elevation: 8,
-                                      style: const TextStyle(
-                                          color: AppColors.cyan),
-                                      underline: Container(
-                                        height: 1,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  style: TextStyle(color: AppColors.cyan),
+                                  controller: passwordController,
+                                  decoration: const InputDecoration(
+                                      suffixIcon: Icon(
+                                        Icons.email,
                                         color: AppColors.cyan,
                                       ),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'coches',
-                                        'motos',
-                                        'moviles',
-                                        'moda'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style: TextStyle(fontSize: 17),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    )
-                                  ],
+                                      hintText: 'Password',
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AppColors.cyan))),
+                                  onSaved: (String? value) {
+                                    // This optional block of code can be used to run
+                                    // code when the user saves the form.
+                                  },
                                 ),
                               ),
                               Container(
@@ -280,7 +285,7 @@ class _ProductoFormState extends State<SubeloScreen> {
                                                                   .gallery));
                                                 },
                                                 child: const Text(
-                                                    'Selecciona una imagen')));
+                                                    'Cambiar imagen')));
                                       }),
                                 ),
                               ),
@@ -289,16 +294,22 @@ class _ProductoFormState extends State<SubeloScreen> {
                           GestureDetector(
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
-                                final productoDto = ProductoDto(
-                                    nombre: titleController.text,
-                                    descripcion: descripcionController.text,
-                                    fileOriginal: "",
-                                    fileScale: "",
-                                    precio: double.parse(precioController.text),
-                                    categoria: dropdownValue);
+                                final editDto = EditUserDto(
+                                  nick: nickController.text,
+                                  fechaNacimiento:
+                                      fechaNacimientoController.text,
+                                  localizacion: localizacionController.text,
+                                  password: passwordController.text,
+                                );
 
-                                BlocProvider.of<ProductoBloc>(context).add(
-                                    DoProductoEvent(productoDto, filePath));
+                                if (filePath.isEmpty) {
+                                  BlocProvider.of<UserBloc>(context).add(
+                                      EditUserEvent(
+                                          editDto, editResponse.avatar));
+                                } else {
+                                  BlocProvider.of<UserBloc>(context)
+                                      .add(EditUserEvent(editDto, filePath));
+                                }
                               }
                             },
                             child: Padding(
@@ -315,7 +326,7 @@ class _ProductoFormState extends State<SubeloScreen> {
                                           color: AppColors.cyan, width: 2),
                                       borderRadius: BorderRadius.circular(50)),
                                   child: Text(
-                                    'Crear'.toUpperCase(),
+                                    'Editar'.toUpperCase(),
                                     style: const TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
                                   )),

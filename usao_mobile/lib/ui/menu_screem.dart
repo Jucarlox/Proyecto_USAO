@@ -117,9 +117,11 @@ class _MenuScreenState extends State<HomePage> {
                       color: AppColors.cyan,
                     ),
               onTap: () {
-                setState(() {
-                  _currentIndex = 2;
-                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SubeloScreen(),
+                    ));
               },
             ),
             GestureDetector(

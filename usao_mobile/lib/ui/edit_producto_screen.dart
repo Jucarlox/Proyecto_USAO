@@ -61,6 +61,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
           }),
         ],
         child: Scaffold(
+          appBar: CupertinoNavigationBar(),
           body: _createBody(context),
         ));
   }
@@ -76,7 +77,15 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                   state is ProductoSuccessState;
             }, listener: (context, state) async {
               if (state is ProductoSuccessState) {
-                Navigator.pop(context);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setInt('indice', 4);
+
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage(),
+                  ),
+                  (Route route) => false,
+                );
               } else if (state is ProductoErrorState) {
                 _showSnackbar(context, state.message);
               }
@@ -308,8 +317,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                     fileScale: "",
                                     precio: double.parse(precioController.text),
                                     categoria: dropdownValue);
-                                print(filePath);
-                                print(productoResponse.fileScale);
+
                                 if (filePath.isEmpty) {
                                   BlocProvider.of<ProductoBloc>(context).add(
                                       EditProductoEvent(
@@ -337,7 +345,7 @@ class _ProductoEditFormState extends State<EditProductoScreen> {
                                           color: AppColors.cyan, width: 2),
                                       borderRadius: BorderRadius.circular(50)),
                                   child: Text(
-                                    'Crear'.toUpperCase(),
+                                    'Editar'.toUpperCase(),
                                     style: const TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
                                   )),

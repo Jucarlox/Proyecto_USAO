@@ -186,7 +186,7 @@ Widget _createPopularView(
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * (all.length / 7),
+          height: (all.length * 100000 / MediaQuery.of(context).size.height),
           child: Flexible(
             child: GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
