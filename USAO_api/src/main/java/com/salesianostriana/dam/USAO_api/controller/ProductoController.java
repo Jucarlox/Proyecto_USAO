@@ -8,6 +8,11 @@ import com.salesianostriana.dam.USAO_api.services.impl.ProductoServiceImpl;
 import com.salesianostriana.dam.USAO_api.users.dto.CreateUserDto;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import io.github.techgnious.exception.VideoException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +33,18 @@ public class ProductoController {
     //asdasd
     private final ProductoServiceImpl productoService;
     private final ProductoDtoConverter productoDtoConverter;
+
+
+    @Operation(summary = "Crea un Producto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado un Producto",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Producto.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Error al crear un Producto",
+                    content = @Content),
+    })
 
     @PostMapping("/producto")
     public ResponseEntity<GetProductoDto> nuevoProducto(@RequestPart("file") MultipartFile file, @Valid @RequestPart("producto") CreateProductoDto productoDto , @AuthenticationPrincipal User userPrincipal) throws IOException, VideoException {
