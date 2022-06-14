@@ -127,10 +127,9 @@ public class UserEntityService extends BaseService<User, UUID, UserEntityReposit
     public User userEdit(MultipartFile file, CreateUserDtoEdit createUserDto, User userLogeado) throws IOException {
 
 
-        userLogeado.setPassword(createUserDto.getPassword());
         userLogeado.setFechaNacimiento(createUserDto.getFechaNacimiento());
         userLogeado.setLocalizacion(createUserDto.getLocalizacion());
-        userLogeado.setNick(createUserDto.getNick());
+
 
         String extension = StringUtils.getFilenameExtension(StringUtils.cleanPath(file.getOriginalFilename()));
 

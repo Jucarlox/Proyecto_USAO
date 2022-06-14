@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.USAO_api.users.dto;
 
+import com.salesianostriana.dam.USAO_api.validacion.anotaciones.UserNickUniqueValueMatch;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,10 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class CreateUserDtoEdit {
 
-    private String nick;
     private String localizacion;
     private LocalDate fechaNacimiento;
     private String avatar;
-    @NotEmpty
-    private String password;
 }
