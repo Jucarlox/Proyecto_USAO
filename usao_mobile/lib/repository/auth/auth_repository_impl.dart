@@ -41,20 +41,22 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<RegisterResponse> register(
       RegisterDto registerDto, String filePath) async {
-    try {
-      Map<String, String> headers = {"Content-Type": "multipart/form-data"};
+    Map<String, String> headers = {"Content-Type": "multipart/form-data"};
 
-      var data = json.encode({
-        "nick": registerDto.nick,
-        "email": registerDto.email,
-        "password": registerDto.password,
-        "password2": registerDto.password2,
-        "avatar": registerDto.avatar,
-        "fechaNacimiento": registerDto.fechaNacimiento,
-        "categoria": "false",
-        "localizacion": removeDiacritics(registerDto.localizacion.toLowerCase())
-      });
+    var data = json.encode({
+      "nick": registerDto.nick,
+      "email": registerDto.email,
+      "password": registerDto.password,
+      "password2": registerDto.password2,
+      "avatar": registerDto.avatar,
+      "fechaNacimiento": registerDto.fechaNacimiento,
+      "categoria": "false",
+      "localizacion": removeDiacritics(registerDto.localizacion.toLowerCase())
+    });
 
+    if (filePath == '') {
+      throw Exception('Debe de selecionar una imagen');
+    } else {
       var request = http.MultipartRequest(
           'POST', Uri.parse("https://usao-back.herokuapp.com/auth/register"))
         ..files.add(http.MultipartFile.fromString('user', data,
@@ -66,24 +68,27 @@ class AuthRepositoryImpl extends AuthRepository {
       var response = await request.send();
 
       if (response.statusCode == 201) {
-        LoginDto loginDto =
-            LoginDto(email: registerDto.email, password: registerDto.password);
-        login(loginDto);
-        print(registerDto.avatar);
-        return RegisterResponse.fromJson(
-            jsonDecode(await response.stream.bytesToString()));
+        if (registerDto.password.length < 6 ||
+            registerDto.password2.length < 6) {
+          throw Exception('contraseña inferior a 6 caracteres');
+        } else {
+          LoginDto loginDto = LoginDto(
+              email: registerDto.email, password: registerDto.password);
+          login(loginDto);
+          print(registerDto.avatar);
+          return RegisterResponse.fromJson(
+              jsonDecode(await response.stream.bytesToString()));
+        }
       } else {
         throw Exception('Fail to register');
       }
-    } catch (error) {
-      throw (error);
     }
   }
+}
 
-  jsonToFormData(http.MultipartRequest request, Map<String, dynamic> data) {
-    for (var key in data.keys) {
-      request.fields[key] = data[key].toString();
-    }
-    return request;
+jsonToFormData(http.MultipartRequest request, Map<String, dynamic> data) {
+  for (var key in data.keys) {
+    request.fields[key] = data[key].toString();
   }
+  return request;
 }

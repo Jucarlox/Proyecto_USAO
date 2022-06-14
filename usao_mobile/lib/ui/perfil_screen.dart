@@ -75,89 +75,66 @@ Widget _profile(BuildContext context, ProfileResponse user) {
       children: [
         Column(
           children: [
+            SizedBox(height: 20.0),
+            CircleAvatar(
+              backgroundImage: NetworkImage(user.avatar),
+              radius: 70.0,
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              user.nick,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 30.0,
+              ),
+            ),
+            SizedBox(height: 15.0),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(user.avatar)),
-                  ),
-                ),
+                SizedBox(width: 20.0),
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            TextButton(
-                              onPressed: null,
-                              child: Text(
-                                user.productoList.length.toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            Text("posts"),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          children: [
-                            TextButton(
-                              onPressed: null,
-                              child: Text(
-                                user.productoListLike.length.toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            Text("Likes"),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      ],
+                    Text(
+                      user.productoList.length.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      "Productos",
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.3),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w100),
                     ),
                   ],
                 ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(user.email),
+                Column(
+                  children: [
+                    Text(
+                      user.productoListLike.length.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-                        child: Text(
-                          user.nick,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      "Favoritos",
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.3),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 20.0),
+              ],
             ),
+            SizedBox(height: 5.0),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 7),
               child: Container(
@@ -194,6 +171,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                         ),*/
         Flexible(
           child: GridView.builder(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),

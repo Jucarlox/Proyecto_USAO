@@ -127,6 +127,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                   ),
                 ),
                 child: SingleChildScrollView(
+                  physics: ScrollPhysics(parent: BouncingScrollPhysics()),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
