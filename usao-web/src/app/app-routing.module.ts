@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'register', component: FormularioRegisterComponent },
   { path: 'usuarios', component:ListaUsuariosComponent},
   { path: 'productos', component:ListaProductosComponent},
-  { path: '', pathMatch: 'full', component: FormularioLoginComponent}
+  { path: '',redirectTo: 'login', pathMatch: 'full'}
   
 ];
 
