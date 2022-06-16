@@ -43,10 +43,8 @@ class UserRepositoryImpl extends UserRepository {
       };
 
       var data = json.encode({
-        "nick": editUserDto.nick,
         "fechaNacimiento": editUserDto.fechaNacimiento,
         "localizacion": editUserDto.localizacion,
-        "password": editUserDto.password,
       });
 
       var request = http.MultipartRequest(

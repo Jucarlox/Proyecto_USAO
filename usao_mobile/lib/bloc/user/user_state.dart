@@ -36,4 +36,7 @@ class UserEditState extends UserState {
   final RegisterResponse editResponse;
 
   const UserEditState(this.editResponse);
+
+  @override
+  List<Object> get props => [editResponse];
 }

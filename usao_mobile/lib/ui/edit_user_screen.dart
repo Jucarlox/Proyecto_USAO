@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usao_mobile/bloc/auth/register/register_bloc.dart';
@@ -48,6 +49,7 @@ class _UserEditFormState extends State<EditUserScreen> {
   TextEditingController localizacionController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String _selectedItem = '';
+  String _fecha = '';
   String dropdownValue = 'coches';
   String nombre = '';
   String descripcion = '';
@@ -126,7 +128,8 @@ class _UserEditFormState extends State<EditUserScreen> {
     nickController = TextEditingController(text: editResponse.nick);
     fechaNacimientoController =
         TextEditingController(text: editResponse.fechaNacimiento);
-    _selectedItem = editResponse.localizacion;
+    localizacionController =
+        TextEditingController(text: editResponse.localizacion);
     double deviceWidth = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
@@ -156,43 +159,36 @@ class _UserEditFormState extends State<EditUserScreen> {
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
-                                child: TextFormField(
-                                  style: TextStyle(color: AppColors.cyan),
-                                  controller: nickController,
-                                  decoration: const InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.person,
-                                        color: AppColors.cyan,
-                                      ),
-                                      suffixIconColor: AppColors.cyan,
-                                      hintText: 'Nombre del Usuario',
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: AppColors.cyan))),
-                                  onSaved: (String? value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
-                                  },
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                width: deviceWidth - 100,
-                                child: TextFormField(
-                                  style: TextStyle(color: AppColors.cyan),
+                                child: TextField(
                                   controller: fechaNacimientoController,
                                   decoration: const InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.email,
-                                        color: AppColors.cyan,
-                                      ),
-                                      hintText: 'Fecha',
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: AppColors.cyan))),
-                                  onSaved: (String? value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
+                                    labelText: "Fecha de nacimiento",
+                                    suffixIcon: Icon(
+                                      Icons.calendar_today,
+                                      color: AppColors.cyan,
+                                    ),
+                                  ),
+                                  readOnly: true,
+                                  onTap: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2101));
+
+                                    if (pickedDate != null) {
+                                      print(pickedDate);
+                                      String formattedDate =
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(pickedDate);
+                                      print(formattedDate);
+
+                                      setState(() {
+                                        fechaNacimientoController.value =
+                                            TextEditingValue(
+                                                text: formattedDate);
+                                      });
+                                    }
                                   },
                                 ),
                               ),
@@ -205,7 +201,7 @@ class _UserEditFormState extends State<EditUserScreen> {
                                 ),
                                 child: SearchField(
                                   searchStyle: TextStyle(color: AppColors.cyan),
-                                  hint: 'Localización',
+                                  hint: localizacionController.text,
                                   searchInputDecoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -297,28 +293,6 @@ class _UserEditFormState extends State<EditUserScreen> {
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  style: TextStyle(color: AppColors.cyan),
-                                  controller: passwordController,
-                                  decoration: const InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.email,
-                                        color: AppColors.cyan,
-                                      ),
-                                      hintText: 'Password',
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: AppColors.cyan))),
-                                  onSaved: (String? value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
-                                  },
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                width: deviceWidth - 100,
                                 child: BlocProvider(
                                   create: (context) {
                                     return ImagePickBloc();
@@ -351,16 +325,67 @@ class _UserEditFormState extends State<EditUserScreen> {
                                                   primary: AppColors.cyan,
                                                 ),
                                                 onPressed: () {
-                                                  BlocProvider.of<
+                                                  /*BlocProvider.of<
                                                               ImagePickBloc>(
                                                           context)
                                                       .add(
                                                           const SelectImageEvent(
                                                               ImageSource
-                                                                  .gallery));
+                                                                  .gallery));*/
+
+                                                  showDialog<String>(
+                                                    context: context,
+                                                    builder: (_) => AlertDialog(
+                                                      actionsAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      title: Center(
+                                                        child: const Text(
+                                                          'Elija una opción',
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .cyan),
+                                                        ),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .gallery))
+                                                          },
+                                                          child: const Text(
+                                                            'Galeria',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .camera))
+                                                          },
+                                                          child: const Text(
+                                                            'Camara',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
                                                 },
                                                 child: const Text(
-                                                    'Cambiar imagen')));
+                                                    'Selecciona una imagen')));
                                       }),
                                 ),
                               ),
@@ -370,17 +395,18 @@ class _UserEditFormState extends State<EditUserScreen> {
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
                                 final editDto = EditUserDto(
-                                  nick: nickController.text,
                                   fechaNacimiento:
                                       fechaNacimientoController.text,
-                                  localizacion: localizacionController.text,
-                                  password: passwordController.text,
+                                  localizacion: _selectedItem.isEmpty
+                                      ? localizacionController.text
+                                      : _selectedItem,
                                 );
 
                                 if (filePath.isEmpty) {
                                   BlocProvider.of<UserBloc>(context).add(
                                       EditUserEvent(
                                           editDto, editResponse.avatar));
+                                  Navigator.pop(context);
                                 } else {
                                   BlocProvider.of<UserBloc>(context)
                                       .add(EditUserEvent(editDto, filePath));
