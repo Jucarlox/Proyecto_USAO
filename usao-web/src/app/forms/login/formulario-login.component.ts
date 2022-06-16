@@ -25,6 +25,7 @@ export class FormularioLoginComponent implements OnInit {
     this.authService.postLogin(this.LoginDto).subscribe((loginResult) => {
       if(loginResult.role=='ADMIN'){
         localStorage.setItem('token', loginResult.token);
+        console.log(localStorage.getItem('token'));
         this.router.navigate(['/home']);
       }else{
         this.dialog.open(DialogErrorComponent, {

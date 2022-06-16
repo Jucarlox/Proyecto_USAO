@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/post").authenticated()
                 .antMatchers(HttpMethod.GET, "/download/{filename:.+}").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/swagger-ui/*","/v3/api-docs/*").permitAll()                .anyRequest().authenticated();
 
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "DELETE", "PUT"));

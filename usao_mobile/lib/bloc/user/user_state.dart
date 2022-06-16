@@ -25,3 +25,18 @@ class UserFetchError extends UserState {
   @override
   List<Object> get props => [message];
 }
+
+class UserInitialEditState extends UserState {
+  final ProfileResponse editResponse;
+
+  const UserInitialEditState(this.editResponse);
+}
+
+class UserEditState extends UserState {
+  final RegisterResponse editResponse;
+
+  const UserEditState(this.editResponse);
+
+  @override
+  List<Object> get props => [editResponse];
+}

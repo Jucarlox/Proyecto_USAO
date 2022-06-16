@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,10 +47,12 @@ class _ProductoFormState extends State<SubeloScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) {
-          return ProductoBloc(productoRepository);
-        },
-        child: _createBody(context));
+      create: (context) {
+        return ProductoBloc(productoRepository);
+      },
+      child: Scaffold(
+          appBar: CupertinoNavigationBar(), body: _createBody(context)),
+    );
   }
 
   _createBody(BuildContext context) {
@@ -268,13 +271,64 @@ class _ProductoFormState extends State<SubeloScreen> {
                                                   primary: AppColors.cyan,
                                                 ),
                                                 onPressed: () {
-                                                  BlocProvider.of<
+                                                  /*BlocProvider.of<
                                                               ImagePickBloc>(
                                                           context)
                                                       .add(
                                                           const SelectImageEvent(
                                                               ImageSource
-                                                                  .gallery));
+                                                                  .gallery));*/
+
+                                                  showDialog<String>(
+                                                    context: context,
+                                                    builder: (_) => AlertDialog(
+                                                      actionsAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      title: Center(
+                                                        child: const Text(
+                                                          'Elija una opción',
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .cyan),
+                                                        ),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .gallery))
+                                                          },
+                                                          child: const Text(
+                                                            'Galeria',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .camera))
+                                                          },
+                                                          child: const Text(
+                                                            'Camara',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
                                                 },
                                                 child: const Text(
                                                     'Selecciona una imagen')));

@@ -11,13 +11,15 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
   final ProductoRepository productoRepository;
 
   ProductoBloc(this.productoRepository) : super(ProductoInitialState()) {
-    on<FetchProductoWithType>(_productoFetchedGangas);
+    on<FetchAllProducto>(_productoFetchedAll);
     on<DoProductoEvent>(_doProductoEvent);
     on<LikeProductoEvent>(_likeProductoEvent);
     on<FetchProductosLike>(__productoFetchedLike);
     on<DislikeProductoEvent>(_dislikeProductoEvent);
     on<ProductoIdEvent>(_productoIdEvent);
     on<SearchProductoEvent>(_productoFetchedSearch);
+    on<EditProductoEvent>(_editProductoEvent);
+    on<ProductoIdEvent2>(_productoIdEditEvent);
   }
 
   void _likeProductoEvent(
@@ -42,6 +44,17 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     }
   }
 
+  void _productoIdEditEvent(
+      ProductoIdEvent2 event, Emitter<ProductoState> emit) async {
+    try {
+      final postResponse = await productoRepository.productoId(event.id);
+      emit(ProductoInitialEditState(postResponse));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoErrorState(e.toString()));
+    }
+  }
+
   void _dislikeProductoEvent(
       DislikeProductoEvent event, Emitter<ProductoState> emit) async {
     try {
@@ -53,11 +66,12 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     }
   }
 
-  void _productoFetchedGangas(
-      FetchProductoWithType event, Emitter<ProductoState> emit) async {
+  void _productoFetchedAll(
+      FetchAllProducto event, Emitter<ProductoState> emit) async {
     try {
-      final producto = await productoRepository.fetchGangasProducto();
-      emit(ProductoFetched(producto));
+      final allProductos = await productoRepository.fetchAllProductos();
+      final gangasProducto = await productoRepository.fetchGangasProducto();
+      emit(ProductoFetchedAll(gangasProducto, allProductos));
       return;
     } on Exception catch (e) {
       emit(ProductoFetchError(e.toString()));
@@ -91,6 +105,18 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     try {
       final postResponse = await productoRepository.createProducto(
           event.productoDto, event.imagePath);
+      emit(ProductoSuccessState(postResponse));
+      return;
+    } on Exception catch (e) {
+      emit(ProductoErrorState(e.toString()));
+    }
+  }
+
+  void _editProductoEvent(
+      EditProductoEvent event, Emitter<ProductoState> emit) async {
+    try {
+      final postResponse = await productoRepository.editProducto(
+          event.productoDto, event.id, event.imagePath);
       emit(ProductoSuccessState(postResponse));
       return;
     } on Exception catch (e) {

@@ -11,7 +11,10 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/repository/user/user_repository.dart';
 import 'package:usao_mobile/repository/user/user_repository_impl.dart';
 import 'package:usao_mobile/styles/text.dart';
+import 'package:usao_mobile/ui/edit_producto_screen.dart';
+import 'package:usao_mobile/ui/edit_user_screen.dart';
 import 'package:usao_mobile/ui/error_screen.dart';
+import 'package:usao_mobile/ui/image_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -72,89 +75,66 @@ Widget _profile(BuildContext context, ProfileResponse user) {
       children: [
         Column(
           children: [
+            SizedBox(height: 20.0),
+            CircleAvatar(
+              backgroundImage: NetworkImage(user.avatar),
+              radius: 70.0,
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              user.nick,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 30.0,
+              ),
+            ),
+            SizedBox(height: 15.0),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(user.avatar)),
-                  ),
-                ),
+                SizedBox(width: 20.0),
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            TextButton(
-                              onPressed: null,
-                              child: Text(
-                                user.productoList.length.toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            Text("posts"),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          children: [
-                            TextButton(
-                              onPressed: null,
-                              child: Text(
-                                user.productoListLike.length.toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            Text("Likes"),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      ],
+                    Text(
+                      user.productoList.length.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      "Productos",
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.3),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w100),
                     ),
                   ],
                 ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(user.email),
+                Column(
+                  children: [
+                    Text(
+                      user.productoListLike.length.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-                        child: Text(
-                          user.nick,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      "Favoritos",
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.3),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 20.0),
+              ],
             ),
+            SizedBox(height: 5.0),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 7),
               child: Container(
@@ -165,7 +145,13 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                   ),
                   width: 320,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    EditUserScreen(id: user.id)));
+                      },
                       child: const Text(
                         "Edit Profile",
                         style: TextStyle(color: Colors.black),
@@ -185,6 +171,7 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                         ),*/
         Flexible(
           child: GridView.builder(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
@@ -198,30 +185,39 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                     children: <Widget>[
                       Center(
                           child: Container(
-                        height: 130,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                user.productoList.elementAt(index).fileScale),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: ListTile(
-                            leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            imageUrl: user.avatar,
-                            width: 30,
-                            height: 30,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                      )),
+                              height: 130,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                                image: DecorationImage(
+                                  image: NetworkImage(user.productoList
+                                      .elementAt(index)
+                                      .fileScale),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => ImageScreen(
+                                            image: user.productoList
+                                                .elementAt(index)
+                                                .fileScale))),
+                                child: ListTile(
+                                    leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    imageUrl: user.avatar,
+                                    width: 30,
+                                    height: 30,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                              ))),
                       Container(
                         height: 69,
                         child: Row(
@@ -247,6 +243,19 @@ Widget _profile(BuildContext context, ProfileResponse user) {
                                   ),
                                 ),
                               ),
+                            ),
+                            CupertinoButton(
+                              child: Icon(
+                                CupertinoIcons.square_pencil,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => EditProductoScreen(
+                                          id: user.productoList
+                                              .elementAt(index)
+                                              .id))),
                             ),
                             Container(
                               padding: EdgeInsets.only(right: 10),

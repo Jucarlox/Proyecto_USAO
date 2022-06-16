@@ -18,6 +18,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ListaUsuariosComponent } from './components/lista-usuarios/lista-usuarios.component';
+import { ListaProductosComponent } from './components/lista-productos/lista-productos.component';
+
 
 
 
@@ -30,6 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     FormularioLoginComponent,
     FormularioRegisterComponent,
     DialogErrorComponent,
+    ListaUsuariosComponent,
+    ListaProductosComponent
     
 
   ],

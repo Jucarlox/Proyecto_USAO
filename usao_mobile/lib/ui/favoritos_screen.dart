@@ -10,6 +10,7 @@ import 'package:usao_mobile/bloc/producto/producto_bloc.dart';
 import 'package:usao_mobile/models/producto/producto_response.dart';
 import 'package:usao_mobile/repository/producto/producto_repository.dart';
 import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
+import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:usao_mobile/ui/detail_product.dart';
 
@@ -59,7 +60,7 @@ Widget _createPublics(BuildContext context) {
       } else if (state is ProductoLoading) {
         return Text('Loadind');
       } else if (state is ProductoFetched) {
-        return _createPopularView(context, state.productos);
+        return _createPopularView(context, state.productosSearch);
       } else {
         return Center(child: Text("No hay post publicos actualmente"));
       }
@@ -165,7 +166,7 @@ Widget _createPopularView(
                                     return Icon(CupertinoIcons.heart_fill,
                                         color: isLiked
                                             ? Color.fromARGB(255, 216, 216, 216)
-                                            : Colors.red);
+                                            : AppColors.cyan);
                                   },
                                   onTap: (isLiked) {
                                     return changedata(isLiked,

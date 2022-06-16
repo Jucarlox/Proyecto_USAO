@@ -14,6 +14,13 @@ class FetchProductoWithType extends ProductoEvent {
   List<Object> get props => [];
 }
 
+class FetchAllProducto extends ProductoEvent {
+  const FetchAllProducto();
+
+  @override
+  List<Object> get props => [];
+}
+
 class LikeProductoEvent extends ProductoEvent {
   final int id;
   const LikeProductoEvent(this.id);
@@ -27,6 +34,11 @@ class SearchProductoEvent extends ProductoEvent {
 class ProductoIdEvent extends ProductoEvent {
   final int id;
   const ProductoIdEvent(this.id);
+}
+
+class ProductoIdEvent2 extends ProductoEvent {
+  final int id;
+  const ProductoIdEvent2(this.id);
 }
 
 class DislikeProductoEvent extends ProductoEvent {
@@ -45,4 +57,11 @@ class FetchProductosLike extends ProductoEvent {
   const FetchProductosLike();
   @override
   List<Object> get props => [];
+}
+
+class EditProductoEvent extends ProductoEvent {
+  final int id;
+  final ProductoDto productoDto;
+  final String imagePath;
+  const EditProductoEvent(this.id, this.imagePath, this.productoDto);
 }

@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: AppColors.cyan, width: 2),
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Text(
-                                  'Sign In'.toUpperCase(),
+                                  'Loguear'.toUpperCase(),
                                   style: const TextStyle(color: Colors.black),
                                   textAlign: TextAlign.center,
                                 )),
@@ -227,8 +227,6 @@ class _LoginScreenState extends State<LoginScreen> {
       email: email,
       password: password,
     );
-    print(userCredential.user!.uid);
-    print('holaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('indice', 0);
     Navigator.pushNamed(context, '/home');

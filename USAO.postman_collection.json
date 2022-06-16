@@ -26,12 +26,7 @@
 									"type": "file",
 									"src": "/C:/Users/Carlos/Desktop/Ele.jpg"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
 							"raw": "https://usao-back.herokuapp.com/auth/register",
@@ -222,6 +217,34 @@
 							"path": [
 								"profile",
 								"c0a83801-8071-17e4-8180-719809850000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/listUsers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"listUsers"
 							]
 						}
 					},
@@ -575,6 +598,15 @@
 								"motos"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Producto id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
 					},
 					"response": []
 				}

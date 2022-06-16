@@ -260,21 +260,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     DateTime? pickedDate = await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
-                                        firstDate: DateTime(2000),
+                                        firstDate: DateTime(1900),
                                         lastDate: DateTime(2101));
 
                                     if (pickedDate != null) {
-                                      print(pickedDate);
                                       String formattedDate =
                                           DateFormat('yyyy-MM-dd')
                                               .format(pickedDate);
-                                      print(formattedDate);
 
                                       setState(() {
                                         dateController.text = formattedDate;
                                       });
-                                    } else {
-                                      print("Date is not selected");
                                     }
                                   },
                                 ),
@@ -412,13 +408,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   primary: AppColors.cyan,
                                                 ),
                                                 onPressed: () {
-                                                  BlocProvider.of<
+                                                  /*BlocProvider.of<
                                                               ImagePickBloc>(
                                                           context)
                                                       .add(
                                                           const SelectImageEvent(
                                                               ImageSource
-                                                                  .gallery));
+                                                                  .gallery));*/
+
+                                                  showDialog<String>(
+                                                    context: context,
+                                                    builder: (_) => AlertDialog(
+                                                      actionsAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      title: Center(
+                                                        child: const Text(
+                                                          'Elija una opción',
+                                                          style: TextStyle(
+                                                              color: AppColors
+                                                                  .cyan),
+                                                        ),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .gallery))
+                                                          },
+                                                          child: const Text(
+                                                            'Galeria',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            BlocProvider.of<
+                                                                        ImagePickBloc>(
+                                                                    context)
+                                                                .add(const SelectImageEvent(
+                                                                    ImageSource
+                                                                        .camera))
+                                                          },
+                                                          child: const Text(
+                                                            'Camara',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
                                                 },
                                                 child: const Text(
                                                     'Selecciona una imagen')));

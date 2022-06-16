@@ -34,6 +34,7 @@ public class UserDtoConverter {
 
         return GetUserDto.builder()
                 .id(user.getId())
+                .localizacion(user.getLocalizacion())
                 .avatar(user.getAvatar())
                 .fechaNacimiento(user.getFechaNacimiento())
                 .nick(user.getNick())

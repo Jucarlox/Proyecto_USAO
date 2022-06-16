@@ -21,6 +21,7 @@ public class GetUserDto {
     private UUID id;
     private String nick;
     private String email;
+    private String localizacion;
     private LocalDate fechaNacimiento;
     private String avatar;
     private UserRole role;

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:usao_mobile/repository/preferences_utils.dart';
+import 'package:usao_mobile/ui/detail_product.dart';
 import 'package:usao_mobile/ui/login_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
 import 'package:usao_mobile/ui/perfil_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomePage(),
         '/search': (context) => SearchScreen(),
+        '/detail': (context) => DetailProductScreen(),
 
         //       '/post-form': (context) => const PostForm(),
       },

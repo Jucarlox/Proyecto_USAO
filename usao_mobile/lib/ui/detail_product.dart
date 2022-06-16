@@ -13,7 +13,9 @@ import 'package:usao_mobile/repository/producto/producto_repository_impl.dart';
 import 'package:usao_mobile/styles/colors.dart';
 import 'package:usao_mobile/styles/text.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:usao_mobile/ui/image_screen.dart';
 import 'package:usao_mobile/ui/menu_screem.dart';
+import 'package:usao_mobile/ui/message.dart';
 
 class DetailProductScreen extends StatefulWidget {
   DetailProductScreen({Key? key, this.id}) : super(key: key);
@@ -99,7 +101,16 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Image.network(data.fileScale)
+              GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              ImageScreen(image: data.fileScale))),
+                  child: Image.network(
+                    data.fileScale,
+                    width: MediaQuery.of(context).size.height / 3,
+                  ))
             ],
           ),
         ),
@@ -116,6 +127,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                   ),
                 ),
                 child: SingleChildScrollView(
+                  physics: ScrollPhysics(parent: BouncingScrollPhysics()),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -125,7 +137,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                           Text(
                             data.nombre,
                             style: GoogleFonts.poppins(
-                              fontSize: 22,
+                              fontSize: 18,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -189,7 +201,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                 likeBuilder: (bool isliked) {
                   return Icon(CupertinoIcons.heart_fill,
                       color: data.idUsersLike.contains(uid)
-                          ? Colors.red
+                          ? AppColors.cyan
                           : Color.fromARGB(255, 216, 216, 216));
                 },
                 onTap: (isLiked) {
@@ -204,7 +216,6 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                 onTap: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  print(currentUser);
 
                   FirebaseFirestore.instance
                       .collection('users')
@@ -213,9 +224,7 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                       .limit(1)
                       .get()
                       .then((snapshot) {
-                    print(snapshot.size);
                     if (snapshot.size == 0) {
-                      print('aaaaa');
                       FirebaseFirestore.instance
                           .collection('users')
                           .doc(currentUser)
@@ -259,8 +268,6 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                       .then((value) => {
                             for (var doc in value.docs)
                               {
-                                print(doc),
-                                print('aaaaaaaaaa'),
                                 if (!doc
                                     .data()
                                     .containsValue(data.propietario.nick))
@@ -301,13 +308,12 @@ Widget _post(BuildContext context, ProductoResponse data, String uid,
                               }
                           });
 
-                  prefs.setInt('indice', 3);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage(),
-                    ),
-                    (Route route) => false,
-                  );
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => ChatDetail(
+                              friendUid: data.propietario.id,
+                              friendName: data.propietario.nick)));
                 },
                 child: Container(
                   alignment: Alignment.center,

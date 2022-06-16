@@ -7,6 +7,11 @@ import com.salesianostriana.dam.USAO_api.users.dto.GetUserDto;
 import com.salesianostriana.dam.USAO_api.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.USAO_api.users.model.User;
 import com.salesianostriana.dam.USAO_api.users.services.UserEntityService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +33,17 @@ public class AuthenticationController {
     private final UserDtoConverter userDtoConverter;
     private final UserEntityService userEntityService;
 
+
+    @Operation(summary = "Logear")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha logueado",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Error al loguearse",
+                    content = @Content),
+    })
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
@@ -60,6 +76,16 @@ public class AuthenticationController {
                 .build();
     }
 
+    @Operation(summary = "Recoger tus datos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha recogido tus datos",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Error al recoger tus datos",
+                    content = @Content),
+    })
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal User userPrincipal) {
 
