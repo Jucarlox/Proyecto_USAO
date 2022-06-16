@@ -126,8 +126,7 @@ class _UserEditFormState extends State<EditUserScreen> {
     nickController = TextEditingController(text: editResponse.nick);
     fechaNacimientoController =
         TextEditingController(text: editResponse.fechaNacimiento);
-    //localizacionController =
-    //TextEditingController(text: editResponse.localizacion);
+    _selectedItem = editResponse.localizacion;
     double deviceWidth = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
@@ -200,23 +199,99 @@ class _UserEditFormState extends State<EditUserScreen> {
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 width: deviceWidth - 100,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  style: TextStyle(color: AppColors.cyan),
-                                  controller: localizacionController,
-                                  decoration: const InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.email,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SearchField(
+                                  searchStyle: TextStyle(color: AppColors.cyan),
+                                  hint: 'Localización',
+                                  searchInputDecoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: AppColors.cyan,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 2,
                                         color: AppColors.cyan,
                                       ),
-                                      hintText: 'Localizacion',
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: AppColors.cyan))),
-                                  onSaved: (String? value) {
-                                    // This optional block of code can be used to run
-                                    // code when the user saves the form.
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  maxSuggestionsInViewPort: 6,
+                                  itemHeight: 50,
+                                  suggestionsDecoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  onSuggestionTap:
+                                      (SearchFieldListItem<String> x) {
+                                    setState(() {
+                                      _selectedItem = x.item!;
+                                    });
                                   },
+                                  suggestions: [
+                                    'Álava',
+                                    'Albacete',
+                                    'Alicante',
+                                    'Almería',
+                                    'Asturias',
+                                    'Ávila',
+                                    'Badajoz',
+                                    'Barcelona',
+                                    'Burgos',
+                                    'Cáceres',
+                                    'Cádiz',
+                                    'Cantabria',
+                                    'Castellón',
+                                    'Ceuta',
+                                    'Ciudad Real',
+                                    'Córdoba',
+                                    'Cuenca',
+                                    'Gerona',
+                                    'Granada',
+                                    'Guadalajara',
+                                    'Guipúzcoa',
+                                    'Huelva',
+                                    'Huesca',
+                                    'Islas Baleares',
+                                    'Jaén',
+                                    'La Coruña',
+                                    'La Rioja',
+                                    'Las Palmas',
+                                    'León',
+                                    'Lérida',
+                                    'Lugo',
+                                    'Madrid',
+                                    'Málaga',
+                                    'Melilla',
+                                    'Murcia',
+                                    'Navarra',
+                                    'Orense',
+                                    'Palencia',
+                                    'Pontevedra',
+                                    'Salamanca',
+                                    'Santa Cruzde Tenerife',
+                                    'Segovia',
+                                    'Sevilla',
+                                    'Soria',
+                                    'Tarragona',
+                                    'Teruel',
+                                    'Toledo',
+                                    'Valencia',
+                                    'Valladolid',
+                                    'Vizcaya',
+                                    'Zamora',
+                                    'Zaragoza'
+                                  ]
+                                      .map((country) => SearchFieldListItem(
+                                          country,
+                                          item: country))
+                                      .toList(),
                                 ),
                               ),
                               Container(
