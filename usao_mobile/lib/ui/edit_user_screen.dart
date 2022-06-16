@@ -177,11 +177,9 @@ class _UserEditFormState extends State<EditUserScreen> {
                                         lastDate: DateTime(2101));
 
                                     if (pickedDate != null) {
-                                      print(pickedDate);
                                       String formattedDate =
                                           DateFormat('yyyy-MM-dd')
                                               .format(pickedDate);
-                                      print(formattedDate);
 
                                       setState(() {
                                         fechaNacimientoController.value =

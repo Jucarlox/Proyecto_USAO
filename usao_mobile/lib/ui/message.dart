@@ -55,7 +55,6 @@ class _ChatDetailState extends State<ChatDetail> {
       FirebaseFirestore.instance.collection('users').get().then((value) => {
             for (var doc1 in value.docs)
               {
-                print(doc1.data().entries.first),
                 if (doc1.data().containsValue(friendName))
                   {idFri = doc1.id.toString()}
               }
@@ -65,12 +64,10 @@ class _ChatDetailState extends State<ChatDetail> {
 
   void getdata() async {
     final prefs = await SharedPreferences.getInstance();
-    print(friendName);
     String id = 'ayayay';
     FirebaseFirestore.instance.collection('users').get().then((value) => {
           for (var doc1 in value.docs)
             {
-              print(doc1.data().entries.first),
               if (doc1.data().containsValue(friendName))
                 {prefs.setString('idFri', doc1.id.toString())}
             }
@@ -91,8 +88,6 @@ class _ChatDetailState extends State<ChatDetail> {
                 setState(() {
                   chatDocId = querySnapshot.docs.single.id;
                 });
-
-                print(chatDocId);
               } else {
                 chats.add({
                   'users': {currentUser: null, prefs.getString('idFri'): null}
@@ -105,7 +100,6 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   void sendMessage(String msg) {
-    print(msg);
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'createdOn': FieldValue.serverTimestamp(),
@@ -236,7 +230,6 @@ class _ChatDetailState extends State<ChatDetail> {
                               {
                                 if (doc1.data().containsValue(friendName))
                                   {
-                                    print(doc1),
                                     FirebaseFirestore.instance
                                         .collection('users')
                                         .doc(doc1.id)
